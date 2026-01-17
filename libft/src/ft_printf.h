@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_printf.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: nyxssa <nyxssa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/11 23:00:39 by rselva-2          #+#    #+#             */
-/*   Updated: 2025/11/24 15:48:57 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/01/17 03:06:10 by nyxssa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 # define FT_PRINTF_H
 # include "libft.h"
 # include <stdarg.h>
-# define FD 2
+# define FD 1
 
 typedef struct s_flags
 {
