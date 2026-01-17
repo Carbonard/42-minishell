@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/02 14:22:21 by rselva-2          #+#    #+#             */
-/*   Updated: 2025/12/04 20:05:35 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/01/17 16:13:21 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,6 +74,7 @@ char	*ft_str_malloc(size_t size);
 int		ft_printf(const char *str, ...);
 char	*get_next_line(int fd);
 int		ft_ishex(int c);
+char	*ft_strjoin_char(char const *s1, char const *s2, char c);
 // Math
 int		ft_abs(int n);
 float	ft_fabs(float n);

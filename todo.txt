@@ -17,3 +17,6 @@ Parser:
 			(cmd &&(1) cmd)
 		...
 	- luego lo mismo con pipes
+
+built-ins
+	- pwd sin env
