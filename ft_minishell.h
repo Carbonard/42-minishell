@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/16 14:57:20 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/01/17 17:37:12 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/01/17 19:23:28 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 # define FT_MINISHELL_H
 
 # include "libft.h"
+# include "dynamic_arrays/src/ft_dynarray.h"
 # include <stdio.h>
 
 # define MAX_PWD 1024
@@ -37,5 +38,7 @@ typedef struct s_command
 void	echo(char **argv);
 void	pwd(void);
 void	print_env(char **env);
+
+char	**split_cmd(char *cmd);
 
 #endif

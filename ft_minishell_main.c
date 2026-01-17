@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/16 14:59:51 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/01/17 16:47:48 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/01/17 20:18:01 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,7 @@ int	main(int argc, char **argv, char **env)
 	while (status)
 	{
 		input = read_input();
-		command = ft_split(input, ' ');
+		command = split_cmd(input);
 		if (!ft_strncmp(command[0], "cd", 3))
 			chdir(command[1]);
 		else if (!ft_strncmp(command[0], "pwd", 4))
@@ -101,6 +101,8 @@ int	main(int argc, char **argv, char **env)
 			print_env(env);
 		else if (!ft_strncmp(command[0], "echo", 7))
 			echo(command);
+		free(input);
+		free(command);
 	}
 (void)argc;(void)argv;(void)env;
 // 	pwd();
