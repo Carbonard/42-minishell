@@ -1,33 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_minishell.h                                     :+:      :+:    :+:   */
+/*   ft_minishell_cd.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/01/16 14:57:20 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/01/17 03:42:45 by rselva-2         ###   ########.fr       */
+/*   Created: 2026/01/16 19:17:53 by rselva-2          #+#    #+#             */
+/*   Updated: 2026/01/17 01:21:35 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef FT_MINISHELL_H
-# define FT_MINISHELL_H
+#include "ft_minishell.h"
 
-# include "libft.h"
-
-# define MAX_PWD 1024
-
-typedef struct s_command
+int	main(int argc, char **argv)
 {
-	struct s_command	*cmd1;
-	struct s_command	*cmd2;
-	char				*cmd;
-	char				sep;
-}	t_command;
-
-// Built-ins
-void	echo(char **argv);
-void	pwd(void);
-void	print_env(char **env);
-
-#endif
+	chdir(argv[1]);
+}
