@@ -4,7 +4,7 @@ CC = cc
 
 CFLAGS = -Wall -Werror -Wextra
 
-CLIBS = -L./libft -lft
+CLIBS = -L./libft -lft -lreadline
 
 LIBFT = libft/libft.a
 

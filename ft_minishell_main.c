@@ -6,15 +6,18 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/16 14:59:51 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/01/17 03:46:55 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/01/17 16:47:48 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_minishell.h"
+#include <stdio.h>
+#include <readline/readline.h>
+#include <readline/history.h>
 
-void	display_prompt()
+
+int	get_prompt(char *prompt)
 {
-	char	prompt[MAX_PWD + 3];
 	char	home[100];
 	int		length;
 
@@ -28,19 +31,54 @@ void	display_prompt()
 	if (!ft_strncmp(prompt, home, ft_strlen(home)))
 	{
 		prompt[ft_strlen(home) - 1] = '~';
-		ft_putstr_fd(prompt + ft_strlen(home) - 1, 1);
+		return (ft_strlen(home) - 1);
 	}
 	else
-		ft_putstr_fd(prompt, 1);
+		return (0);
+}
+
+int	open_quotes(char *input)
+{
+	int		i;
+	char	quote;
+
+	i = 0;
+	while (input[i])
+	{
+		if (input[i] == '\'' || input[i] == '"')
+		{
+			// printf("\n(%c)\n", input[i]);
+			quote = input[i];
+			i++;
+			while (input[i] && input[i] != quote)
+				i++;
+			if (!input[i])
+				return (1);
+		}
+		// else
+		// 	putchar(input[i]);
+		i++;
+	}
+	return (0);
 }
 
 char	*read_input()
 {
+	char	prompt[MAX_PWD + 3];
 	char	*input;
+	char	*input_extension;
+	char	*aux;
+	int		start;
 
-	display_prompt();
-	input = get_next_line(0);
-	input[ft_strlen(input) - 1] = 0;
+	start = get_prompt(prompt);
+	input = readline(prompt + start);
+	while (open_quotes(input))
+	{
+		input_extension = readline("> ");
+		aux = ft_strjoin_char(input, input_extension, '\n');
+		free(input);
+		input = aux;
+	}
 	return (input);
 }
 

@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/16 14:57:20 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/01/17 03:42:45 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/01/17 15:33:09 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,8 @@
 # define FT_MINISHELL_H
 
 # include "libft.h"
+# include <stdio.h>
+// # include <readline.h>
 
 # define MAX_PWD 1024
 
