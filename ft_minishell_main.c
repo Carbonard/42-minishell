@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_minishell_main.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nyxssa <nyxssa@student.42.fr>              +#+  +:+       +#+        */
+/*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/16 14:59:51 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/01/18 16:08:04 by nyxssa           ###   ########.fr       */
+/*   Updated: 2026/01/18 19:16:26 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,6 +96,11 @@ int	main(int argc, char **argv, char **env)
 		tree->cmd = input;
 		create_tree(tree);
 		display_tree(tree);
+		command = split_cmd(input);
+		if (!check_build_ins(command, env))
+			(void)status;// otra cosa
+		free(input);
+		free(command);
 	}
 (void)argc;(void)argv;(void)env;
 // 	pwd();

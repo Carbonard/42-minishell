@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_minishell.h                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nyxssa <nyxssa@student.42.fr>              +#+  +:+       +#+        */
+/*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/16 14:57:20 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/01/18 18:56:08 by nyxssa           ###   ########.fr       */
+/*   Updated: 2026/01/18 19:17:43 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 # define FT_MINISHELL_H
 
 # include "libft.h"
+# include "dynamic_arrays/src/ft_dynarray.h"
 # include <stdio.h>
 
 # define MAX_PWD 1024
@@ -45,5 +46,9 @@ void	display_tree(t_command *tree);
 void	echo(char **argv);
 void	pwd(void);
 void	print_env(char **env);
+
+
+char	**split_cmd(char *cmd);
+int		check_build_ins(char **command, char **env);
 
 #endif
