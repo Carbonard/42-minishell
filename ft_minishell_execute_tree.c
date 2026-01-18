@@ -1,34 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_minishell_main.c                                :+:      :+:    :+:   */
+/*   ft_minishell_execute_tree.c                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/01/16 14:59:51 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/01/18 20:45:57 by rselva-2         ###   ########.fr       */
+/*   Created: 2026/01/18 19:24:30 by rselva-2          #+#    #+#             */
+/*   Updated: 2026/01/18 20:10:08 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_minishell.h"
 
-int	main(int argc, char **argv, char **env)
+int	execute(t_command *command, char **env)
 {
-	int			status;
-	t_context	ctx;
+	char			**split;
+	t_redirection	redir;
+	int				status;
 
-	ctx.cmd_tree = malloc(sizeof(t_command));
-	status = 1;
-	while (status >= 0)
+	if (!command->sep)
 	{
-		ctx.user_input = read_input();
-		ctx.cmd_tree->cmd = ctx.user_input;
-		create_tree(ctx.cmd_tree);
-		display_tree(ctx.cmd_tree);
-		putchar('\n');
-		execute(ctx.cmd_tree, env);
+		split = split_cmd(command->cmd, &redir);
+		status = check_build_ins(split, env);
+		if (status >= 0)
+			return (0);
+		printf("Lo va a hacer tu madre jaja saludos\n");
 	}
-	(void)argc;
-	(void)argv;
 	return (0);
 }

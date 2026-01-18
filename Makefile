@@ -10,7 +10,9 @@ LIBFT = libft/libft.a
 
 DYNARRAYS = dynamic_arrays/libft_dynarray.a
 
-BUILT_INS = ft_minishell_echo.c ft_minishell_pwd.c ft_minishell_env.c ft_minishell_split_cmd.c
+BUILT_INS = ft_minishell_echo.c ft_minishell_pwd.c ft_minishell_env.c
+
+SRC = ft_minishell_get_input.c ft_minishell_parser.c ft_minishell_split_cmd.c ft_minishell_builtins.c ft_minishell_execute_tree.c ft_minishell_debug.c
 
 LIBFT:
 	make -C libft
@@ -30,6 +32,6 @@ DYNARRAYS:
 # cd: ft_minishell_cd.c $(LIBFT)
 # 	$(CC) $(CFLAGS) $^ $(CLIBS) -o cd
 
-test: $(BUILT_INS) ft_minishell_main.c ft_minishell_parser.c
+test: $(BUILT_INS) $(SRC) ft_minishell_main.c
 	$(CC) $(CFLAGS) $^ $(CLIBS) -o test
 

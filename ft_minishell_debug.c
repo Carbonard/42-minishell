@@ -1,34 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_minishell_main.c                                :+:      :+:    :+:   */
+/*   ft_minishell_debug.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/01/16 14:59:51 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/01/18 20:45:57 by rselva-2         ###   ########.fr       */
+/*   Created: 2026/01/18 20:27:06 by rselva-2          #+#    #+#             */
+/*   Updated: 2026/01/18 20:39:29 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_minishell.h"
 
-int	main(int argc, char **argv, char **env)
+void	display_tree(t_command *tree)
 {
-	int			status;
-	t_context	ctx;
-
-	ctx.cmd_tree = malloc(sizeof(t_command));
-	status = 1;
-	while (status >= 0)
+	printf("\001\e[95m\002");
+	if (!tree->cmd1)
 	{
-		ctx.user_input = read_input();
-		ctx.cmd_tree->cmd = ctx.user_input;
-		create_tree(ctx.cmd_tree);
-		display_tree(ctx.cmd_tree);
-		putchar('\n');
-		execute(ctx.cmd_tree, env);
+		printf("[%s]", tree->cmd);
+		printf("\001\e[0m\002");
+		return ;
 	}
-	(void)argc;
-	(void)argv;
-	return (0);
+	printf("[ ");
+	display_tree(tree->cmd1);
+	printf(" %d ", tree->sep);
+	display_tree(tree->cmd2);
+	printf(" ]");
+	printf("\001\e[0m\002");
 }

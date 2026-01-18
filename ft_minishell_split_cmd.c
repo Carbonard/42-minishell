@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/17 17:03:15 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/01/17 21:14:37 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/01/18 20:37:21 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,23 @@ static void	cut_string(char *cmd)
 	ft_bzero(cmd - shift, shift);
 }
 
-char	**split_cmd(char *cmd)
+static int	get_redirection(char *cmd, int i, t_redirection *redir)
+{
+	if (cmd[i] == '<' && cmd [i + 1] == '<')
+		redir->type = HERE_DOC;
+	else if (cmd[i] == '>' && cmd [i + 1] == '>')
+		redir->type = REDIRECTION_APP;
+	else if (cmd[i] == '<')
+		redir->type = REDIRECTION_IN;
+	else if (cmd[i] == '>')
+		redir->type = REDIRECTION_OUT;
+	while (cmd[i] == '<' || cmd[i] == '>' || cmd[i] == 0)
+		i++;
+	redir->file = cmd + i;
+	return (i);
+}
+
+char	**split_cmd(char *cmd, t_redirection *redir)
 {
 	t_dyn_ptr	split;
 	int			length;
@@ -53,91 +69,15 @@ char	**split_cmd(char *cmd)
 	i = 0;
 	while (i < length)
 	{
-		if (cmd[i] && (i == 0 || cmd[i-1] == 0))
-			add_ptr(&split, cmd + i);
+		if (cmd[i] && (i == 0 || cmd[i - 1] == 0))
+		{
+			if (cmd[i] == '<' || cmd[i] == '>')
+				i = get_redirection(cmd, i, redir);
+			else
+				add_ptr(&split, cmd + i);
+		}
 		i++;
 	}
 	add_ptr(&split, NULL);
 	return (split.arr);
 }
-
-// char	**split_cmd(char *cmd)
-// {
-// 	t_dyn_ptr	split;
-// 	char		*arg_start;
-// 	char		quote;
-// 	int			i;
-// 	int			shift;
-
-// 	i = 0;
-// 	shift = 0;
-// 	quote = 0;
-// 	init_dyn_ptr(&split, 2);
-// 	arg_start = NULL;
-// 	while (cmd[i])
-// 	{
-// 		if (!arg_start && cmd[i] != ' ')
-// 			arg_start = cmd + i - shift;
-// 		if (!quote && (cmd[i] == '\'' || cmd[i] == '"'))
-// 		{
-// 			quote = cmd[i];
-// 			shift++;
-// 		}
-// 		else if (quote || cmd[i] != ' ')
-// 		{
-// 			cmd[i - shift] = cmd[i];
-// 			if (cmd[i] == quote)
-// 			{
-// 				quote = 0;
-// 				shift++;
-// 			}
-// 		}
-// 		else if (arg_start)
-// 		{
-// 			cmd[i - shift] = 0;
-// 			add_ptr(&split, arg_start);
-// 			arg_start = NULL;
-// 		}
-// 		i++;
-// 	}
-// 	if (arg_start)
-// 	{
-// 		cmd[i - shift] = 0;
-// 		add_ptr(&split, arg_start);
-// 	}
-// 	add_ptr(&split, NULL);
-// 	return (split.arr);
-// }
-
-// char	**split_cmd(char *cmd)
-// {
-// 	t_dyn_ptr	split;
-// 	char		*arg_start;
-// 	char		quote;
-// 	int			i;
-// 	int			shift;
-
-// 	i = 0;
-// 	shift = 0;
-// 	while (cmd[i])
-// 	{
-// 		arg_start = cmd + i;
-// 		if (cmd[i] == '\'' || cmd[i] == '"')
-// 		{
-// 			quote = cmd[i];
-// 			shift++;
-// 			while (cmd[i] && cmd[i] != quote)
-// 			{
-// 				i++;
-// 				cmd[i - shift] = cmd[i];
-// 			}
-// 			cmd[i - shift + 1] = 0;
-// 		}
-// 	}
-// }
-
-// estados	comilla	espacio	letra 
-
-// inicial	comilla	inicial	texto
-// comilla	texto	comilla	comilla
-// texto	comilla	

@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/16 18:55:11 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/01/17 03:40:50 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/01/18 20:56:50 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 void	print_env(char **env)
 {
-	int env_i;
+	int	env_i;
 
 	env_i = 0;
 	while (env[env_i])

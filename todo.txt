@@ -20,3 +20,7 @@ Parser:
 
 built-ins
 	- pwd sin env
+
+exit
+	- input
+	- tree

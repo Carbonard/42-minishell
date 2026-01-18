@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/16 16:52:14 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/01/17 03:42:35 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/01/18 20:48:32 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,8 +40,8 @@ void	echo(char **argv)
 		if (valid_flag(argv[arg_i]))
 			new_line = 0;
 		else
-			break;
-		arg_i++; 
+			break ;
+		arg_i++;
 	}
 	while (argv[arg_i])
 	{
@@ -53,4 +53,3 @@ void	echo(char **argv)
 	if (new_line)
 		ft_putchar_fd('\n', 1);
 }
-
