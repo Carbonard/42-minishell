@@ -25,6 +25,6 @@ LIBFT:
 # cd: ft_minishell_cd.c $(LIBFT)
 # 	$(CC) $(CFLAGS) $^ $(CLIBS) -o cd
 
-test: $(BUILT_INS) ft_minishell_main.c
+test: $(BUILT_INS) ft_minishell_main.c ft_minishell_parser.c
 	$(CC) $(CFLAGS) $^ $(CLIBS) -o test
 

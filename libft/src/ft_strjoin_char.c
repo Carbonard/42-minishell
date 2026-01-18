@@ -3,23 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strjoin_char.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: nyxssa <nyxssa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/17 16:11:52 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/01/17 16:46:23 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/01/18 15:58:11 by nyxssa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
-
-static char	*solve_null_error(char const *s1, char const *s2)
-{
-	if (s1 == NULL && s2 != NULL)
-		return (ft_strdup(s2));
-	if (s1 != NULL && s2 == NULL)
-		return (ft_strdup(s1));
-	return (NULL);
-}
 
 char	*ft_strjoin_char(char const *s1, char const *s2, char c)
 {

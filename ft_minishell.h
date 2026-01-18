@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_minishell.h                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: nyxssa <nyxssa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/16 14:57:20 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/01/17 17:37:12 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/01/18 18:56:08 by nyxssa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,9 +20,13 @@
 
 enum e_separators
 {
-	AND,
-	OR,
-	PIPE
+	AND,// &&
+	OR,// ||
+	PIPE,// |
+	REDIRECTION_OUT,// >
+	REDIRECTION_APP,//>>
+	REDIRECTION_IN,// <
+	HERE_DOC// <<
 };
 
 typedef struct s_command
@@ -33,6 +37,10 @@ typedef struct s_command
 	int					sep;
 }	t_command;
 
+// Parser
+void	create_tree(t_command *input);
+void	remove_parenthesis(char *str);
+void	display_tree(t_command *tree);
 // Built-ins
 void	echo(char **argv);
 void	pwd(void);

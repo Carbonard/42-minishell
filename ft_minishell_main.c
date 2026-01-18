@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_minishell_main.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: nyxssa <nyxssa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/16 14:59:51 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/01/17 16:47:48 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/01/18 16:08:04 by nyxssa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,23 +84,18 @@ char	*read_input()
 
 int	main(int argc, char **argv, char **env)
 {
-	int		status;
-	char	*input;
-	char	**command;
+	int			status;
+	char		*input;
+	// char		**command;
+	t_command	*tree = malloc(sizeof(t_command));
 
 	status = 1;
 	while (status)
 	{
 		input = read_input();
-		command = ft_split(input, ' ');
-		if (!ft_strncmp(command[0], "cd", 3))
-			chdir(command[1]);
-		else if (!ft_strncmp(command[0], "pwd", 4))
-			pwd();
-		else if (!ft_strncmp(command[0], "env", 4))
-			print_env(env);
-		else if (!ft_strncmp(command[0], "echo", 7))
-			echo(command);
+		tree->cmd = input;
+		create_tree(tree);
+		display_tree(tree);
 	}
 (void)argc;(void)argv;(void)env;
 // 	pwd();
