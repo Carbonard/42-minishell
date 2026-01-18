@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/29 01:14:42 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/01/17 19:34:21 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/01/17 21:50:21 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,4 +47,4 @@ int		ft_realloc2(void ***ptr, size_t old_size, size_t new_size);
 // Ptr
 int		init_dyn_ptr(t_dyn_ptr *d_array, size_t size);
 int		add_ptr(t_dyn_ptr *d_array, char *str);
-void	free_dyn_ptr(t_dyn_ptr *d_array);
+// void	free_dyn_ptr(t_dyn_ptr *d_array);

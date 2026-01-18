@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/16 14:59:51 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/01/17 20:18:01 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/01/17 21:38:41 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,14 +93,8 @@ int	main(int argc, char **argv, char **env)
 	{
 		input = read_input();
 		command = split_cmd(input);
-		if (!ft_strncmp(command[0], "cd", 3))
-			chdir(command[1]);
-		else if (!ft_strncmp(command[0], "pwd", 4))
-			pwd();
-		else if (!ft_strncmp(command[0], "env", 4))
-			print_env(env);
-		else if (!ft_strncmp(command[0], "echo", 7))
-			echo(command);
+		if (!check_build_ins(command, env))
+			(void)status;// otra cosa
 		free(input);
 		free(command);
 	}

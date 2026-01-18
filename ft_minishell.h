@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/16 14:57:20 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/01/17 19:23:28 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/01/17 21:37:42 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,8 @@ void	echo(char **argv);
 void	pwd(void);
 void	print_env(char **env);
 
+
 char	**split_cmd(char *cmd);
+int		check_build_ins(char **command, char **env);
 
 #endif
