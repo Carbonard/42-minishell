@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/02 14:22:21 by rselva-2          #+#    #+#             */
-/*   Updated: 2025/12/04 20:05:42 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/01/19 14:14:01 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,12 @@ typedef struct s_list
 	void			*content;
 	struct s_list	*next;
 }	t_list;
+
+typedef struct s_str_list
+{
+	char				*content;
+	struct s_str_list	*next;
+}	t_str_list;
 
 int		ft_isalpha(int c);
 int		ft_isdigit(int c);
@@ -66,9 +72,24 @@ void	ft_lstdelone(t_list *lst, void (*del)(void *));
 void	ft_lstclear(t_list **lst, void (*del)(void *));
 void	ft_lstiter(t_list *lst, void (*f)(void *));
 t_list	*ft_lstmap(t_list *lst, void *(*f)(void *), void (*del)(void *));
+// str_list
+t_str_list	*ft_str_lstnew(char *content);
+void	ft_str_lstadd_back(t_str_list **lst, t_str_list *new);
+void	ft_str_delitem(t_str_list **lst, t_str_list *item);
 // Others
+void	*free_split(char **spl);
 char	*ft_utoa_base(unsigned long nbr, const char *base);
 size_t	ft_putnstr_fd(char *s, int fd, size_t n);
+int		ft_atoi_base(char *str, char *base);
 char	*ft_str_malloc(size_t size);
+int		ft_printf(const char *str, ...);
+char	*get_next_line(int fd);
+int		ft_ishex(int c);
+char	*ft_strjoin_char(char const *s1, char const *s2, char c);
+// Math
+int		ft_abs(int n);
+float	ft_fabs(float n);
+int		ft_max(int n, int m);
+int		ft_sign(int n);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/16 14:59:51 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/01/18 20:45:57 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/01/19 13:53:53 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@ int	main(int argc, char **argv, char **env)
 	int			status;
 	t_context	ctx;
 
+	save_env(&ctx, env);
 	ctx.cmd_tree = malloc(sizeof(t_command));
 	status = 1;
 	while (status >= 0)
@@ -26,7 +27,7 @@ int	main(int argc, char **argv, char **env)
 		create_tree(ctx.cmd_tree);
 		display_tree(ctx.cmd_tree);
 		putchar('\n');
-		execute(ctx.cmd_tree, env);
+		execute(&ctx, ctx.cmd_tree);
 	}
 	(void)argc;
 	(void)argv;

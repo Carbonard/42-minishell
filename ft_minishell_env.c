@@ -6,20 +6,49 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/16 18:55:11 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/01/18 20:56:50 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/01/19 14:10:17 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_minishell.h"
 
-void	print_env(char **env)
+void	print_env(t_context *ctx)
 {
-	int	env_i;
+	t_str_list	*item;
 
-	env_i = 0;
-	while (env[env_i])
+	item = ctx->env;
+	while (item)
 	{
-		ft_putendl_fd(env[env_i], 1);
-		env_i++;
+		ft_putendl_fd(item->content, 1);
+		item = item->next;
 	}
+}
+
+int	export(t_context *ctx, char *new_var)
+{
+	t_str_list	*item;
+
+	item = find_env_node(ctx, new_var);
+	if (item)
+	{
+		free(item->content);
+		item->content = ft_strdup(new_var);
+		if (!new_var)
+			return (MS_E_ENV_MALLOC);
+		return (MS_SUCCESS);
+	}
+	return (add_env(ctx, new_var));
+}
+
+int	unset(t_context *ctx, char *var)
+{
+	t_str_list	*item;
+
+	item = find_env_node(ctx, var);
+	if (item)
+	{
+		ft_str_delitem(&ctx->env, item);
+		return (MS_SUCCESS);
+	}
+	return (MS_E_ENV_NFOUND);
 }

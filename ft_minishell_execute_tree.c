@@ -6,13 +6,13 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/18 19:24:30 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/01/18 20:10:08 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/01/19 14:07:36 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_minishell.h"
 
-int	execute(t_command *command, char **env)
+int	execute(t_context *ctx, t_command *command)
 {
 	char			**split;
 	t_redirection	redir;
@@ -21,8 +21,8 @@ int	execute(t_command *command, char **env)
 	if (!command->sep)
 	{
 		split = split_cmd(command->cmd, &redir);
-		status = check_build_ins(split, env);
-		if (status >= 0)
+		status = check_build_ins(ctx, split);
+		if (status == MS_BUILT_IN_EXECUTED)
 			return (0);
 		printf("Lo va a hacer tu madre jaja saludos\n");
 	}

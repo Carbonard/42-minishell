@@ -1,26 +1,18 @@
 
 Parser:
-	- Comprobar todo bien cerrado y blabla
-		...
-	- eliminar parentesis innecesarios
-	- numerar los &&
-		(cmd &&(1) (cmd &&(2) cmd)) &&(0) cmd &&(0) (cmd &&(1) cmd)
-	- seccionamos segun numeracion (recursivo?)
-		- buscamos primera ocurrencia de && fuera de () y creamos dos nodos:
-			(cmd &&(1) (cmd &&(2) cmd))
-			cmd &&(0) (cmd &&(1) cmd)
-		iteramos repitiendo lo anterior a cada uno de los nodos, el primer nodo se divie en
-			cmd
-			cmd &&(2) cmd
-		y el segundo nodo queda en cmd &&(0) (cmd &&(1) cmd) que se divide en 
-			cmd
-			(cmd &&(1) cmd)
-		...
-	- luego lo mismo con pipes
+	[x] Comprobar todo bien cerrado
+	[-] chequear sintaxis
+	[x] eliminar parentesis innecesarios
+	[x] crear arbol
 
 built-ins
-	- pwd sin env
+	- cd - y cd (?)
+	- averiguar que coño con env
+	- export
+	- unset
+	- exit
 
-exit
+free at exit
 	- input
 	- tree
+	- si falla env

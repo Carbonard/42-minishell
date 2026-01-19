@@ -6,37 +6,29 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/17 21:35:56 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/01/18 20:36:31 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/01/19 14:08:47 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_minishell.h"
 
-int	check_build_ins(char **command, char **env)
+int	check_build_ins(t_context *ctx, char **command)
 {
 	if (!ft_strncmp(command[0], "cd", 3))
-	{
 		chdir(command[1]);
-		return (CD);
-	}
 	else if (!ft_strncmp(command[0], "pwd", 4))
-	{
 		pwd();
-		return (PWD);
-	}
 	else if (!ft_strncmp(command[0], "env", 4))
-	{
-		print_env(env);
-		return (ENV);
-	}
-	else if (!ft_strncmp(command[0], "echo", 7))
-	{
+		print_env(ctx);
+	else if (!ft_strncmp(command[0], "echo", 5))
 		echo(command);
-		return (ECHO);
-	}
-	else if (!ft_strncmp(command[0], "exit", 7))
-		return (EXIT);
+	else if (!ft_strncmp(command[0], "export", 7))
+		export(ctx, command[1]);
+	else if (!ft_strncmp(command[0], "unset", 6))
+		unset(ctx, command[1]);
+	else if (!ft_strncmp(command[0], "exit", 5))
+		return (MS_EXIT);
 	else
-		return (-1);
-	return (-1);
+		return (MS_BUILT_IN_NFOUND);
+	return (MS_BUILT_IN_EXECUTED);
 }

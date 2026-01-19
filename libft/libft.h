@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/02 14:22:21 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/01/17 16:13:24 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/01/19 12:40:28 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,12 @@ typedef struct s_list
 	void			*content;
 	struct s_list	*next;
 }	t_list;
+
+typedef struct s_str_list
+{
+	char				*content;
+	struct s_str_list	*next;
+}	t_str_list;
 
 int		ft_isalpha(int c);
 int		ft_isdigit(int c);
@@ -65,6 +71,10 @@ void	ft_lstdelone(t_list *lst, void (*del)(void *));
 void	ft_lstclear(t_list **lst, void (*del)(void *));
 void	ft_lstiter(t_list *lst, void (*f)(void *));
 t_list	*ft_lstmap(t_list *lst, void *(*f)(void *), void (*del)(void *));
+// str_list
+t_str_list	*ft_str_lstnew(char *content);
+void	ft_str_lstadd_back(t_str_list **lst, t_str_list *new);
+void	ft_str_delitem(t_str_list **lst, t_str_list *item);
 // Others
 void	*free_split(char **spl);
 char	*ft_utoa_base(unsigned long nbr, const char *base);
