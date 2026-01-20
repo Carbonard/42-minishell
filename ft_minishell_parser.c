@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_minishell_parser.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nyxssa <nyxssa@student.42.fr>              +#+  +:+       +#+        */
+/*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/16 16:54:26 by nyxssa            #+#    #+#             */
-/*   Updated: 2026/01/19 22:30:32 by nyxssa           ###   ########.fr       */
+/*   Updated: 2026/01/20 00:00:43 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,7 @@ static int
 			*second = malloc(sizeof(t_command));
 			(*first)->cmd = input->cmd;
 			(*second)->cmd = input->cmd + i + 2;
-printf("En logic:\nfirst:%s\nsecond:%s\n", (*first)->cmd, (*second)->cmd);
+// printf("En logic:\nfirst:%s\nsecond:%s\n", (*first)->cmd, (*second)->cmd);
 			input->cmd1 = *first;
 			input->cmd2 = *second;
 			return (1);
@@ -105,7 +105,7 @@ static int
 			*second = malloc(sizeof(t_command));
 			(*first)->cmd = input->cmd;
 			(*second)->cmd = input->cmd + i + 1;
-printf("En pipes:\nfirst:%s\nsecond:%s\n", (*first)->cmd, (*second)->cmd);
+// printf("En pipes:\nfirst:%s\nsecond:%s\n", (*first)->cmd, (*second)->cmd);
 			input->cmd1 = *first;
 			input->cmd2 = *second;
 			return (1);

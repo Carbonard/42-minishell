@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/17 21:35:56 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/01/19 14:08:47 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/01/20 00:12:03 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ int	check_build_ins(t_context *ctx, char **command)
 	else if (!ft_strncmp(command[0], "unset", 6))
 		unset(ctx, command[1]);
 	else if (!ft_strncmp(command[0], "exit", 5))
-		return (MS_EXIT);
+		ft_exit(ctx);
 	else
 		return (MS_BUILT_IN_NFOUND);
 	return (MS_BUILT_IN_EXECUTED);

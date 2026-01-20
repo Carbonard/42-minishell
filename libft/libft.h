@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/02 14:22:21 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/01/19 12:40:28 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/01/20 00:07:54 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,6 +75,7 @@ t_list	*ft_lstmap(t_list *lst, void *(*f)(void *), void (*del)(void *));
 t_str_list	*ft_str_lstnew(char *content);
 void	ft_str_lstadd_back(t_str_list **lst, t_str_list *new);
 void	ft_str_delitem(t_str_list **lst, t_str_list *item);
+void	ft_str_lstclear(t_str_list **lst);
 // Others
 void	*free_split(char **spl);
 char	*ft_utoa_base(unsigned long nbr, const char *base);
