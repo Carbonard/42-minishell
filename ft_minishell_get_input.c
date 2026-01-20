@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/18 20:24:41 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/01/18 20:25:09 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/01/20 23:01:48 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,44 +33,126 @@ static int	get_prompt(char *prompt)
 		return (0);
 }
 
-static int	open_quotes(char *input)
+static int	check_quotes(t_context *ctx)
 {
 	int		i;
 	char	quote;
 
 	i = 0;
-	while (input[i])
+	while (ctx->user_input[i])
 	{
-		if (input[i] == '\'' || input[i] == '"')
+		if (ctx->user_input[i] == '\'' || ctx->user_input[i] == '"')
 		{
-			quote = input[i];
+			quote = ctx->user_input[i];
 			i++;
-			while (input[i] && input[i] != quote)
+			while (ctx->user_input[i] && ctx->user_input[i] != quote)
 				i++;
-			if (!input[i])
+			if (!ctx->user_input[i])
+			{
+				ctx->status = MS_OPENQUOTE;
 				return (1);
+			}
 		}
 		i++;
 	}
 	return (0);
 }
 
-char	*read_input(void)
+static int	check_parenthesis(t_context *ctx)
+{
+	int	i;
+	int	parenthesis_checker;
+
+	i = 0;
+	parenthesis_checker = 0;
+	while (ctx->user_input[i])
+	{
+		if (ctx->user_input[i] == '(')
+			parenthesis_checker++;
+		if (ctx->user_input[i] == ')')
+			parenthesis_checker--;
+		if (parenthesis_checker < 0)
+		{
+			ctx->status = MS_E_SYNTAX;
+			return (1);
+		}
+		i++;
+	}
+	if (parenthesis_checker != 0)
+		return (1);
+	return (0);
+}
+
+static int	is_operator(char *str)
+{
+	if ((str[0] == '&' && str[1] == '&') || (str[0] == '|' && str[1] == '|'))
+		return (2);
+	if (str[0] == '|')
+		return (1);
+	return (0);
+}
+
+static int	is_redirection(char *str)
+{
+	if ((str[0] == '<' && str[1] == '<') || (str[0] == '>' && str[1] == '>'))
+		return (2);
+	if (str[0] == '<' || str[0] == '>')
+		return (1);
+	return (0);
+}
+
+static int	check_operator(t_context *ctx)
+{
+	int	i;
+
+	i = 0;
+	while (ctx->user_input[i])
+	{
+		if (is_operator(ctx->user_input + i))
+		{
+// printf("1.%s\n", ctx->user_input + i);
+			i += is_operator(ctx->user_input + i);
+// printf("2.%s\n", ctx->user_input + i);
+			while ((ctx->user_input[i] == ' ' || ctx->user_input[i] == '\n'))
+				i++;
+// printf("3.%s\n", ctx->user_input + i);
+			if (ctx->user_input[i] == 0)
+			{
+				ctx->status = MS_E_SYNTAX;
+				return (1);
+			}
+		}
+		else if (is_redirection(ctx->user_input + i))
+		{
+			i += is_redirection(ctx->user_input + i);
+			while ((ctx->user_input[i] == ' '))
+				i++;
+			if (ctx->user_input == 0)
+			{
+				ctx->status = MS_E_SYNTAX_EOF;
+				return (1);
+			}
+		}
+		i++;
+	}
+	return (0);
+}
+
+void	read_input(t_context *ctx)
 {
 	char	prompt[MAX_PWD + 3];
-	char	*input;
 	char	*input_extension;
 	char	*aux;
 	int		start;
 
+	ctx->status = MS_SUCCESS;
 	start = get_prompt(prompt);
-	input = readline(prompt + start);
-	while (open_quotes(input))
+	ctx->user_input = readline(prompt + start);
+	while ((check_quotes(ctx) || check_parenthesis(ctx) || check_operator(ctx)))
 	{
 		input_extension = readline("> ");
-		aux = ft_strjoin_char(input, input_extension, '\n');
-		free(input);
-		input = aux;
+		aux = ft_strjoin_char(ctx->user_input, input_extension, '\n');
+		free(ctx->user_input);
+		ctx->user_input = aux;
 	}
-	return (input);
 }

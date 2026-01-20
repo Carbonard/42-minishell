@@ -18,3 +18,8 @@ free at exit
 	- si falla env
 
 check unset VAR=value
+(echo hola) > file
+
+señales
+	- historial
+	- ctrl + D mientras escribir input antes y despues de un salto de linea

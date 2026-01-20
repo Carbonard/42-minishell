@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/16 14:59:51 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/01/19 13:53:53 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/01/20 14:37:52 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ int	main(int argc, char **argv, char **env)
 	status = 1;
 	while (status >= 0)
 	{
-		ctx.user_input = read_input();
+		read_input(&ctx);
 		ctx.cmd_tree->cmd = ctx.user_input;
 		create_tree(ctx.cmd_tree);
 		display_tree(ctx.cmd_tree);

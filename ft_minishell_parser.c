@@ -6,20 +6,21 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/16 16:54:26 by nyxssa            #+#    #+#             */
-/*   Updated: 2026/01/20 00:00:43 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/01/20 22:15:42 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_minishell.h"
 
-static int	find_closing_par(char *str)
+// This function assumes that the closing parenthesis exists
+int	find_closing_par(char *str)
 {
 	int	parenthesis_checker;
 	int	parenthesis_checker_i;
 
 	parenthesis_checker = 1;
 	parenthesis_checker_i = 0;
-	while (parenthesis_checker != 0)
+	while (str[parenthesis_checker_i] && parenthesis_checker != 0)
 	{
 		parenthesis_checker_i++;
 		if (str[parenthesis_checker_i] == '(')

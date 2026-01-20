@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/17 17:03:15 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/01/18 20:37:21 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/01/20 23:04:20 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ static void	cut_string(char *cmd)
 			quote = *cmd;
 			shift++;
 		}
-		else if (quote || *cmd != ' ')
+		else if (quote || (*cmd != ' ' && *cmd != '\n'))
 		{
 			*(cmd - shift) = *cmd;
 			if (*cmd == quote)

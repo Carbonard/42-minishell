@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/16 14:57:20 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/01/20 00:10:58 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/01/20 22:39:05 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,11 @@
 enum e_status
 {
 	MS_SUCCESS,
+	MS_OPENQUOTE,
+	MS_OPENPAR,
+	MS_OPENOP,
+	MS_E_SYNTAX,
+	MS_E_SYNTAX_EOF,
 	MS_EXIT,
 	MS_BUILT_IN_EXECUTED,
 	MS_BUILT_IN_NFOUND,
@@ -73,9 +78,11 @@ typedef struct s_redirection
 
 typedef struct s_context
 {
-	t_str_list		*env;
+	int			status;
+	t_str_list	*env;
 	char		*user_input;
 	t_command	*cmd_tree;
+
 }	t_context;
 
 int		save_env(t_context *ctx, char **original_env);
@@ -83,8 +90,9 @@ int		add_env(t_context *ctx, char *new_var);
 t_str_list	*find_env_node(t_context *ctx, char *var);
 char	*find_env_value(t_context *ctx, char *var);
 int		del_env(t_context *ctx, char *var_name);
-char	*read_input(void);
+void	read_input(t_context *ctx);
 // Parser
+int		find_closing_par(char *str);
 void	create_tree(t_command *input);
 void	display_tree(t_command *tree);
 // Built-ins
