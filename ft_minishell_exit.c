@@ -6,13 +6,13 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/20 00:02:17 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/01/20 00:13:02 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/01/21 22:15:34 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_minishell.h"
 
-static void	clear_tree(t_command *tree)
+static void	clear_tree(t_command_tree *tree)
 {
 	if (tree->cmd1)
 		clear_tree(tree->cmd1);

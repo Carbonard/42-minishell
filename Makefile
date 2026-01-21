@@ -6,6 +6,8 @@ CFLAGS = -Wall -Werror -Wextra -g3 #-fsanitize=address
 
 CLIBS = -L./libft -L./dynamic_arrays -lft -lft_dynarray -lreadline
 
+NAME = minishell
+
 LIBFT = libft/libft.a
 
 DYNARRAYS = dynamic_arrays/libft_dynarray.a
@@ -32,6 +34,6 @@ $(DYNARRAYS):
 # cd: ft_minishell_cd.c $(LIBFT)
 # 	$(CC) $(CFLAGS) $^ $(CLIBS) -o cd
 
-test: $(LIBFT) $(DYNARRAYS) $(BUILT_INS) $(SRC) ft_minishell_main.c
-	$(CC) $(CFLAGS) $^ $(CLIBS) -o test
+$(NAME): $(LIBFT) $(DYNARRAYS) $(BUILT_INS) $(SRC) ft_minishell_main.c
+	$(CC) $(CFLAGS) $^ $(CLIBS) -o $@
 

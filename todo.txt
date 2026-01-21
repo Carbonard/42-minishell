@@ -7,10 +7,7 @@ Parser:
 
 built-ins
 	- cd - y cd (?)
-	- averiguar que coño con env
-	- export
-	- unset
-	- exit
+	- errores
 
 free at exit
 	- input
@@ -19,6 +16,7 @@ free at exit
 
 check unset VAR=value
 (echo hola) > file
+echo $CMD | ./minishell
 
 señales
 	- historial

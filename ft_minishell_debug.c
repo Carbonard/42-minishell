@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   ft_minishell_debug.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nyxssa <nyxssa@student.42.fr>              +#+  +:+       +#+        */
+/*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/18 20:27:06 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/01/19 22:23:41 by nyxssa           ###   ########.fr       */
+/*   Updated: 2026/01/21 22:54:26 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_minishell.h"
 
-void	display_tree(t_command *tree)
+void	display_tree(t_command_tree *tree)
 {
 	char	*separators[] = {"", "&&", "||", "|"};
 	if (!tree->cmd1)

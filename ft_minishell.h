@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/16 14:57:20 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/01/20 22:39:05 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/01/21 23:23:55 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 # include <readline/readline.h>
 # include <readline/history.h>
 # include <errno.h>
+# include <sys/wait.h>
 
 # define MAX_PWD 1024
 
@@ -61,14 +62,14 @@ enum e_separators
 	HERE_DOC
 };
 
-typedef struct s_command
+typedef struct s_command_tree
 {
-	struct s_command	*cmd1;
-	struct s_command	*cmd2;
+	struct s_command_tree	*cmd1;
+	struct s_command_tree	*cmd2;
 	char				*cmd;
 	int					sep;
 	char				*file;
-}	t_command;
+}	t_command_tree;
 
 typedef struct s_redirection
 {
@@ -78,10 +79,11 @@ typedef struct s_redirection
 
 typedef struct s_context
 {
-	int			status;
-	t_str_list	*env;
-	char		*user_input;
-	t_command	*cmd_tree;
+	int				status;
+	t_str_list		*env;
+	char			*user_input;
+	t_command_tree	*cmd_tree;
+	t_dyn_int		pids;
 
 }	t_context;
 
@@ -93,8 +95,8 @@ int		del_env(t_context *ctx, char *var_name);
 void	read_input(t_context *ctx);
 // Parser
 int		find_closing_par(char *str);
-void	create_tree(t_command *input);
-void	display_tree(t_command *tree);
+void	create_tree(t_command_tree *input);
+void	display_tree(t_command_tree *tree);
 // Built-ins
 void	echo(char **argv);
 void	pwd(void);
@@ -103,10 +105,11 @@ int		export(t_context *ctx, char *new_var);
 int		unset(t_context *ctx, char *var);
 void	ft_exit(t_context *ctx);
 // Execute commands
-int		execute(t_context *ctx, t_command *command);
+int		execute(t_context *ctx, t_command_tree *command);
+void	execute_input(t_context *ctx);
 char	**split_cmd(char *cmd, t_redirection *redir);
 int		check_build_ins(t_context *ctx, char **command);
 // Debug
-void	display_tree(t_command *tree);
+void	display_tree(t_command_tree *tree);
 
 #endif

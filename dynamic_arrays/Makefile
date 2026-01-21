@@ -4,7 +4,7 @@ CFLAGS = -Wall -Werror -Wextra -g3
 
 NAME = libft_dynarray.a
 
-FILES = dynarray_realloc dynamic_ptr
+FILES = dynarray_realloc dynamic_ptr dynamic_int
 
 SRC_DIR = src
 

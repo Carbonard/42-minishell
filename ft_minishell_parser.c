@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/16 16:54:26 by nyxssa            #+#    #+#             */
-/*   Updated: 2026/01/20 22:15:42 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/01/21 22:15:34 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ static void	remove_parenthesis(char *str)
 }
 
 static int
-	divide_by_logic_op(t_command *input, t_command **first, t_command **second)
+	divide_by_logic_op(t_command_tree *input, t_command_tree **first, t_command_tree **second)
 {
 	int			i;
 
@@ -73,8 +73,8 @@ static int
 			else
 				input->sep = OR;
 			input->cmd[i] = 0;
-			*first = malloc(sizeof(t_command));
-			*second = malloc(sizeof(t_command));
+			*first = malloc(sizeof(t_command_tree));
+			*second = malloc(sizeof(t_command_tree));
 			(*first)->cmd = input->cmd;
 			(*second)->cmd = input->cmd + i + 2;
 // printf("En logic:\nfirst:%s\nsecond:%s\n", (*first)->cmd, (*second)->cmd);
@@ -88,7 +88,7 @@ static int
 }
 
 static int
-	divide_by_pipes(t_command *input, t_command **first, t_command **second)
+	divide_by_pipes(t_command_tree *input, t_command_tree **first, t_command_tree **second)
 {
 	int			i;
 
@@ -102,8 +102,8 @@ static int
 		{
 			input->sep = PIPE;
 			input->cmd[i] = 0;
-			*first = malloc(sizeof(t_command));
-			*second = malloc(sizeof(t_command));
+			*first = malloc(sizeof(t_command_tree));
+			*second = malloc(sizeof(t_command_tree));
 			(*first)->cmd = input->cmd;
 			(*second)->cmd = input->cmd + i + 1;
 // printf("En pipes:\nfirst:%s\nsecond:%s\n", (*first)->cmd, (*second)->cmd);
@@ -116,10 +116,10 @@ static int
 	return (0);
 }
 
-void	create_tree(t_command *input)
+void	create_tree(t_command_tree *input)
 {
-	t_command	*first;
-	t_command	*second;
+	t_command_tree	*first;
+	t_command_tree	*second;
 
 	first = NULL;
 	second = NULL;
