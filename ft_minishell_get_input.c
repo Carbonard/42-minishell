@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/18 20:24:41 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/01/20 23:01:48 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/01/22 18:29:45 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -147,10 +147,22 @@ void	read_input(t_context *ctx)
 
 	ctx->status = MS_SUCCESS;
 	start = get_prompt(prompt);
-	ctx->user_input = readline(prompt + start);
+	if (ctx->interactive)
+		ctx->user_input = get_next_line(STDIN_FILENO);
+	else
+		ctx->user_input = readline(prompt + start);
+	if (!ctx->user_input)
+	{
+		ctx->user_input = ft_strdup("exit");
+		printf("exit\n");
+		return ;
+	}
 	while ((check_quotes(ctx) || check_parenthesis(ctx) || check_operator(ctx)))
 	{
-		input_extension = readline("> ");
+		if (ctx->interactive)
+			input_extension = get_next_line(STDIN_FILENO);
+		else
+			input_extension = readline("> ");
 		aux = ft_strjoin_char(ctx->user_input, input_extension, '\n');
 		free(ctx->user_input);
 		ctx->user_input = aux;

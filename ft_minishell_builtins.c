@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/17 21:35:56 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/01/20 00:12:03 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/01/22 16:58:14 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,17 +15,17 @@
 int	check_build_ins(t_context *ctx, char **command)
 {
 	if (!ft_strncmp(command[0], "cd", 3))
-		chdir(command[1]);
+		ctx->status = chdir(command[1]);
 	else if (!ft_strncmp(command[0], "pwd", 4))
-		pwd();
+		ctx->status = pwd();
 	else if (!ft_strncmp(command[0], "env", 4))
-		print_env(ctx);
+		ctx->status = print_env(ctx);
 	else if (!ft_strncmp(command[0], "echo", 5))
-		echo(command);
+		ctx->status = echo(command);
 	else if (!ft_strncmp(command[0], "export", 7))
-		export(ctx, command[1]);
+		ctx->status = export(ctx, command[1]);
 	else if (!ft_strncmp(command[0], "unset", 6))
-		unset(ctx, command[1]);
+		ctx->status = unset(ctx, command[1]);
 	else if (!ft_strncmp(command[0], "exit", 5))
 		ft_exit(ctx);
 	else

@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/18 19:24:30 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/01/21 23:23:33 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/01/22 17:05:17 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,26 +14,31 @@
 
 char	*find_cmd_path(t_context *ctx, char *cmd)
 {
-	char		**paths;
-	char		*path;
+	char		**env_paths;
+	char		*abs_path;
+	char		*tmp;
 	int			i;
-// errores malloc
-	paths = ft_split(find_env_value(ctx, "PATH"), ':');
+
+	env_paths = ft_split(find_env_value(ctx, "PATH"), ':');
 	i = 0;
-	while (paths[i])
+	while (env_paths && env_paths[i])
 	{
-		path = ft_strjoin(paths[i], "/");
-		path = ft_strjoin(path, cmd);
-		if (!access(path, X_OK))
+		tmp = ft_strjoin(env_paths[i], "/");
+		if (!tmp)
+			return (free_split(env_paths));
+		abs_path = ft_strjoin(tmp, cmd);
+		free(tmp);
+		if (!abs_path)
+			return (free_split(env_paths));
+		if (!access(abs_path, X_OK))
 		{
-			free_split(paths);
-			return (path);
+			free_split(env_paths);
+			return (abs_path);
 		}
-		free(path);
+		free(abs_path);
 		i++;
 	}
-	free_split(paths);
-	return (NULL);
+	return (free_split(env_paths));
 }
 
 char	**list_to_strarray(t_str_list *env)
@@ -41,7 +46,7 @@ char	**list_to_strarray(t_str_list *env)
 	t_str_list	*aux;
 	char		**new_env;
 	int			size;
-// Control de errores
+
 	size = 0;
 	aux = env;
 	while (aux)
@@ -50,19 +55,22 @@ char	**list_to_strarray(t_str_list *env)
 		aux = aux->next;
 	}
 	new_env = malloc((size + 1) * sizeof(char *));
+	if (!new_env)
+		return (NULL);
 	size = 0;
-	aux = env;
-	while (aux)
+	while (env)
 	{
-		new_env[size] = ft_strdup(aux->content);
+		new_env[size] = ft_strdup(env->content);
+		if (!new_env[size])
+			return (free_split(new_env));
 		size++;
-		aux = aux->next;
+		env = env->next;
 	}
 	new_env[size] = NULL;
 	return (new_env);
 }
 
-void	execute_command(t_context *ctx, char **command)
+void	create_son(t_context *ctx, char **command)
 {
 	char	*path;
 	char	**env;
@@ -76,51 +84,86 @@ void	execute_command(t_context *ctx, char **command)
 	}
 	path = find_cmd_path(ctx, command[0]);
 	if (!path)
-		return ;
-	env = list_to_strarray(ctx->env);
-	if (!env)
-		return ;
-	execve(path, command, env);
-	printf("algo fue mal");
+		ctx->status = MS_E_PATH_NFOUND;
+	else
+	{
+		env = list_to_strarray(ctx->env);
+		if (!env)
+			ctx->status = MS_E_ENV_NFOUND;
+		else
+			execve(path, command, env);
+		// Gestionar errores
+		printf("Mensaje de error\n");
+		exit (-42);
+	}
 }
 
-int	execute(t_context *ctx, t_command_tree *command)
+void	execute_command(t_context *ctx, t_command_tree *command)
 {
 	char			**split;
 	t_redirection	redir;
 	int				status;
-// printf("\e[32m%s\nsep: %i\e[0m\n", command->cmd, command->sep);
-	if (!command->sep)
+
+	split = split_cmd(command->cmd, &redir);
+	// Manage redirections
+	if (!split[0])
+	//habria que ver mas
+		return ;
+	status = check_build_ins(ctx, split);
+	if (status == MS_BUILT_IN_EXECUTED)
 	{
-		split = split_cmd(command->cmd, &redir);
-		// Manage redirections
-		status = check_build_ins(ctx, split);
-		if (status == MS_BUILT_IN_EXECUTED)
-			return (0);
-		execute_command(ctx, split);
+		ctx->last_cmd_is_builtin = 1;
+		return ;
 	}
-	else
+	ctx->last_cmd_is_builtin = 0;
+	create_son(ctx, split);
+}
+
+int	wait_sons(t_context *ctx)
+{
+	size_t	i;
+	int		status;
+
+	i = 0;
+	while (i < ctx->pids.length)
 	{
-		if (command->cmd1)
-			execute(ctx, command->cmd1);
-		if (command->cmd2)
+		waitpid(ctx->pids.arr[i], &status, 0);
+		i++;
+	}
+	ctx->pids.length = 0;
+	if (ctx->last_cmd_is_builtin)
+		return (ctx->status);
+	return (status);
+}
+
+void	manage_pipe(t_context *ctx, t_command_tree *command)
+{
+	execute_command(ctx, command->cmd1);
+	execute_command(ctx, command->cmd2);
+}
+
+void	execute(t_context *ctx, t_command_tree *command)
+{
+	int	status;
+
+	if (command->sep == NONE)
+		execute_command(ctx, command);
+	else if (command->sep == PIPE)
+		manage_pipe(ctx, command);
+	else if (command->sep == AND || command->sep == OR)
+	{
+		execute(ctx, command->cmd1);
+		status = wait_sons(ctx);
+		if ((WEXITSTATUS(status) == EXIT_SUCCESS && command->sep == AND)
+			|| (WEXITSTATUS(status) != EXIT_SUCCESS && command->sep == OR))
 			execute(ctx, command->cmd2);
 	}
-	return (0);
 }
 
 void	execute_input(t_context *ctx)
 {
-	// int	i;
-	int	wstatus;
-
 	init_dyn_int(&ctx->pids, 1);
 	execute(ctx, ctx->cmd_tree);
-	// i = 0;
-	// while (i < ctx->pids.length)
-	// {
-		waitpid(-1, &wstatus, 0);
-	// 	i++;
-	// }
+	ctx->exit_status = wait_sons(ctx);
 	free_dyn_int(&ctx->pids);
 }

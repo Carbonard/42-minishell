@@ -17,6 +17,8 @@ free at exit
 check unset VAR=value
 (echo hola) > file
 echo $CMD | ./minishell
+'echo hola
+echo adios'
 
 señales
 	- historial

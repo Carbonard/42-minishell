@@ -6,22 +6,25 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/16 18:55:11 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/01/19 14:10:17 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/01/22 16:59:40 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_minishell.h"
 
-void	print_env(t_context *ctx)
+int	print_env(t_context *ctx)
 {
 	t_str_list	*item;
 
+	if (!ctx->env)
+		return (MS_E_ENV_NFOUND);
 	item = ctx->env;
 	while (item)
 	{
 		ft_putendl_fd(item->content, 1);
 		item = item->next;
 	}
+	return (MS_SUCCESS);
 }
 
 int	export(t_context *ctx, char *new_var)
@@ -50,5 +53,5 @@ int	unset(t_context *ctx, char *var)
 		ft_str_delitem(&ctx->env, item);
 		return (MS_SUCCESS);
 	}
-	return (MS_E_ENV_NFOUND);
+	return (MS_E_VAR_NFOUND);
 }

@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/16 14:57:20 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/01/21 23:23:55 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/01/22 18:09:03 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,9 +34,12 @@ enum e_status
 	MS_EXIT,
 	MS_BUILT_IN_EXECUTED,
 	MS_BUILT_IN_NFOUND,
+	MS_E_PWD_NFOUND,
 	MS_E_ENV_MALLOC,
 	MS_E_ENV_NFOUND,
-	MS_E_EQINNAME
+	MS_E_VAR_NFOUND,
+	MS_E_EQINNAME,
+	MS_E_PATH_NFOUND
 };
 
 enum e_BUILTINS
@@ -80,11 +83,13 @@ typedef struct s_redirection
 typedef struct s_context
 {
 	int				status;
+	int				exit_status;
 	t_str_list		*env;
 	char			*user_input;
+	int				interactive;
 	t_command_tree	*cmd_tree;
 	t_dyn_int		pids;
-
+	int				last_cmd_is_builtin;
 }	t_context;
 
 int		save_env(t_context *ctx, char **original_env);
@@ -98,14 +103,15 @@ int		find_closing_par(char *str);
 void	create_tree(t_command_tree *input);
 void	display_tree(t_command_tree *tree);
 // Built-ins
-void	echo(char **argv);
-void	pwd(void);
-void	print_env(t_context *ctx);
+int		valid_flag(const char *arg, char f);
+int		echo(char **argv);
+int		pwd(void);
+int		print_env(t_context *ctx);
 int		export(t_context *ctx, char *new_var);
 int		unset(t_context *ctx, char *var);
 void	ft_exit(t_context *ctx);
 // Execute commands
-int		execute(t_context *ctx, t_command_tree *command);
+void	execute(t_context *ctx, t_command_tree *command);
 void	execute_input(t_context *ctx);
 char	**split_cmd(char *cmd, t_redirection *redir);
 int		check_build_ins(t_context *ctx, char **command);
