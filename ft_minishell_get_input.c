@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/18 20:24:41 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/01/22 18:29:45 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/01/22 18:58:11 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -154,16 +154,23 @@ void	read_input(t_context *ctx)
 	if (!ctx->user_input)
 	{
 		ctx->user_input = ft_strdup("exit");
-		printf("exit\n");
+		if (!ctx->interactive)
+			printf("exit\n");
 		return ;
 	}
 	while ((check_quotes(ctx) || check_parenthesis(ctx) || check_operator(ctx)))
 	{
 		if (ctx->interactive)
+		{
 			input_extension = get_next_line(STDIN_FILENO);
+			//Checkear errores de malloc
+			aux = ft_strjoin(ctx->user_input, input_extension);
+		}
 		else
+		{
 			input_extension = readline("> ");
-		aux = ft_strjoin_char(ctx->user_input, input_extension, '\n');
+			aux = ft_strjoin_char(ctx->user_input, input_extension, '\n');
+		}
 		free(ctx->user_input);
 		ctx->user_input = aux;
 	}

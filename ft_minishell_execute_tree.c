@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/18 19:24:30 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/01/22 17:05:17 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/01/22 21:48:11 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -138,8 +138,15 @@ int	wait_sons(t_context *ctx)
 
 void	manage_pipe(t_context *ctx, t_command_tree *command)
 {
-	execute_command(ctx, command->cmd1);
-	execute_command(ctx, command->cmd2);
+	// int	pipe_fd[2];
+
+	// pipe(pipe_fd);
+	// dup2(pipe_fd[1], STDOUT_FILENO);
+	// close(pipe_fd[1]);
+	execute(ctx, command->cmd1);
+	// dup2(pipe_fd[0], STDIN_FILENO);
+	// close(pipe_fd[0]);
+	execute(ctx, command->cmd2);
 }
 
 void	execute(t_context *ctx, t_command_tree *command)
