@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/16 14:59:51 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/01/22 18:31:11 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/01/28 13:16:26 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,16 +14,19 @@
 
 void	io_while(t_context *ctx)
 {
+	ctx->status = MS_SUCCESS;
 	while (ctx->status != MS_EXIT)
 	{
 		read_input(ctx);
-		ctx->cmd_tree->cmd = ctx->user_input;
-		create_tree(ctx->cmd_tree);
+		ctx->cmd_tree.cmd = ctx->user_input;
+		create_tree(&ctx->cmd_tree);
 		// display_tree(ctx->cmd_tree);
 		// putchar('\n');
 		execute_input(ctx);
+		clear_input(ctx);
 	}
 }
+
 void	check_interactive(t_context *ctx, int argc, char **argv)
 {
 	int	input_pipe[2];
@@ -55,7 +58,7 @@ int	main(int argc, char **argv, char **env)
 
 	check_interactive(&ctx, argc, argv);
 	save_env(&ctx, env);
-	ctx.cmd_tree = malloc(sizeof(t_command_tree));
+	// ctx.cmd_tree = malloc(sizeof(t_command_tree));
 	io_while(&ctx);
 	return (0);
 }

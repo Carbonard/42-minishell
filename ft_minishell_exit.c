@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/20 00:02:17 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/01/21 22:15:34 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/01/28 13:19:30 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,10 +21,23 @@ static void	clear_tree(t_command_tree *tree)
 	free(tree);
 }
 
+void	clear_input(t_context *ctx)
+{
+	if (ctx->user_input)
+		free(ctx->user_input);
+	ctx->user_input = NULL;
+	if (ctx->cmd_tree.cmd1)
+		clear_tree(ctx->cmd_tree.cmd1);
+	ctx->cmd_tree.cmd1 = NULL;
+	if (ctx->cmd_tree.cmd2)
+		clear_tree(ctx->cmd_tree.cmd2);
+	ctx->cmd_tree.cmd2 = NULL;
+}
+
 void	ft_exit(t_context *ctx)
 {
-	free(ctx->user_input);
-	clear_tree(ctx->cmd_tree);
+	clear_input(ctx);
 	ft_str_lstclear(&ctx->env);
-	exit (errno);
+	// rl_clear_history();
+	exit (ctx->exit_status);
 }

@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/16 16:54:26 by nyxssa            #+#    #+#             */
-/*   Updated: 2026/01/21 22:15:34 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/01/27 23:12:05 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,11 +31,13 @@ int	find_closing_par(char *str)
 	return (parenthesis_checker_i);
 }
 
-static void	remove_parenthesis(char *str)
+static int	remove_parenthesis(char *str)
 {
 	int	parenthesis_checker_i;
 	int	space_cnt;
+	int	removed;
 
+	removed = 0;
 	while (*str == ' ' || *str == '(')
 	{
 		space_cnt = 1;
@@ -48,10 +50,12 @@ static void	remove_parenthesis(char *str)
 			{
 				str[0] = ' ';
 				str[parenthesis_checker_i] = ' ';
+				removed = 1;
 			}
 		}
 		str++;
 	}
+	return (removed);
 }
 
 static int
@@ -60,7 +64,6 @@ static int
 	int			i;
 
 	i = 0;
-	remove_parenthesis(input->cmd);
 	while (input->cmd[i] != 0)
 	{
 		if (input->cmd[i] == '(')
@@ -77,7 +80,6 @@ static int
 			*second = malloc(sizeof(t_command_tree));
 			(*first)->cmd = input->cmd;
 			(*second)->cmd = input->cmd + i + 2;
-// printf("En logic:\nfirst:%s\nsecond:%s\n", (*first)->cmd, (*second)->cmd);
 			input->cmd1 = *first;
 			input->cmd2 = *second;
 			return (1);
@@ -93,7 +95,6 @@ static int
 	int			i;
 
 	i = 0;
-	remove_parenthesis(input->cmd);
 	while (input->cmd[i] != 0)
 	{
 		if (input->cmd[i] == '(')
@@ -106,7 +107,6 @@ static int
 			*second = malloc(sizeof(t_command_tree));
 			(*first)->cmd = input->cmd;
 			(*second)->cmd = input->cmd + i + 1;
-// printf("En pipes:\nfirst:%s\nsecond:%s\n", (*first)->cmd, (*second)->cmd);
 			input->cmd1 = *first;
 			input->cmd2 = *second;
 			return (1);
@@ -124,7 +124,7 @@ void	create_tree(t_command_tree *input)
 	first = NULL;
 	second = NULL;
 	input->sep = NONE;
-	remove_parenthesis(input->cmd);
+	input->subshell = remove_parenthesis(input->cmd);
 	if (!divide_by_logic_op(input, &first, &second))
 		divide_by_pipes(input, &first, &second);
 	input->cmd1 = first;

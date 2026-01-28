@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/18 20:24:41 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/01/22 18:58:11 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/01/28 21:29:17 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -174,4 +174,5 @@ void	read_input(t_context *ctx)
 		free(ctx->user_input);
 		ctx->user_input = aux;
 	}
+	add_history(ctx->user_input);
 }

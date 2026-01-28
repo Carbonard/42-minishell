@@ -37,3 +37,7 @@ $(DYNARRAYS):
 $(NAME): $(LIBFT) $(DYNARRAYS) $(BUILT_INS) $(SRC) ft_minishell_main.c
 	$(CC) $(CFLAGS) $^ $(CLIBS) -o $@
 
+clean:
+	@rm -f $(NAME)
+
+re: clean $(NAME)
