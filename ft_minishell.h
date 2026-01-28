@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/16 14:57:20 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/01/28 14:32:54 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/01/28 22:20:14 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@
 # include <readline/history.h>
 # include <errno.h>
 # include <sys/wait.h>
+# include <fcntl.h>
 
 # define MAX_PWD 1024
 
@@ -53,7 +54,7 @@ enum e_BUILTINS
 	EXIT
 };
 
-enum e_separators
+enum e_operators
 {
 	NONE,
 	AND,
@@ -76,8 +77,10 @@ typedef struct s_command_tree
 
 typedef struct s_redirection
 {
-	int		type;
-	char	*file;
+	int		type_in;
+	char	*file_in;
+	int		type_out;
+	char	*file_out;
 }	t_redirection;
 
 typedef struct s_context

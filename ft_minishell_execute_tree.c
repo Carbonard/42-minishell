@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/18 19:24:30 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/01/28 21:32:40 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/01/28 23:34:07 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,12 +112,14 @@ void	execute_command(t_context *ctx, char **argv)
 	char			*path;
 	char			**env;
 
-	// Manage redirections
 	if (!argv[0])
 	//habria que ver mas
 		return ;
 	try_builtins(ctx, argv);
-	path = find_cmd_path(ctx, argv[0]);
+	if (!ft_strncmp(argv[0], "./", 2) || !ft_strncmp(argv[0], "../", 3))
+		path = ft_strdup(argv[0]);
+	else
+		path = find_cmd_path(ctx, argv[0]);
 	if (!path)
 	{
 		ctx->status = MS_E_PATH_NFOUND;
@@ -130,6 +132,35 @@ void	execute_command(t_context *ctx, char **argv)
 		execve(path, argv, env);
 	free(path);
 	free_split(env);
+}
+
+void	manage_redirection(t_redirection *redir)
+{
+	int	fd;
+	// fprintf(stderr, "sssss\n");
+// fprintf(stderr, "managing in: %i %s\n", redir->type_in, redir->file_in);
+// fprintf(stderr, "managing out: %i %s\n", redir->type_out, redir->file_out);
+	if (redir->type_in == REDIRECTION_IN)
+	{
+		printf("redirigimos entrada a _%s_\n", redir->file_in);
+		fd = open(redir->file_in, O_RDONLY);
+		dup2(fd, STDIN_FILENO);
+		close(fd);
+	}
+	if (redir->type_out == REDIRECTION_OUT)
+	{
+		printf("redirigimos salida a _%s_\n", redir->file_out);
+		fd = open(redir->file_out, O_WRONLY | O_CREAT | O_TRUNC, 0664);
+		dup2(fd, STDOUT_FILENO);
+		close(fd);
+	}
+	else if (redir->type_out == REDIRECTION_APP)
+	{
+		printf("redirigimos salida apendada a _%s_\n", redir->file_out);
+		fd = open(redir->file_out, O_WRONLY | O_CREAT | O_APPEND, 0664);
+		dup2(fd, STDOUT_FILENO);
+		close(fd);
+	}
 }
 
 int	execute_leaf(t_context *ctx, t_command_tree *node)
@@ -150,10 +181,22 @@ int	execute_leaf(t_context *ctx, t_command_tree *node)
 		ctx->status = chdir (split[1]);
 	}
 	ctx->read_exit_status = 0;
+	// if (redir.type)
+	// 	pipe(ctx->pipe_fds);
 	pid = fork();
 	if (pid == 0)
 	{
+		// fprintf(stderr, "typein: %d, typeout: %d\n", redir.type_in, redir.type_out);
+		if (redir.type_in || redir.type_out)
+		{
+			// fprintf(stderr, "adfasdfasfd\n");
+			manage_redirection(&redir);
+		}
+		// else
+		// 	fprintf(stderr, "que cojones\n");
+		// fprintf(stderr, "esto si?\n");
 		execute_command(ctx, split);
+		perror(split[0]);
 		free(split);
 		if (ctx->status == MS_E_PATH_NFOUND)
 		{
