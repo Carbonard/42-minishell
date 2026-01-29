@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/20 00:02:17 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/01/28 23:02:37 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/01/29 13:41:38 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@ void	clear_input(t_context *ctx)
 	if (ctx->cmd_tree.cmd2)
 		clear_tree(ctx->cmd_tree.cmd2);
 	ctx->cmd_tree.cmd2 = NULL;
+	free_dyn_ptr(&ctx->here_docs);
 }
 
 void	ft_exit(t_context *ctx)

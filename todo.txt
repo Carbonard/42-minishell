@@ -26,3 +26,5 @@ señales
 
 exit no exitea
 echo hola > /dev/stdout | sleep 3 | echo adios
+
+echo hola || echo adios && echo si

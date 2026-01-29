@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/16 14:57:20 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/01/28 22:20:14 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/01/29 13:11:00 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,9 +70,10 @@ typedef struct s_command_tree
 {
 	struct s_command_tree	*cmd1;
 	struct s_command_tree	*cmd2;
-	char				*cmd;
-	int					sep;
-	int					subshell;
+	char					*cmd;
+	int						sep;
+	int						subshell;
+	char					*here_doc;
 }	t_command_tree;
 
 typedef struct s_redirection
@@ -93,6 +94,7 @@ typedef struct s_context
 	int				interactive;
 	t_command_tree	cmd_tree;
 	int				pipe_fds[2];
+	t_dyn_ptr		here_docs;
 }	t_context;
 
 int		save_env(t_context *ctx, char **original_env);
@@ -120,13 +122,12 @@ char	**split_cmd(char *cmd, t_redirection *redir);
 void	try_builtins(t_context *ctx, char **command);
 char	*find_cmd_path(t_context *ctx, char *cmd);
 char	**list_to_strarray(t_str_list *env);
-int		execute_subshell(t_context *ctx, t_command_tree *node);
-void	execute_command(t_context *ctx, char **argv);
-int		execute_leaf(t_context *ctx, t_command_tree *node);
-int		execute_logic(t_context *ctx, t_command_tree *node);
-int		execute_pipe(t_context *ctx, t_command_tree *node);
-int		execute_node(t_context *ctx, t_command_tree *node);
+// int		execute_subshell(t_context *ctx, t_command_tree *node);
 void	execute_input(t_context *ctx);
+int		execute_leaf(t_context *ctx, t_command_tree *node);
+// int		execute_logic(t_context *ctx, t_command_tree *node);
+// int		execute_pipe(t_context *ctx, t_command_tree *node);
+int		execute_node(t_context *ctx, t_command_tree *node);
 
 // Debug
 void	display_tree(t_command_tree *tree);

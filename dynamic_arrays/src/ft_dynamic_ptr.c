@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/27 17:06:30 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/01/17 21:49:57 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/01/29 13:39:43 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,15 +41,16 @@ int	add_ptr(t_dyn_ptr *d_array, char *str)
 	return (1);
 }
 
-// void	free_dyn_ptr(t_dyn_ptr *d_array)
-// {
-// 	size_t	i;
+void	free_dyn_ptr(t_dyn_ptr *d_array)
+{
+	size_t	i;
 
-// 	i = 0;
-// 	while (i < d_array->length)
-// 	{
-// 		free(d_array->arr[i]);
-// 		i++;
-// 	}
-// 	free(d_array->arr);
-// }
+	i = 0;
+	while (i < d_array->length)
+	{
+		free(d_array->arr[i]);
+		i++;
+	}
+	free(d_array->arr);
+	d_array->arr = NULL;
+}
