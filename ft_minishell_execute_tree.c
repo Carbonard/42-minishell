@@ -6,76 +6,18 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/18 19:24:30 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/01/29 13:54:31 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/01/29 18:17:38 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_minishell.h"
-
-char	*find_cmd_path(t_context *ctx, char *cmd)
-{
-	char		**env_paths;
-	char		*abs_path;
-	char		*tmp;
-	int			i;
-
-	env_paths = ft_split(find_env_value(ctx, "PATH"), ':');
-	i = 0;
-	while (env_paths && env_paths[i])
-	{
-		tmp = ft_strjoin(env_paths[i], "/");
-		if (!tmp)
-			return (free_split(env_paths));
-		abs_path = ft_strjoin(tmp, cmd);
-		free(tmp);
-		if (!abs_path)
-			return (free_split(env_paths));
-		if (!access(abs_path, X_OK))
-		{
-			free_split(env_paths);
-			return (abs_path);
-		}
-		free(abs_path);
-		i++;
-	}
-	return (free_split(env_paths));
-}
-
-char	**list_to_strarray(t_str_list *env)
-{
-	t_str_list	*aux;
-	char		**new_env;
-	int			size;
-
-	size = 0;
-	aux = env;
-	while (aux)
-	{
-		size++;
-		aux = aux->next;
-	}
-	new_env = malloc((size + 1) * sizeof(char *));
-	if (!new_env)
-		return (NULL);
-	size = 0;
-	while (env)
-	{
-		new_env[size] = ft_strdup(env->content);
-		if (!new_env[size])
-			return (free_split(new_env));
-		size++;
-		env = env->next;
-	}
-	new_env[size] = NULL;
-	return (new_env);
-}
 
 int	get_status(t_context *ctx, int wstatus)
 {
 	if (ctx->read_exit_status)
 		return (ctx->exit_status);
 	ctx->read_exit_status = 1;
-	if(WIFEXITED(wstatus))
+	if (WIFEXITED(wstatus))
 		ctx->exit_status = WEXITSTATUS(wstatus);
 	else if (WIFSIGNALED(wstatus))
 		ctx->exit_status = WTERMSIG(wstatus) + 128;
@@ -123,7 +65,7 @@ int	execute_logic(t_context *ctx, t_command_tree *node)
 	return (pid);
 }
 
-void	execute_pipe_son(t_context *ctx, int fileno, t_command_tree *next_node)
+void	execute_pipe_child(t_context *ctx, int fileno, t_command_tree *next_node)
 {
 	int	pipe_extrem;
 	int	pid;
@@ -152,11 +94,11 @@ int	execute_pipe(t_context *ctx, t_command_tree *node)
 	ctx->read_exit_status = 0;
 	pid1 = fork();
 	if (pid1 == 0)
-		execute_pipe_son(ctx, STDOUT_FILENO, node->cmd1);
+		execute_pipe_child(ctx, STDOUT_FILENO, node->cmd1);
 	close(ctx->pipe_fds[1]);
 	pid2 = fork();
 	if (pid2 == 0)
-		execute_pipe_son(ctx, STDIN_FILENO, node->cmd2);
+		execute_pipe_child(ctx, STDIN_FILENO, node->cmd2);
 	close(ctx->pipe_fds[0]);
 	waitpid(pid1, NULL, 0);
 	waitpid(pid2, &status, 0);

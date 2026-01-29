@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/16 14:57:20 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/01/29 13:11:00 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/01/29 21:22:52 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,7 +119,7 @@ int		unset(t_context *ctx, char *var);
 void	ft_exit(t_context *ctx);
 // Execute commands
 char	**split_cmd(char *cmd, t_redirection *redir);
-void	try_builtins(t_context *ctx, char **command);
+int		try_builtins(t_context *ctx, char **command);
 char	*find_cmd_path(t_context *ctx, char *cmd);
 char	**list_to_strarray(t_str_list *env);
 // int		execute_subshell(t_context *ctx, t_command_tree *node);

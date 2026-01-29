@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/18 22:18:08 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/01/21 22:34:15 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/01/29 14:05:10 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,11 +51,9 @@ t_str_list	*find_env_node(t_context *ctx, char *var)
 	item = ctx->env;
 	while (item)
 	{
-// printf("checkeando si %s es %s\n", var, item->content);
 		if (item->content[var_name_len] == '='
 			&& !ft_strncmp(var, item->content, var_name_len))
 			return (item);
-// printf("Nope, %c y ademas no %d\n", item->content[var_name_len] , ft_strncmp(var, item->content, var_name_len));
 		item = item->next;
 	}
 	return (NULL);

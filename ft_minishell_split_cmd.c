@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/17 17:03:15 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/01/28 23:36:14 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/01/29 21:32:04 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,10 +43,9 @@ static void	cut_string(char *cmd)
 
 static int	get_redirection(char *cmd, int i, t_redirection *redir)
 {
-	int original_i;
+	int	original_i;
 
 	original_i = i;
-	// fprintf(stderr, "reading %c%c\n", cmd[i], cmd[i+1]);
 	if (cmd[i] == '<' && cmd [i + 1] == '<')
 		redir->type_in = HERE_DOC;
 	else if (cmd[i] == '>' && cmd [i + 1] == '>')
@@ -73,8 +72,6 @@ char	**split_cmd(char *cmd, t_redirection *redir)
 	init_dyn_ptr(&split, 2);
 	redir->type_in = NONE;
 	redir->type_out = NONE;
-	redir->file_in = NULL;
-	redir->file_out = NULL;
 	length = ft_strlen(cmd);
 	cut_string(cmd);
 	i = 0;
@@ -90,7 +87,5 @@ char	**split_cmd(char *cmd, t_redirection *redir)
 		i++;
 	}
 	add_ptr(&split, NULL);
-	// for (int i = 0; split.arr[i]; i++)
-	// 	fprintf(stderr, "%s\n", split.arr[i]);
 	return (split.arr);
 }

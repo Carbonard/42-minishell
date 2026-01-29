@@ -6,13 +6,13 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/16 14:59:51 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/01/29 13:52:26 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/01/29 19:08:21 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_minishell.h"
 
-void read_hd(t_context *ctx, char *eof)
+void	read_hd(t_context *ctx, char *eof)
 {
 	char	*here_doc;
 	char	*new_line;
@@ -22,7 +22,8 @@ void read_hd(t_context *ctx, char *eof)
 	len = ft_strlen(eof);
 	here_doc = NULL;
 	new_line = get_next_line(0);
-	while (new_line && (ft_strncmp(new_line, eof, len) || new_line[len] != '\n'))
+	while (new_line
+		&& (ft_strncmp(new_line, eof, len) || new_line[len] != '\n'))
 	{
 		aux = ft_strjoin(here_doc, new_line);
 		free(here_doc);
@@ -32,6 +33,7 @@ void read_hd(t_context *ctx, char *eof)
 	}
 	if (new_line)
 		free(new_line);
+	//else mensaje de error
 	add_ptr(&ctx->here_docs, here_doc);
 }
 
@@ -45,7 +47,7 @@ void	read_here_docs(t_context *ctx)
 	i = 0;
 	while (ctx->user_input[i])
 	{
-		if (ctx->user_input[i] == '<' && ctx->user_input[i+1] == '<')
+		if (ctx->user_input[i] == '<' && ctx->user_input[i + 1] == '<')
 		{
 			while (ctx->user_input[i] == '<' || ctx->user_input[i] == ' ')
 				i++;
@@ -97,8 +99,6 @@ void	io_while(t_context *ctx)
 		ctx->cmd_tree.cmd = ctx->user_input;
 		create_tree(&ctx->cmd_tree);
 		spread_here_docs(&ctx->cmd_tree, &ctx->here_docs, 0);
-		// display_tree(ctx->cmd_tree);
-		// putchar('\n');
 		execute_input(ctx);
 		clear_input(ctx);
 	}
