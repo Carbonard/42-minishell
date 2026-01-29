@@ -36,3 +36,5 @@ errores:
 señales
 	- ctrl + C
 	- ctrl + \
+
+arreglar echo '$COSA'

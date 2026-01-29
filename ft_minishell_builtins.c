@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/17 21:35:56 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/01/29 21:23:36 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/01/29 21:57:04 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,8 @@ int	try_builtins(t_context *ctx, char **argv)
 		return (0);
 	if (ctx->status != MS_SUCCESS)
 		perror(argv[0]);
-	free_split(argv);
+	free(argv[0]);
+	free(argv);
 	ctx->exit_status = ctx->status;
 	ctx->read_exit_status = 1;
 	// ft_exit(ctx);

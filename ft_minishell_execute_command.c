@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/29 03:50:34 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/01/29 21:35:16 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/01/29 22:08:08 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -153,20 +153,25 @@ int	need_to_expand(char *str)
 
 char	*expand_var(t_context *ctx, char *str)
 {
-	int		var_i;
+	int		var_start;
+	int		var_len;
 	char	*expanded;
 	char	*aux1;
 	char	*aux2;
 
-	var_i = need_to_expand(str);
-	expanded = ft_substr(str, 0, var_i);
-	aux2 = ft_substr(str, var_i + 1, ft_strchr(str + var_i, ' ') - (str + var_i + 1));
+	var_start = need_to_expand(str);
+	expanded = ft_substr(str, 0, var_start);
+	var_len = 0;
+	while (str[var_start + 1 + var_len]
+		&& str[var_start + 1 + var_len] != ' ' && str[var_start + 1 + var_len] != '"')
+		var_len++;
+	aux2 = ft_substr(str, var_start + 1, var_len);
 	aux1 = ft_strdup(find_env_value(ctx, aux2));
 	free(aux2);
 	aux2 = ft_strjoin(expanded, aux1);
 	free(expanded);
 	free(aux1);
-	aux1 = ft_strdup(ft_strchr(str + var_i, ' '));
+	aux1 = ft_strdup(ft_strchr(str + var_start, ' '));
 	expanded = ft_strjoin(aux2, aux1);
 	free(aux2);
 	free(aux1);
@@ -195,9 +200,13 @@ int	execute_leaf(t_context *ctx, t_command_tree *node)
 	int				pid;
 	char			**split;
 	t_redirection	redir;
+	char			*command;
 
-	split = split_cmd(node->cmd, &redir);
-	expand_argv(ctx, split);
+	command = ft_strdup(node->cmd);
+	while (need_to_expand(command) >= 0)
+		command = expand_var(ctx, command);
+	split = split_cmd(command, &redir);
+	// free(command);
 	if (try_builtins(ctx, split))
 		return (0);
 	ctx->read_exit_status = 0;
@@ -208,7 +217,8 @@ int	execute_leaf(t_context *ctx, t_command_tree *node)
 			manage_redirection(ctx, &redir, node->here_doc);
 		execute_command(ctx, split);
 		perror(split[0]);
-		free_split(split);
+		free(command);
+		free(split);
 		if (ctx->status == MS_E_PATH_NFOUND)
 		{
 			if (errno == EACCES)
@@ -219,6 +229,7 @@ int	execute_leaf(t_context *ctx, t_command_tree *node)
 		ctx->exit_status = -42;
 		ft_exit(ctx);
 	}
-	free_split(split);
+	free(command);
+	free(split);
 	return (pid);
 }
