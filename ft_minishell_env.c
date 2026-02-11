@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/16 18:55:11 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/01/22 16:59:40 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/02/11 13:50:32 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ int	export(t_context *ctx, char *new_var)
 	{
 		free(item->content);
 		item->content = ft_strdup(new_var);
-		if (!new_var)
+		if (!item->content)
 			return (MS_E_ENV_MALLOC);
 		return (MS_SUCCESS);
 	}
@@ -53,5 +53,5 @@ int	unset(t_context *ctx, char *var)
 		ft_str_delitem(&ctx->env, item);
 		return (MS_SUCCESS);
 	}
-	return (MS_E_VAR_NFOUND);
+	return (MS_SUCCESS);
 }

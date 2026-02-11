@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/16 14:57:20 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/01/29 21:22:52 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/02/11 13:37:44 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,6 +86,7 @@ typedef struct s_redirection
 
 typedef struct s_context
 {
+	char			*shell_name;
 	int				status;
 	int				exit_status;
 	int				read_exit_status;
@@ -98,6 +99,7 @@ typedef struct s_context
 }	t_context;
 
 int		save_env(t_context *ctx, char **original_env);
+void		set_shell(t_context *ctx, char *shell_name);
 int		add_env(t_context *ctx, char *new_var);
 t_str_list	*find_env_node(t_context *ctx, char *var);
 char	*find_env_value(t_context *ctx, char *var);
@@ -111,6 +113,7 @@ void	display_tree(t_command_tree *tree);
 // void	exit_builtin(char *cmd);
 void	clear_input(t_context *ctx);
 int		valid_flag(const char *arg, char f);
+int		cd(t_context *ctx, char *new_dir);
 int		echo(char **argv);
 int		pwd(void);
 int		print_env(t_context *ctx);

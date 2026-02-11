@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/16 14:59:51 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/01/29 19:08:21 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/02/11 13:00:30 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -135,6 +135,7 @@ int	main(int argc, char **argv, char **env)
 
 	check_interactive(&ctx, argc, argv);
 	save_env(&ctx, env);
+	set_shell(&ctx, argv[0]);
 	// ctx.cmd_tree = malloc(sizeof(t_command_tree));
 	io_while(&ctx);
 	return (0);

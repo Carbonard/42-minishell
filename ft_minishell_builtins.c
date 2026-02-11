@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/17 21:35:56 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/01/29 21:57:04 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/02/11 13:42:49 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,27 @@
 // 	perror(cmd);
 // 	ft_exit(errno);
 // }
+int	cd(t_context *ctx, char *new_dir)
+{
+	char	old_dir[MAX_PWD + 20];
+
+	if (!ft_strncmp(new_dir, "-", 2))
+	{
+		new_dir = find_env_value(ctx, "OLDPWD");
+		if (!new_dir)
+		{
+			ft_putstr_fd(ctx->shell_name, 2);
+			ft_putendl_fd(": cd: OLDPWD not set", 2);
+			return (MS_E_PATH_NFOUND);
+		}
+	}
+	ft_strlcpy(old_dir, "OLDPWD=", 8);
+	getcwd(old_dir + 7, MAX_PWD);
+	if (chdir(new_dir))
+		return (MS_E_PATH_NFOUND);
+	export(ctx, old_dir);
+	return (MS_SUCCESS);
+}
 
 int	try_builtins(t_context *ctx, char **argv)
 {
@@ -34,10 +55,10 @@ int	try_builtins(t_context *ctx, char **argv)
 	else if (!ft_strncmp(argv[0], "exit", 5))
 		ft_exit(ctx);
 	else if (!ft_strncmp(argv[0], "cd", 3))
-		ctx->status = chdir(argv[1]);
+		ctx->status = cd(ctx, argv[1]);
 	else
 		return (0);
-	if (ctx->status != MS_SUCCESS)
+	if (ctx->status != MS_SUCCESS && ft_strncmp(argv[0], "cd", 3))
 		perror(argv[0]);
 	free(argv[0]);
 	free(argv);
