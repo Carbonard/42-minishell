@@ -36,3 +36,5 @@ errores:
 señales
 	- ctrl + C
 	- ctrl + \
+
+Nombre del binario en errores

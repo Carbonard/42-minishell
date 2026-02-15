@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/16 16:54:26 by nyxssa            #+#    #+#             */
-/*   Updated: 2026/01/27 23:12:05 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/02/15 19:20:46 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,25 @@ int	find_closing_par(char *str)
 			parenthesis_checker--;
 	}
 	return (parenthesis_checker_i);
+}
+
+// This function assumes that the opening parenthesis exists
+int	find_open_par(char *str)
+{
+	int	parenthesis_cnt;
+	int	i;
+
+	parenthesis_cnt = -1;
+	i = 0;
+	while (str[i] && parenthesis_cnt != 0)
+	{
+		i--;
+		if (str[i] == '(')
+			parenthesis_cnt++;
+		else if (str[i] == ')')
+			parenthesis_cnt--;
+	}
+	return (i);
 }
 
 static int	remove_parenthesis(char *str)
@@ -63,28 +82,28 @@ static int
 {
 	int			i;
 
-	i = 0;
-	while (input->cmd[i] != 0)
+	i = ft_strlen(input->cmd) - 1;
+	while (i > 0)
 	{
-		if (input->cmd[i] == '(')
-			i += find_closing_par(input->cmd + i);
-		else if ((input->cmd[i] == '&' && input->cmd[i + 1] == '&')
-			|| (input->cmd[i] == '|' && input->cmd[i + 1] == '|'))
+		if (input->cmd[i] == ')')
+			i += find_open_par(input->cmd + i);
+		else if ((input->cmd[i] == '&' && input->cmd[i - 1] == '&')
+			|| (input->cmd[i] == '|' && input->cmd[i - 1] == '|'))
 		{
 			if (input->cmd[i] == '&')
 				input->sep = AND;
 			else
 				input->sep = OR;
-			input->cmd[i] = 0;
+			input->cmd[i - 1] = 0;
 			*first = malloc(sizeof(t_command_tree));
 			*second = malloc(sizeof(t_command_tree));
 			(*first)->cmd = input->cmd;
-			(*second)->cmd = input->cmd + i + 2;
+			(*second)->cmd = input->cmd + i + 1;
 			input->cmd1 = *first;
 			input->cmd2 = *second;
 			return (1);
 		}
-		i++;
+		i--;
 	}
 	return (0);
 }
@@ -94,11 +113,11 @@ static int
 {
 	int			i;
 
-	i = 0;
-	while (input->cmd[i] != 0)
+	i = ft_strlen(input->cmd) - 1;
+	while (i > 0)
 	{
-		if (input->cmd[i] == '(')
-			i += find_closing_par(input->cmd + i);
+		if (input->cmd[i] == ')')
+			i += find_open_par(input->cmd + i);
 		else if (input->cmd[i] == '|')
 		{
 			input->sep = PIPE;
@@ -111,7 +130,7 @@ static int
 			input->cmd2 = *second;
 			return (1);
 		}
-		i++;
+		i--;
 	}
 	return (0);
 }
