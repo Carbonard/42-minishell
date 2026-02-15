@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/30 15:32:38 by rselva-2          #+#    #+#             */
-/*   Updated: 2025/10/02 15:54:35 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/02/14 22:49:39 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,10 @@ int	ft_strncmp(const char *s1, const char *s2, size_t n)
 	unsigned char	*str1;
 	unsigned char	*str2;
 
+	if ((!s1 && s2) || (s1 && !s2))
+		return (-42);
+	if (!s1 && !s2)
+		return (0);
 	str1 = (unsigned char *) s1;
 	str2 = (unsigned char *) s2;
 	i = 0;

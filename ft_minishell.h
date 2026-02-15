@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/16 14:57:20 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/02/11 13:37:44 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/02/15 18:48:40 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,39 @@ enum e_operators
 	HERE_DOC
 };
 
+enum e_automaton_events
+{
+	E_SPACE,
+	E_SINGLE_QUOTE,
+	E_DOUBLE_QUOTE,
+	E_AND,
+	E_OR,
+	E_PIPE,
+	E_REDIR_R,
+	E_REDIR_L,
+	E_DOUBLE_REDIR_R,
+	E_DOUBLE_REDIR_L,
+	E_OPEN_PAR,
+	E_CLOSING_PAR,
+	E_OTHER,
+	E_TOTAL
+};
+
+enum e_automaton_states
+{
+	S_INITIAL,
+	S_COMMAND,
+	S_SING_QUOT,
+	S_DOUB_QUOT,
+	S_OPEN_PAR,
+	S_CLOS_PAR,
+	S_REDIR,
+	S_READ_REDIR,
+	S_ERROR,
+	S_LAST,
+	S_TOTAL
+};
+
 typedef struct s_command_tree
 {
 	struct s_command_tree	*cmd1;
@@ -98,41 +131,41 @@ typedef struct s_context
 	t_dyn_ptr		here_docs;
 }	t_context;
 
-int		save_env(t_context *ctx, char **original_env);
+int			save_env(t_context *ctx, char **original_env);
 void		set_shell(t_context *ctx, char *shell_name);
-int		add_env(t_context *ctx, char *new_var);
+int			add_env(t_context *ctx, char *new_var);
 t_str_list	*find_env_node(t_context *ctx, char *var);
-char	*find_env_value(t_context *ctx, char *var);
-int		del_env(t_context *ctx, char *var_name);
-void	read_input(t_context *ctx);
+char		*find_env_value(t_context *ctx, char *var);
+int			del_env(t_context *ctx, char *var_name);
+void		read_input(t_context *ctx);
 // Parser
-int		find_closing_par(char *str);
-void	create_tree(t_command_tree *input);
-void	display_tree(t_command_tree *tree);
+int			find_closing_par(char *str);
+void		create_tree(t_command_tree *input);
+void		display_tree(t_command_tree *tree);
 // Built-ins
 // void	exit_builtin(char *cmd);
-void	clear_input(t_context *ctx);
-int		valid_flag(const char *arg, char f);
-int		cd(t_context *ctx, char *new_dir);
-int		echo(char **argv);
-int		pwd(void);
-int		print_env(t_context *ctx);
-int		export(t_context *ctx, char *new_var);
-int		unset(t_context *ctx, char *var);
-void	ft_exit(t_context *ctx);
+void		clear_input(t_context *ctx);
+int			valid_flag(const char *arg, char f);
+int			cd(t_context *ctx, char *new_dir);
+int			echo(char **argv);
+int			pwd(void);
+int			print_env(t_context *ctx);
+int			export(t_context *ctx, char *new_var);
+int			unset(t_context *ctx, char *var);
+void		ft_exit(t_context *ctx, long status);
 // Execute commands
-char	**split_cmd(char *cmd, t_redirection *redir);
-int		try_builtins(t_context *ctx, char **command);
-char	*find_cmd_path(t_context *ctx, char *cmd);
-char	**list_to_strarray(t_str_list *env);
+char		**split_cmd(char *cmd, t_redirection *redir);
+int			try_builtins(t_context *ctx, char **command);
+char		*find_cmd_path(t_context *ctx, char *cmd);
+char		**list_to_strarray(t_str_list *env);
 // int		execute_subshell(t_context *ctx, t_command_tree *node);
-void	execute_input(t_context *ctx);
-int		execute_leaf(t_context *ctx, t_command_tree *node);
+void		execute_input(t_context *ctx);
+int			execute_leaf(t_context *ctx, t_command_tree *node);
 // int		execute_logic(t_context *ctx, t_command_tree *node);
 // int		execute_pipe(t_context *ctx, t_command_tree *node);
-int		execute_node(t_context *ctx, t_command_tree *node);
+int			execute_node(t_context *ctx, t_command_tree *node);
 
 // Debug
-void	display_tree(t_command_tree *tree);
+void		display_tree(t_command_tree *tree);
 
 #endif

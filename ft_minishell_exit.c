@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/20 00:02:17 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/01/29 14:00:37 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/02/12 12:59:45 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,10 +35,10 @@ void	clear_input(t_context *ctx)
 	free_dyn_ptr(&ctx->here_docs);
 }
 
-void	ft_exit(t_context *ctx)
+void	ft_exit(t_context *ctx, long status)
 {
 	clear_input(ctx);
 	ft_str_lstclear(&ctx->env);
 	rl_clear_history();
-	exit (ctx->exit_status);
+	exit (status % 256);
 }

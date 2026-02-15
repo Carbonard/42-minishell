@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/02 14:22:21 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/01/20 00:07:54 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/02/12 13:13:08 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,6 +78,7 @@ void	ft_str_delitem(t_str_list **lst, t_str_list *item);
 void	ft_str_lstclear(t_str_list **lst);
 // Others
 void	*free_split(char **spl);
+long long	ft_atoll(const char *nptr);
 char	*ft_utoa_base(unsigned long nbr, const char *base);
 size_t	ft_putnstr_fd(char *s, int fd, size_t n);
 int		ft_atoi_base(char *str, char *base);

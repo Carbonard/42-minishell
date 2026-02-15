@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/29 03:50:34 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/01/29 22:08:08 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/02/14 23:00:35 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -208,7 +208,10 @@ int	execute_leaf(t_context *ctx, t_command_tree *node)
 	split = split_cmd(command, &redir);
 	// free(command);
 	if (try_builtins(ctx, split))
+	{
+		free(command);
 		return (0);
+	}
 	ctx->read_exit_status = 0;
 	pid = fork();
 	if (pid == 0)
@@ -216,6 +219,7 @@ int	execute_leaf(t_context *ctx, t_command_tree *node)
 		if (redir.type_in || redir.type_out)
 			manage_redirection(ctx, &redir, node->here_doc);
 		execute_command(ctx, split);
+		if (split[0])
 		perror(split[0]);
 		free(command);
 		free(split);
@@ -227,7 +231,7 @@ int	execute_leaf(t_context *ctx, t_command_tree *node)
 				ctx->exit_status = 127;
 		}
 		ctx->exit_status = -42;
-		ft_exit(ctx);
+		ft_exit(ctx, ctx->exit_status);
 	}
 	free(command);
 	free(split);

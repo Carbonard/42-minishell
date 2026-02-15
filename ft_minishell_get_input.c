@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/18 20:24:41 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/01/28 21:29:17 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/02/15 18:50:19 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -138,6 +138,108 @@ static int	check_operator(t_context *ctx)
 	return (0);
 }
 
+int	get_event(char *input, int ind)
+{
+	if (input[ind] == ' ')
+		return (E_SPACE);
+	else if (input[ind] == '"')
+		return (E_DOUBLE_QUOTE);
+	else if (input[ind] == '\'')
+		return (E_SINGLE_QUOTE);
+	else if (input[ind] == '&' && input[ind + 1] == '&' && input[ind + 2] != '&')
+		return (E_AND);
+	else if (input[ind] == '|' && input[ind + 1] == '|' && input[ind + 2] != '|')
+		return (E_OR);
+	else if (input[ind] == '|' && input[ind + 1] != '|')
+		return (E_PIPE);
+	else if (input[ind] == '<' && input[ind + 1] == '<' && input[ind + 2] != '<')
+		return (E_DOUBLE_REDIR_L);
+	else if (input[ind] == '>' && input[ind + 1] == '>' && input[ind + 2] != '>')
+		return (E_DOUBLE_REDIR_R);
+	else if (input[ind] == '<' && input[ind + 1] != '<')
+		return (E_REDIR_L);
+	else if (input[ind] == '>' && input[ind + 1] != '>')
+		return (E_REDIR_R);
+	else if (input[ind] == '(')
+		return (E_OPEN_PAR);
+	else if (input[ind] == ')')
+		return (E_CLOSING_PAR);
+	return (E_OTHER);
+}
+
+int	change_state(int current_state, int event)
+{
+						// E_SPACE, E_SINGLE_QUOTE, E_DOUBLE_QUOTE, E_AND, E_OR, E_PIPE, E_REDIR_R, E_REDIR_L, E_DOUBLE_REDIR_R, E_DOUBLE_REDIR_L, E_OPEN_PAR, E_CLOSING_PAR, E_OTHER,
+	static int const	conversor[S_TOTAL][E_TOTAL] = {
+		[S_INITIAL] =	 {S_INITIAL, S_SING_QUOT, S_DOUB_QUOT, S_ERROR, S_ERROR, S_ERROR, S_REDIR, S_REDIR, S_REDIR, S_REDIR, S_OPEN_PAR, S_ERROR, S_COMMAND},
+		[S_SING_QUOT] =	 {S_SING_QUOT, S_LAST, S_SING_QUOT, S_SING_QUOT, S_SING_QUOT, S_SING_QUOT, S_SING_QUOT, S_SING_QUOT, S_SING_QUOT, S_SING_QUOT, S_SING_QUOT, S_SING_QUOT, S_SING_QUOT},
+		[S_DOUB_QUOT] =	 {S_DOUB_QUOT, S_DOUB_QUOT, S_LAST, S_DOUB_QUOT, S_DOUB_QUOT, S_DOUB_QUOT, S_DOUB_QUOT, S_DOUB_QUOT, S_DOUB_QUOT, S_DOUB_QUOT, S_DOUB_QUOT, S_DOUB_QUOT, S_DOUB_QUOT},
+		[S_CLOS_PAR] =	 {S_CLOS_PAR, S_ERROR, S_ERROR, S_INITIAL, S_INITIAL, S_INITIAL, S_REDIR, S_REDIR, S_REDIR, S_REDIR, S_ERROR, S_LAST, S_ERROR},
+		[S_REDIR] =		 {S_REDIR, S_SING_QUOT, S_DOUB_QUOT, S_ERROR, S_ERROR, S_ERROR, S_ERROR, S_ERROR, S_ERROR, S_ERROR, S_ERROR, S_ERROR, S_READ_REDIR},
+		[S_READ_REDIR] = {S_LAST, S_SING_QUOT, S_DOUB_QUOT, S_ERROR, S_ERROR, S_ERROR, S_ERROR, S_ERROR, S_ERROR, S_ERROR, S_ERROR, S_ERROR, S_READ_REDIR},
+		[S_COMMAND] =	 {S_COMMAND, S_SING_QUOT, S_DOUB_QUOT, S_INITIAL, S_INITIAL, S_INITIAL, S_REDIR, S_REDIR, S_REDIR, S_REDIR, S_ERROR, S_LAST, S_COMMAND}
+	};
+	return (conversor[current_state][event]);
+}
+
+void	action(int last_state, int *state, int event, int *i)
+{
+	static int	saved_states[1000];
+	static int	i_saved;
+
+	if (event == E_AND || event == E_OR || event == E_DOUBLE_REDIR_L || event == E_DOUBLE_REDIR_R)
+		(*i)++;
+	else if (*state == S_OPEN_PAR)
+	{
+		saved_states[i_saved] = S_CLOS_PAR;
+		i_saved++;
+		*state = S_INITIAL;
+	}
+	else if ((*state == S_SING_QUOT || *state == S_SING_QUOT || *state == S_REDIR) && *state != last_state)
+	{
+		saved_states[i_saved] = last_state;
+		i_saved++;
+	}
+	else if (*state == S_LAST)
+	{
+		if (i_saved == 0)
+		{
+			*state = S_ERROR;
+			return ;
+		}
+		i_saved--;
+		*state = saved_states[i_saved];
+	}
+}
+
+int	check_input(char *input)
+{
+	int	i;
+	int	last_state;
+	int	state;
+	int	event;
+
+	state = S_INITIAL;
+	i = 0;
+	while (input[i] && state != S_ERROR)
+	{
+		event = get_event(input, i);
+		last_state = state;
+		state = change_state(state, event);
+		// printf("state after reading %c: %i\n", input[i], state);
+		action(last_state, &state, event, &i);
+		i++;
+	}
+	if (state == S_ERROR || state == S_REDIR)
+	{
+		ft_putstr_fd("syntax error near unexpected token ", 2);
+		ft_putchar_fd(input[i-1], 2);
+		ft_putchar_fd('\n', 2);
+		return (1);
+	}
+	return (0);
+}
+
 void	read_input(t_context *ctx)
 {
 	char	prompt[MAX_PWD + 3];
@@ -156,6 +258,12 @@ void	read_input(t_context *ctx)
 		ctx->user_input = ft_strdup("exit");
 		if (!ctx->interactive)
 			printf("exit\n");
+		return ;
+	}
+	if (check_input(ctx->user_input))
+	{
+		free(ctx->user_input);
+		ctx->user_input = ft_calloc(1,1);
 		return ;
 	}
 	while ((check_quotes(ctx) || check_parenthesis(ctx) || check_operator(ctx)))

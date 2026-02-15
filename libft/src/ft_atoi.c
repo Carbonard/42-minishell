@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/30 16:00:14 by rselva-2          #+#    #+#             */
-/*   Updated: 2025/11/30 11:21:51 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/02/12 13:12:49 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,4 +43,29 @@ int	ft_atoi(const char *nptr)
 		i++;
 	}
 	return ((int)(num * sgn));
+}
+
+long long	ft_atoll(const char *nptr)
+{
+	char		*ptr;
+	long long	num;
+	int			sgn;
+	int			i;
+
+	if (!nptr)
+		return (0);
+	ptr = skip_spaces((char *) nptr);
+	i = 0;
+	sgn = 1;
+	if (ptr[i] == '-')
+		sgn = -1;
+	if (ptr[i] == '+' || ptr[i] == '-')
+		i++;
+	num = 0;
+	while (ptr[i] >= '0' && ptr[i] <= '9')
+	{
+		num = num * 10 + ptr[i] - '0';
+		i++;
+	}
+	return (num * sgn);
 }
