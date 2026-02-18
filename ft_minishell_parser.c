@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/16 16:54:26 by nyxssa            #+#    #+#             */
-/*   Updated: 2026/02/15 19:20:46 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/02/15 20:49:53 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,22 +50,43 @@ int	find_open_par(char *str)
 	return (i);
 }
 
+int	skip_redirections(char *str, int i)
+{
+	int	redir_found;
+
+	redir_found = 1;
+	while (str[i] && redir_found)
+	{
+		redir_found = 0;
+		while (str[i] == ' ')
+			i++;
+		while (str[i] == '<' || str[i] == '>')
+		{
+			redir_found = 1;
+			i++;
+		}
+		while (str[i] == ' ')
+			i++;
+		while (redir_found && str[i] && str[i] != ' ' && str[i] != '<' && str[i] != '>')
+			i++;
+	}
+	return (i);
+}
+
 static int	remove_parenthesis(char *str)
 {
 	int	parenthesis_checker_i;
-	int	space_cnt;
+	int	final;
 	int	removed;
 
 	removed = 0;
 	while (*str == ' ' || *str == '(')
 	{
-		space_cnt = 1;
 		if (*str == '(')
 		{
 			parenthesis_checker_i = find_closing_par(str);
-			while (str[parenthesis_checker_i + space_cnt] == ' ')
-				space_cnt++;
-			if (str[parenthesis_checker_i + space_cnt] == 0)
+			final = skip_redirections(str, parenthesis_checker_i + 1);
+			if (str[final] == 0)
 			{
 				str[0] = ' ';
 				str[parenthesis_checker_i] = ' ';
@@ -144,6 +165,8 @@ void	create_tree(t_command_tree *input)
 	second = NULL;
 	input->sep = NONE;
 	input->subshell = remove_parenthesis(input->cmd);
+	if (input->subshell)
+		ft_printf("parenthesis removed\n");
 	if (!divide_by_logic_op(input, &first, &second))
 		divide_by_pipes(input, &first, &second);
 	input->cmd1 = first;

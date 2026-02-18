@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/18 20:24:41 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/02/15 18:50:19 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/02/15 20:54:29 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -176,7 +176,7 @@ int	change_state(int current_state, int event)
 		[S_DOUB_QUOT] =	 {S_DOUB_QUOT, S_DOUB_QUOT, S_LAST, S_DOUB_QUOT, S_DOUB_QUOT, S_DOUB_QUOT, S_DOUB_QUOT, S_DOUB_QUOT, S_DOUB_QUOT, S_DOUB_QUOT, S_DOUB_QUOT, S_DOUB_QUOT, S_DOUB_QUOT},
 		[S_CLOS_PAR] =	 {S_CLOS_PAR, S_ERROR, S_ERROR, S_INITIAL, S_INITIAL, S_INITIAL, S_REDIR, S_REDIR, S_REDIR, S_REDIR, S_ERROR, S_LAST, S_ERROR},
 		[S_REDIR] =		 {S_REDIR, S_SING_QUOT, S_DOUB_QUOT, S_ERROR, S_ERROR, S_ERROR, S_ERROR, S_ERROR, S_ERROR, S_ERROR, S_ERROR, S_ERROR, S_READ_REDIR},
-		[S_READ_REDIR] = {S_LAST, S_SING_QUOT, S_DOUB_QUOT, S_ERROR, S_ERROR, S_ERROR, S_ERROR, S_ERROR, S_ERROR, S_ERROR, S_ERROR, S_ERROR, S_READ_REDIR},
+		[S_READ_REDIR] = {S_LAST, S_SING_QUOT, S_DOUB_QUOT, S_ERROR, S_ERROR, S_ERROR, S_REDIR, S_REDIR, S_REDIR, S_REDIR, S_ERROR, S_ERROR, S_READ_REDIR},
 		[S_COMMAND] =	 {S_COMMAND, S_SING_QUOT, S_DOUB_QUOT, S_INITIAL, S_INITIAL, S_INITIAL, S_REDIR, S_REDIR, S_REDIR, S_REDIR, S_ERROR, S_LAST, S_COMMAND}
 	};
 	return (conversor[current_state][event]);
@@ -195,9 +195,17 @@ void	action(int last_state, int *state, int event, int *i)
 		i_saved++;
 		*state = S_INITIAL;
 	}
-	else if ((*state == S_SING_QUOT || *state == S_SING_QUOT || *state == S_REDIR) && *state != last_state)
+	else if ((*state == S_SING_QUOT || *state == S_SING_QUOT) && *state != last_state)
 	{
 		saved_states[i_saved] = last_state;
+		i_saved++;
+	}
+	else if (*state == S_REDIR && *state != last_state)
+	{
+		if (last_state == S_INITIAL)
+			saved_states[i_saved] = S_COMMAND;
+		else
+			saved_states[i_saved] = last_state;
 		i_saved++;
 	}
 	else if (*state == S_LAST)

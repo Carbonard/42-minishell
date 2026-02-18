@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/17 17:03:15 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/01/29 21:48:25 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/02/15 21:19:39 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,10 +74,18 @@ char	**split_cmd(char *cmd, t_redirection *redir)
 	redir->type_out = NONE;
 	length = ft_strlen(cmd);
 	cut_string(cmd);
+	// for (int k = 0; k < length; k++)
+	// {
+	// 	if (cmd[k])
+	// 		ft_putchar_fd(cmd[k], 1);
+	// 	else
+	// 		ft_putchar_fd('_', 2);
+	// }
+	// ft_putchar_fd('\n', 1);
 	i = 0;
 	while (i < length)
 	{
-		if (cmd[i] && (i == 0 || cmd[i - 1] == 0))
+		if ((cmd[i] && (i == 0 || cmd[i - 1] == 0)) || cmd[i] == '<' || cmd[i] == '>')
 		{
 			if (cmd[i] == '<' || cmd[i] == '>')
 				i = get_redirection(cmd, i, redir);

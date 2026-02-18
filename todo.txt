@@ -1,12 +1,5 @@
-
-Parser:
-	[x] Comprobar todo bien cerrado
-	[-] chequear sintaxis
-	[x] eliminar parentesis innecesarios
-	[x] crear arbol
-
 built-ins
-	- cd - y cd (?)
+	- cd
 	- errores
 
 free at exit
@@ -16,6 +9,7 @@ free at exit
 
 check unset VAR=value
 (echo hola) > file
+
 echo $CMD | ./minishell
 'echo hola
 echo adios'
@@ -24,7 +18,6 @@ señales
 	- historial
 	- ctrl + D mientras escribir input antes y despues de un salto de linea
 
-exit no exitea
 echo hola > /dev/stdout | sleep 3 | echo adios
 
 echo hola || echo adios && echo si
@@ -38,3 +31,10 @@ señales
 	- ctrl + \
 
 Nombre del binario en errores
+
+dos redirecciones deberian crear archivos
+
+redirecciones en builtins
+
+leer hasta metacaracteres
+
