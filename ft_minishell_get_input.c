@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   ft_minishell_get_input.c                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: nyxssa <nyxssa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/18 20:24:41 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/02/15 20:54:29 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/02/18 20:34:51 by nyxssa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_minishell.h"
 
-static int	get_prompt(char *prompt)
+int	get_prompt(char *prompt)
 {
 	char	home[100];
 	int		length;

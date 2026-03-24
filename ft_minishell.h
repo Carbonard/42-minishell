@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_minishell.h                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: nyxssa <nyxssa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/16 14:57:20 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/02/15 18:48:40 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/03/24 17:32:14 by nyxssa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,11 @@
 # include <errno.h>
 # include <sys/wait.h>
 # include <fcntl.h>
+# include <signal.h>
 
 # define MAX_PWD 1024
+
+// int received_signal = 0;
 
 enum e_status
 {
@@ -137,6 +140,7 @@ int			add_env(t_context *ctx, char *new_var);
 t_str_list	*find_env_node(t_context *ctx, char *var);
 char		*find_env_value(t_context *ctx, char *var);
 int			del_env(t_context *ctx, char *var_name);
+int			get_prompt(char *prompt);
 void		read_input(t_context *ctx);
 // Parser
 int			find_closing_par(char *str);
@@ -164,6 +168,9 @@ int			execute_leaf(t_context *ctx, t_command_tree *node);
 // int		execute_logic(t_context *ctx, t_command_tree *node);
 // int		execute_pipe(t_context *ctx, t_command_tree *node);
 int			execute_node(t_context *ctx, t_command_tree *node);
+// Signals
+void		handler_sigint(int sig);
+void		do_nothing(int sig);
 
 // Debug
 void		display_tree(t_command_tree *tree);

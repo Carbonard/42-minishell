@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_minishell_main.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: nyxssa <nyxssa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/16 14:59:51 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/02/11 13:00:30 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/03/24 17:24:29 by nyxssa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,6 +93,7 @@ void	io_while(t_context *ctx)
 	ctx->status = MS_SUCCESS;
 	while (ctx->status != MS_EXIT)
 	{
+		sleep(1);
 		read_input(ctx);
 		read_here_docs(ctx);
 		//check->input(ctx);
@@ -132,7 +133,12 @@ void	check_interactive(t_context *ctx, int argc, char **argv)
 int	main(int argc, char **argv, char **env)
 {
 	t_context	ctx;
-
+	struct sigaction	act;
+	
+	act.sa_handler = SIG_IGN;
+	signal(SIGINT, handler_sigint);
+	// signal(SIGQUIT, do_nothing);
+	sigaction(SIGQUIT, &act, NULL);
 	check_interactive(&ctx, argc, argv);
 	save_env(&ctx, env);
 	set_shell(&ctx, argv[0]);
