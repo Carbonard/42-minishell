@@ -6,31 +6,29 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/18 20:24:41 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/02/15 20:54:29 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/03/24 14:59:58 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_minishell.h"
 
-static int	get_prompt(char *prompt)
+static void	get_prompt(char *prompt)
 {
 	char	home[100];
-	int		length;
+	char	pwd[MAX_PWD];
 
-	getcwd(prompt, MAX_PWD);
-	length = ft_strlen(prompt);
-	prompt[length] = '$';
-	prompt[length + 1] = ' ';
-	prompt[length + 2] = 0;
 	ft_strlcpy(home, "/home/", 100);
 	ft_strlcat(home, getenv("USER"), 100);
-	if (!ft_strncmp(prompt, home, ft_strlen(home)))
+	getcwd(pwd, MAX_PWD);
+	ft_strlcpy(prompt, "\e[94m", MAX_PROMPT);
+	if (!ft_strncmp(home, pwd, ft_strlen(home)))
 	{
-		prompt[ft_strlen(home) - 1] = '~';
-		return (ft_strlen(home) - 1);
+		ft_strlcat(prompt, "~", MAX_PROMPT);
+		ft_strlcat(prompt, pwd + ft_strlen(home), MAX_PROMPT);
 	}
 	else
-		return (0);
+		ft_strlcat(prompt, pwd, MAX_PROMPT);
+	ft_strlcat(prompt, "$ \e[0m", MAX_PROMPT);
 }
 
 static int	check_quotes(t_context *ctx)
@@ -195,9 +193,10 @@ void	action(int last_state, int *state, int event, int *i)
 		i_saved++;
 		*state = S_INITIAL;
 	}
-	else if ((*state == S_SING_QUOT || *state == S_SING_QUOT) && *state != last_state)
+	else if ((*state == S_SING_QUOT || *state == S_DOUB_QUOT) && *state != last_state)
 	{
 		saved_states[i_saved] = last_state;
+		// printf("no\n");
 		i_saved++;
 	}
 	else if (*state == S_REDIR && *state != last_state)
@@ -212,12 +211,14 @@ void	action(int last_state, int *state, int event, int *i)
 	{
 		if (i_saved == 0)
 		{
+			// printf("Si\n");
 			*state = S_ERROR;
 			return ;
 		}
 		i_saved--;
 		*state = saved_states[i_saved];
 	}
+	// printf("wtf state: %d, last: %d\n", *state, last_state);
 }
 
 int	check_input(char *input)
@@ -232,10 +233,13 @@ int	check_input(char *input)
 	while (input[i] && state != S_ERROR)
 	{
 		event = get_event(input, i);
+		// printf("1 state after reading %c: %i, %i\n", input[i], last_state, state);
 		last_state = state;
+		// printf("2 state after reading %c: %i, %i\n", input[i], last_state, state);
 		state = change_state(state, event);
-		// printf("state after reading %c: %i\n", input[i], state);
+		// printf("3 state after reading %c: %i, %i\n", input[i], last_state, state);
 		action(last_state, &state, event, &i);
+		// printf("4 state after reading %c: %i, %i\n", input[i], last_state, state);
 		i++;
 	}
 	if (state == S_ERROR || state == S_REDIR)
@@ -250,17 +254,19 @@ int	check_input(char *input)
 
 void	read_input(t_context *ctx)
 {
-	char	prompt[MAX_PWD + 3];
+	char	prompt[MAX_PROMPT];
 	char	*input_extension;
 	char	*aux;
-	int		start;
+	// int		start;
 
 	ctx->status = MS_SUCCESS;
-	start = get_prompt(prompt);
+	get_prompt(prompt);
 	if (ctx->interactive)
 		ctx->user_input = get_next_line(STDIN_FILENO);
 	else
-		ctx->user_input = readline(prompt + start);
+	{
+		ctx->user_input = readline(prompt);
+	}
 	if (!ctx->user_input)
 	{
 		ctx->user_input = ft_strdup("exit");

@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/16 14:57:20 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/02/15 18:48:40 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/02/21 22:25:36 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@
 # include <fcntl.h>
 
 # define MAX_PWD 1024
+# define MAX_PROMPT MAX_PWD + 20
 
 enum e_status
 {
