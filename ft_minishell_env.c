@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/16 18:55:11 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/02/11 13:50:32 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/02/21 20:58:00 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,8 @@ int	unset(t_context *ctx, char *var)
 {
 	t_str_list	*item;
 
+	if (ft_strchr(var, '='))
+		return (MS_SUCCESS);
 	item = find_env_node(ctx, var);
 	if (item)
 	{

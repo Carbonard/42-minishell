@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_minishell.h                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nyxssa <nyxssa@student.42.fr>              +#+  +:+       +#+        */
+/*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/16 14:57:20 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/03/24 17:32:14 by nyxssa           ###   ########.fr       */
+/*   Updated: 2026/03/24 17:43:21 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,7 @@
 # include <signal.h>
 
 # define MAX_PWD 1024
-
-// int received_signal = 0;
+# define MAX_PROMPT MAX_PWD + 20
 
 enum e_status
 {
