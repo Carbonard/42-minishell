@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/16 14:57:20 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/03/28 23:11:51 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/03/29 19:00:18 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -139,6 +139,12 @@ typedef struct s_context
 	int				pipe_fds[2];
 	t_dyn_ptr		here_docs;
 }	t_context;
+
+// heredoc
+void		read_here_docs(t_context *ctx);
+int			spread_here_docs(t_command_tree *node, t_dyn_ptr *hd, int n);
+// check_input
+int			check_input(char *input);
 
 int			save_env(t_context *ctx, char **original_env);
 void		set_shell(t_context *ctx, char *shell_name);

@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/17 17:03:15 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/03/28 23:35:35 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/03/29 19:08:55 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -139,7 +139,7 @@ char	**split_cmd(char *cmd, t_redirection *redir)
 	i = 0;
 	while (cmd[i])
 	{
-		while (cmd[i] == ' ')
+		while (cmd[i] == ' ' || cmd[i] == '\n')
 			i++;
 		if (!cmd[i])
 			break;

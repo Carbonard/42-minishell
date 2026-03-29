@@ -6,44 +6,11 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/18 22:18:08 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/02/11 14:08:52 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/03/29 17:33:37 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_minishell.h"
-
-void	set_shell(t_context *ctx, char *shell_name)
-{
-	char	*shell;
-	char	*var;
-	int		last_slash;
-
-	if (shell_name[0] != '.' && shell_name[0] != '/' && shell_name[0] != '~')
-	{
-		ctx->shell_name = shell_name;
-		shell = find_cmd_path(ctx, shell_name);
-	}
-	else
-	{
-		shell = malloc(MAX_PWD + 20);
-		last_slash = ft_strlen(shell_name);
-		while (shell_name[last_slash] != '/')
-			last_slash--;
-		shell_name[last_slash] = 0;
-		cd(ctx, shell_name);
-		// ft_strlcpy(shell, "SHELL=", MAX_PWD + 20);
-		getcwd(shell, MAX_PWD);
-		ft_strlcat(shell, "/", MAX_PWD + 20);
-		ft_strlcat(shell, shell_name + last_slash + 1, MAX_PWD + 20);
-		ctx->shell_name = shell_name + last_slash + 1;
-		cd(ctx, "-");
-		unset(ctx, "OLDPWD");
-	}
-	var = ft_strjoin("SHELL=", shell);
-	export(ctx, var);
-	free(var);
-	free(shell);
-}
 
 int	save_env(t_context *ctx, char **original_env)
 {

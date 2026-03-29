@@ -68,3 +68,14 @@ cd too many arguments
 
 ls fadfa || (echo $? && echo $?)
 
+expand ~
+
+just one heredoc (?)
+
+echo |
+^C
+
+echo |
+^D
+
+echo |||
