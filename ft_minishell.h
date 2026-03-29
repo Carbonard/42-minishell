@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/16 14:57:20 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/03/24 17:43:21 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/03/28 23:11:51 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,13 @@ enum e_status
 	MS_E_VAR_NFOUND,
 	MS_E_EQINNAME,
 	MS_E_PATH_NFOUND
+};
+
+enum e_exit_status
+{
+	ES_SUCCESS = 0,
+	ES_CMD_NOT_EXEC = 126,
+	ES_CMD_NOT_FOUND = 127,
 };
 
 enum e_BUILTINS
@@ -139,8 +146,8 @@ int			add_env(t_context *ctx, char *new_var);
 t_str_list	*find_env_node(t_context *ctx, char *var);
 char		*find_env_value(t_context *ctx, char *var);
 int			del_env(t_context *ctx, char *var_name);
-int			get_prompt(char *prompt);
-void		read_input(t_context *ctx);
+void		get_prompt(t_context *ctx, char *prompt);
+int			read_input(t_context *ctx);
 // Parser
 int			find_closing_par(char *str);
 void		create_tree(t_command_tree *input);
@@ -156,6 +163,8 @@ int			print_env(t_context *ctx);
 int			export(t_context *ctx, char *new_var);
 int			unset(t_context *ctx, char *var);
 void		ft_exit(t_context *ctx, long status);
+void		silent_exit(t_context *ctx, long status);
+void		free_all(t_context *ctx);
 // Execute commands
 char		**split_cmd(char *cmd, t_redirection *redir);
 int			try_builtins(t_context *ctx, char **command);
@@ -173,5 +182,7 @@ void		do_nothing(int sig);
 
 // Debug
 void		display_tree(t_command_tree *tree);
+
+int			is_redirection(char *str);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/29 18:52:39 by rselva-2          #+#    #+#             */
-/*   Updated: 2025/10/03 10:45:08 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/03/28 22:52:44 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,8 @@ size_t	ft_strlcat(char *dst, const char *src, size_t size)
 	size_t	i_dst;
 	size_t	i_src;
 
+	if (!src)
+		return (0);
 	size_dst = ft_strlen(dst);
 	if (size < size_dst)
 		size_dst = size;

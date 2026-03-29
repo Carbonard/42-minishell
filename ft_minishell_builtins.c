@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/17 21:35:56 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/02/14 22:59:34 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/03/28 22:46:53 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,10 @@ void	builtin_exit(t_context *ctx, char **argv)
 	long long	number;
 
 	if (!argv[1])
+	{
+		free_split(argv);
 		ft_exit(ctx, ctx->exit_status);
+	}
 	length = 0;
 	if (argv[1][0] == '-')
 		length++;
@@ -51,6 +54,7 @@ void	builtin_exit(t_context *ctx, char **argv)
 			ft_putstr_fd("exit\nminishell: exit: ", 2);
 			ft_putstr_fd(argv[1], 2);
 			ft_putendl_fd(": numeric argument required", 2);
+			free_split(argv);
 			ft_exit(ctx, 2);
 		}
 		length++;
@@ -62,7 +66,10 @@ void	builtin_exit(t_context *ctx, char **argv)
 		ft_putstr_fd(argv[1], 2);
 		ft_putendl_fd(": numeric argument required", 2);
 		if (!argv[2])
+		{
+			free_split(argv);
 			ft_exit(ctx, 2);
+		}
 	}
 	if (argv[2])
 	{
@@ -70,11 +77,35 @@ void	builtin_exit(t_context *ctx, char **argv)
 		ft_putendl_fd("minishell: exit: too many arguments", 2);
 		return ;
 	}
+	free_split(argv);
 	ft_exit (ctx, (long)number);
+}
+
+char	*get_preperror(char **argv)
+{
+	char	*pre_perror;
+	char	*aux;
+
+	pre_perror = ft_strdup("minishell: ");
+	aux = ft_strjoin(pre_perror, argv[0]);
+	free(pre_perror);
+	pre_perror = aux;
+	if (!ft_strncmp(argv[0], "cd", 3))
+	{
+		aux = ft_strjoin(pre_perror, ": ");
+		free(pre_perror);
+		pre_perror = aux;
+		aux = ft_strjoin(pre_perror, argv[1]);
+		free(pre_perror);
+		pre_perror = aux;
+	}
+	return (pre_perror);
 }
 
 int	try_builtins(t_context *ctx, char **argv)
 {
+	char	*pre_perror;
+
 	if (!ft_strncmp(argv[0], "pwd", 4))
 		ctx->status = pwd();
 	else if (!ft_strncmp(argv[0], "env", 4))
@@ -91,11 +122,17 @@ int	try_builtins(t_context *ctx, char **argv)
 		ctx->status = cd(ctx, argv[1]);
 	else
 		return (0);
-	if (ctx->status != MS_SUCCESS && ft_strncmp(argv[0], "cd", 3))
-		perror(argv[0]);
-	// free(argv[0]);
-	free(argv);
-	ctx->exit_status = ctx->status;
+	pre_perror = get_preperror(argv);
+	if (ctx->status != MS_SUCCESS)// && ft_strncmp(argv[0], "cd", 3))
+		perror(pre_perror);
+	else
+		ctx->exit_status = 0;
+	free(pre_perror);
+	// printf("free argv con argv[0]: %s, argv[1]: %s\n", argv[0], argv[1]);
+	free_split(argv);
+	ctx->exit_status = 0;
+	if (ctx->status != MS_SUCCESS)
+		ctx->exit_status = 1;
 	ctx->read_exit_status = 1;
 	return (1);
 }

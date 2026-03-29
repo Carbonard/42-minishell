@@ -42,3 +42,29 @@ variables staticas
 echo ${REAL_VAR}aaaa
 
 exit exit
+
+cat << EOF | grep -e |>>''
+
+cat
+^C
+
+*
+
+cosas sin permisos
+
+mensaje error de command not found
+
+export ?=algo
+
+redirecciones builtins
+
+export a=' hola'
+echo$a		-> imprime hola
+echo"$a"	-> echo hola command not found
+
+exit status cuando commando sin permisos
+
+cd too many arguments
+
+ls fadfa || (echo $? && echo $?)
+

@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/18 19:24:30 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/02/12 13:01:05 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/03/26 12:53:54 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,7 +126,7 @@ void	execute_input(t_context *ctx)
 	int	pid;
 	int	status;
 
-	ctx->exit_status = 0;
+	// ctx->exit_status = 0;
 	pid = execute_node(ctx, &ctx->cmd_tree);
 	if (!ctx->read_exit_status)
 	{

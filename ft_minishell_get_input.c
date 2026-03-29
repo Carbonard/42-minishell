@@ -6,22 +6,21 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/18 20:24:41 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/03/24 17:43:56 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/03/28 23:12:02 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_minishell.h"
 
-int	get_prompt(char *prompt)
+void	get_prompt(t_context *ctx, char *prompt)
 {
 	char	home[100];
 	char	pwd[MAX_PWD];
 
-	ft_strlcpy(home, "/home/", 100);
-	ft_strlcat(home, getenv("USER"), 100);
+	ft_strlcpy(home, find_env_value(ctx, "HOME"), 100);
 	getcwd(pwd, MAX_PWD);
 	ft_strlcpy(prompt, "\e[94m", MAX_PROMPT);
-	if (!ft_strncmp(home, pwd, ft_strlen(home)))
+	if (home[0] && !ft_strncmp(home, pwd, ft_strlen(home)))
 	{
 		ft_strlcat(prompt, "~", MAX_PROMPT);
 		ft_strlcat(prompt, pwd + ft_strlen(home), MAX_PROMPT);
@@ -35,6 +34,7 @@ static int	check_quotes(t_context *ctx)
 {
 	int		i;
 	char	quote;
+
 
 	i = 0;
 	while (ctx->user_input[i])
@@ -90,7 +90,7 @@ static int	is_operator(char *str)
 	return (0);
 }
 
-static int	is_redirection(char *str)
+int	is_redirection(char *str)
 {
 	if ((str[0] == '<' && str[1] == '<') || (str[0] == '>' && str[1] == '>'))
 		return (2);
@@ -174,7 +174,7 @@ int	change_state(int current_state, int event)
 		[S_DOUB_QUOT] =	 {S_DOUB_QUOT, S_DOUB_QUOT, S_LAST, S_DOUB_QUOT, S_DOUB_QUOT, S_DOUB_QUOT, S_DOUB_QUOT, S_DOUB_QUOT, S_DOUB_QUOT, S_DOUB_QUOT, S_DOUB_QUOT, S_DOUB_QUOT, S_DOUB_QUOT},
 		[S_CLOS_PAR] =	 {S_CLOS_PAR, S_ERROR, S_ERROR, S_INITIAL, S_INITIAL, S_INITIAL, S_REDIR, S_REDIR, S_REDIR, S_REDIR, S_ERROR, S_LAST, S_ERROR},
 		[S_REDIR] =		 {S_REDIR, S_SING_QUOT, S_DOUB_QUOT, S_ERROR, S_ERROR, S_ERROR, S_ERROR, S_ERROR, S_ERROR, S_ERROR, S_ERROR, S_ERROR, S_READ_REDIR},
-		[S_READ_REDIR] = {S_LAST, S_SING_QUOT, S_DOUB_QUOT, S_ERROR, S_ERROR, S_ERROR, S_REDIR, S_REDIR, S_REDIR, S_REDIR, S_ERROR, S_ERROR, S_READ_REDIR},
+		[S_READ_REDIR] = {S_LAST, S_SING_QUOT, S_DOUB_QUOT, S_LAST, S_LAST, S_LAST, S_REDIR, S_REDIR, S_REDIR, S_REDIR, S_ERROR, S_LAST, S_READ_REDIR},
 		[S_COMMAND] =	 {S_COMMAND, S_SING_QUOT, S_DOUB_QUOT, S_INITIAL, S_INITIAL, S_INITIAL, S_REDIR, S_REDIR, S_REDIR, S_REDIR, S_ERROR, S_LAST, S_COMMAND}
 	};
 	return (conversor[current_state][event]);
@@ -187,7 +187,7 @@ void	action(int last_state, int *state, int event, int *i)
 
 	if (event == E_AND || event == E_OR || event == E_DOUBLE_REDIR_L || event == E_DOUBLE_REDIR_R)
 		(*i)++;
-	else if (*state == S_OPEN_PAR)
+	if (*state == S_OPEN_PAR)
 	{
 		saved_states[i_saved] = S_CLOS_PAR;
 		i_saved++;
@@ -201,6 +201,7 @@ void	action(int last_state, int *state, int event, int *i)
 	}
 	else if (*state == S_REDIR && *state != last_state)
 	{
+		// printf("saving state: %d\n", last_state	);
 		if (last_state == S_INITIAL)
 			saved_states[i_saved] = S_COMMAND;
 		else
@@ -252,7 +253,7 @@ int	check_input(char *input)
 	return (0);
 }
 
-void	read_input(t_context *ctx)
+int	read_input(t_context *ctx)
 {
 	char	prompt[MAX_PROMPT];
 	char	*input_extension;
@@ -260,25 +261,27 @@ void	read_input(t_context *ctx)
 	// int		start;
 
 	ctx->status = MS_SUCCESS;
-	get_prompt(prompt);
+	get_prompt(ctx, prompt);
 	if (ctx->interactive)
 		ctx->user_input = get_next_line(STDIN_FILENO);
 	else
-	{
 		ctx->user_input = readline(prompt);
-	}
+		// ctx->user_input = get_next_line(0);//(prompt);
 	if (!ctx->user_input)
 	{
-		ctx->user_input = ft_strdup("exit");
 		if (!ctx->interactive)
-			printf("exit\n");
-		return ;
+			ctx->user_input = ft_strdup("exit");
+		else
+		{
+			ctx->status = MS_EXIT;
+			return (0);
+		}
 	}
 	if (check_input(ctx->user_input))
 	{
 		free(ctx->user_input);
-		ctx->user_input = ft_calloc(1,1);
-		return ;
+		ctx->user_input = NULL;
+		return (0);
 	}
 	while ((check_quotes(ctx) || check_parenthesis(ctx) || check_operator(ctx)))
 	{
@@ -291,10 +294,12 @@ void	read_input(t_context *ctx)
 		else
 		{
 			input_extension = readline("> ");
+			// input_extension = get_next_line(0);//("> ");
 			aux = ft_strjoin_char(ctx->user_input, input_extension, '\n');
 		}
 		free(ctx->user_input);
 		ctx->user_input = aux;
 	}
 	add_history(ctx->user_input);
+	return (1);
 }

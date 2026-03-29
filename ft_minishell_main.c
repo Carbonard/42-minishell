@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_minishell_main.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nyxssa <nyxssa@student.42.fr>              +#+  +:+       +#+        */
+/*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/16 14:59:51 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/03/24 17:24:29 by nyxssa           ###   ########.fr       */
+/*   Updated: 2026/03/27 16:56:09 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@ void	read_hd(t_context *ctx, char *eof)
 
 	len = ft_strlen(eof);
 	here_doc = NULL;
+	ft_putstr_fd("> ", 1);
 	new_line = get_next_line(0);
 	while (new_line
 		&& (ft_strncmp(new_line, eof, len) || new_line[len] != '\n'))
@@ -29,10 +30,13 @@ void	read_hd(t_context *ctx, char *eof)
 		free(here_doc);
 		free(new_line);
 		here_doc = aux;
+		ft_putstr_fd("> ", 1);
 		new_line = get_next_line(0);
 	}
 	if (new_line)
 		free(new_line);
+	else
+		ft_putchar_fd('\n', 1);
 	//else mensaje de error
 	add_ptr(&ctx->here_docs, here_doc);
 }
@@ -43,7 +47,6 @@ void	read_here_docs(t_context *ctx)
 	int		len;
 	char	*eof;
 
-	init_dyn_ptr(&ctx->here_docs, 1);
 	i = 0;
 	while (ctx->user_input[i])
 	{
@@ -53,7 +56,7 @@ void	read_here_docs(t_context *ctx)
 				i++;
 			len = 0;
 			// condiciones while
-			while (ctx->user_input[i + len] != ' ')
+			while (ctx->user_input[i + len] && ctx->user_input[i + len] != ' ')
 				len++;
 			eof = ft_substr(ctx->user_input, i, len);
 			read_hd(ctx, eof);
@@ -93,14 +96,17 @@ void	io_while(t_context *ctx)
 	ctx->status = MS_SUCCESS;
 	while (ctx->status != MS_EXIT)
 	{
-		sleep(1);
-		read_input(ctx);
-		read_here_docs(ctx);
-		//check->input(ctx);
-		ctx->cmd_tree.cmd = ctx->user_input;
-		create_tree(&ctx->cmd_tree);
-		spread_here_docs(&ctx->cmd_tree, &ctx->here_docs, 0);
-		execute_input(ctx);
+		init_dyn_ptr(&ctx->here_docs, 1);
+		if (read_input(ctx))
+		{
+			read_here_docs(ctx);
+			ctx->cmd_tree.cmd = ctx->user_input;
+			create_tree(&ctx->cmd_tree);
+			spread_here_docs(&ctx->cmd_tree, &ctx->here_docs, 0);
+			execute_input(ctx);
+		}
+		else if (ctx->status == MS_EXIT)
+			return ;
 		clear_input(ctx);
 	}
 }
@@ -110,6 +116,8 @@ void	check_interactive(t_context *ctx, int argc, char **argv)
 	int	input_pipe[2];
 
 	ctx->interactive = 0;
+	if (!isatty(0))
+		ctx->interactive = 1;
 	if (argc < 2)
 		return ;
 	if (!valid_flag(argv[1], 'c'))
@@ -122,12 +130,20 @@ void	check_interactive(t_context *ctx, int argc, char **argv)
 		printf("minishell: -c: option requires an argument\n");
 		exit (2);
 	}
+	if (!isatty(0))
+		return ;
 	pipe(input_pipe);
 	dup2(input_pipe[0], STDIN_FILENO);
 	close(input_pipe[0]);
 	ft_putstr_fd(argv[2], input_pipe[1]);
 	close(input_pipe[1]);
 	ctx->interactive = 1;
+}
+
+void dn(int sig)
+{
+	(void) sig;
+	printf("a");
 }
 
 int	main(int argc, char **argv, char **env)
@@ -137,6 +153,7 @@ int	main(int argc, char **argv, char **env)
 	
 	act.sa_handler = SIG_IGN;
 	signal(SIGINT, handler_sigint);
+	// signal(, dn);
 	// signal(SIGQUIT, do_nothing);
 	sigaction(SIGQUIT, &act, NULL);
 	check_interactive(&ctx, argc, argv);
@@ -144,5 +161,6 @@ int	main(int argc, char **argv, char **env)
 	set_shell(&ctx, argv[0]);
 	// ctx.cmd_tree = malloc(sizeof(t_command_tree));
 	io_while(&ctx);
+	free_all(&ctx);
 	return (0);
 }
