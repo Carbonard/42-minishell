@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_minishell.h                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: nyxssa <nyxssa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/16 14:57:20 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/03/29 19:00:18 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/03/31 01:01:37 by nyxssa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,8 @@ enum e_status
 	MS_E_ENV_NFOUND,
 	MS_E_VAR_NFOUND,
 	MS_E_EQINNAME,
-	MS_E_PATH_NFOUND
+	MS_E_PATH_NFOUND,
+	MS_TOO_MANY_ARGS
 };
 
 enum e_exit_status
@@ -162,7 +163,7 @@ void		display_tree(t_command_tree *tree);
 // void	exit_builtin(char *cmd);
 void		clear_input(t_context *ctx);
 int			valid_flag(const char *arg, char f);
-int			cd(t_context *ctx, char *new_dir);
+int			cd(t_context *ctx, char **argv);
 int			echo(char **argv);
 int			pwd(void);
 int			print_env(t_context *ctx);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_minishell_main.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: nyxssa <nyxssa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/16 14:59:51 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/03/29 17:33:43 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/03/31 00:56:44 by nyxssa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ static void	io_while(t_context *ctx)
 			create_tree(&ctx->cmd_tree);
 			spread_here_docs(&ctx->cmd_tree, &ctx->here_docs, 0);
 			execute_input(ctx);
-		}
+		}	
 		else if (ctx->status == MS_EXIT)
 			return ;
 		clear_input(ctx);
@@ -65,8 +65,12 @@ void	set_shell(t_context *ctx, char *shell_name)
 {
 	char	*shell;
 	char	*var;
+	char	**tmp;
 	int		last_slash;
 
+	tmp = malloc(3 * sizeof(char *));
+	tmp[0] = ft_strdup("cd");
+	tmp[2] = NULL;
 	if (shell_name[0] != '.' && shell_name[0] != '/' && shell_name[0] != '~')
 	{
 		ctx->shell_name = shell_name;
@@ -79,13 +83,19 @@ void	set_shell(t_context *ctx, char *shell_name)
 		while (shell_name[last_slash] != '/')
 			last_slash--;
 		shell_name[last_slash] = 0;
-		cd(ctx, shell_name);
+		tmp[1] = ft_strdup(shell_name);
+		cd(ctx, tmp);
 		// ft_strlcpy(shell, "SHELL=", MAX_PWD + 20);
 		getcwd(shell, MAX_PWD);
 		ft_strlcat(shell, "/", MAX_PWD + 20);
 		ft_strlcat(shell, shell_name + last_slash + 1, MAX_PWD + 20);
 		ctx->shell_name = shell_name + last_slash + 1;
-		cd(ctx, "-");
+		free(tmp[1]);
+		tmp[1] = ft_strdup("-");
+		cd(ctx, tmp);
+		free(tmp[0]);
+		free(tmp[1]);
+		free(tmp);
 		unset(ctx, "OLDPWD");
 	}
 	var = ft_strjoin("SHELL=", shell);
