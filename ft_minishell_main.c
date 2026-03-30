@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/16 14:59:51 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/03/29 17:33:43 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/03/30 18:24:59 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,8 @@ static void	io_while(t_context *ctx)
 		}
 		else if (ctx->status == MS_EXIT)
 			return ;
+		// else
+		// 	print_syntax_error();
 		clear_input(ctx);
 	}
 }

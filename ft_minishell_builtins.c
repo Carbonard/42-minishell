@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/17 21:35:56 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/03/28 22:46:53 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/03/29 20:49:07 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,53 +32,6 @@ int	cd(t_context *ctx, char *new_dir)
 		return (MS_E_PATH_NFOUND);
 	export(ctx, old_dir);
 	return (MS_SUCCESS);
-}
-
-void	builtin_exit(t_context *ctx, char **argv)
-{
-	int			length;
-	long long	number;
-
-	if (!argv[1])
-	{
-		free_split(argv);
-		ft_exit(ctx, ctx->exit_status);
-	}
-	length = 0;
-	if (argv[1][0] == '-')
-		length++;
-	while (argv[1][length])
-	{
-		if (!ft_isdigit(argv[1][length]) || length > 19)
-		{
-			ft_putstr_fd("exit\nminishell: exit: ", 2);
-			ft_putstr_fd(argv[1], 2);
-			ft_putendl_fd(": numeric argument required", 2);
-			free_split(argv);
-			ft_exit(ctx, 2);
-		}
-		length++;
-	}
-	number = ft_atoll(argv[1]);
-	if (number > __LONG_MAX__)
-	{
-		ft_putstr_fd("exit\nminishell: exit: ", 2);
-		ft_putstr_fd(argv[1], 2);
-		ft_putendl_fd(": numeric argument required", 2);
-		if (!argv[2])
-		{
-			free_split(argv);
-			ft_exit(ctx, 2);
-		}
-	}
-	if (argv[2])
-	{
-		ctx->exit_status = 1;
-		ft_putendl_fd("minishell: exit: too many arguments", 2);
-		return ;
-	}
-	free_split(argv);
-	ft_exit (ctx, (long)number);
 }
 
 char	*get_preperror(char **argv)
@@ -123,12 +76,11 @@ int	try_builtins(t_context *ctx, char **argv)
 	else
 		return (0);
 	pre_perror = get_preperror(argv);
-	if (ctx->status != MS_SUCCESS)// && ft_strncmp(argv[0], "cd", 3))
+	if (ctx->status != MS_SUCCESS)
 		perror(pre_perror);
 	else
 		ctx->exit_status = 0;
 	free(pre_perror);
-	// printf("free argv con argv[0]: %s, argv[1]: %s\n", argv[0], argv[1]);
 	free_split(argv);
 	ctx->exit_status = 0;
 	if (ctx->status != MS_SUCCESS)

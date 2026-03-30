@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/16 16:54:26 by nyxssa            #+#    #+#             */
-/*   Updated: 2026/02/15 20:49:53 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/03/30 00:07:02 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,14 +32,12 @@ int	find_closing_par(char *str)
 }
 
 // This function assumes that the opening parenthesis exists
-int	find_open_par(char *str)
+int	find_open_par(char *str, int i)
 {
 	int	parenthesis_cnt;
-	int	i;
 
 	parenthesis_cnt = -1;
-	i = 0;
-	while (str[i] && parenthesis_cnt != 0)
+	while (i && parenthesis_cnt != 0)
 	{
 		i--;
 		if (str[i] == '(')
@@ -47,6 +45,17 @@ int	find_open_par(char *str)
 		else if (str[i] == ')')
 			parenthesis_cnt--;
 	}
+	return (i);
+}
+
+static int	find_open_quote(char *str, int i)
+{
+	char	quote;
+
+	quote = str[i];
+	i--;
+	while (i && str[i] != quote)
+		i--;
 	return (i);
 }
 
@@ -67,8 +76,11 @@ int	skip_redirections(char *str, int i)
 		}
 		while (str[i] == ' ')
 			i++;
-		while (redir_found && str[i] && str[i] != ' ' && str[i] != '<' && str[i] != '>')
+		while (redir_found && str[i] && str[i] != ' ' && str[i] != '<'
+			&& str[i] != '>' && str[i] != '&' && str[i] != '|')
 			i++;
+		if (str[i] == '&' || str[i] == '|')
+			return (i);
 	}
 	return (i);
 }
@@ -98,17 +110,26 @@ static int	remove_parenthesis(char *str)
 	return (removed);
 }
 
-static int
-	divide_by_logic_op(t_command_tree *input, t_command_tree **first, t_command_tree **second)
+static int	reduce_index(char *input, int i)
 {
-	int			i;
+	if (input[i] == ')')
+		i = find_open_par(input, i);
+	else if (input[i] == '\'' || input[i] == '"')
+		i = find_open_quote(input, i);
+	return (i - 1);
+}
 
-	i = ft_strlen(input->cmd) - 1;
+static int	divide_by_logic_op(t_command_tree *input, t_command_tree **first, t_command_tree **second)
+{
+	int	i;
+
+	i = ft_strlen(input->cmd);
 	while (i > 0)
 	{
-		if (input->cmd[i] == ')')
-			i += find_open_par(input->cmd + i);
-		else if ((input->cmd[i] == '&' && input->cmd[i - 1] == '&')
+		i = reduce_index(input->cmd, i);
+		if (i < 0)
+			break;
+		if ((input->cmd[i] == '&' && input->cmd[i - 1] == '&')
 			|| (input->cmd[i] == '|' && input->cmd[i - 1] == '|'))
 		{
 			if (input->cmd[i] == '&')
@@ -120,26 +141,23 @@ static int
 			*second = malloc(sizeof(t_command_tree));
 			(*first)->cmd = input->cmd;
 			(*second)->cmd = input->cmd + i + 1;
-			input->cmd1 = *first;
-			input->cmd2 = *second;
 			return (1);
 		}
-		i--;
 	}
 	return (0);
 }
 
-static int
-	divide_by_pipes(t_command_tree *input, t_command_tree **first, t_command_tree **second)
+static int	divide_by_pipes(t_command_tree *input, t_command_tree **first, t_command_tree **second)
 {
-	int			i;
+	int	i;
 
-	i = ft_strlen(input->cmd) - 1;
+	i = ft_strlen(input->cmd);
 	while (i > 0)
 	{
-		if (input->cmd[i] == ')')
-			i += find_open_par(input->cmd + i);
-		else if (input->cmd[i] == '|')
+		i = reduce_index(input->cmd, i);
+		if (i < 0)
+			break;
+		if (input->cmd[i] == '|')
 		{
 			input->sep = PIPE;
 			input->cmd[i] = 0;
@@ -147,11 +165,8 @@ static int
 			*second = malloc(sizeof(t_command_tree));
 			(*first)->cmd = input->cmd;
 			(*second)->cmd = input->cmd + i + 1;
-			input->cmd1 = *first;
-			input->cmd2 = *second;
 			return (1);
 		}
-		i--;
 	}
 	return (0);
 }

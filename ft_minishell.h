@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/16 14:57:20 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/03/29 19:00:18 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/03/30 23:56:50 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,9 +22,12 @@
 # include <sys/wait.h>
 # include <fcntl.h>
 # include <signal.h>
+# include <dirent.h>
 
 # define MAX_PWD 1024
 # define MAX_PROMPT MAX_PWD + 20
+
+extern int last_signal;
 
 enum e_status
 {
@@ -108,6 +111,15 @@ enum e_automaton_states
 	S_TOTAL
 };
 
+typedef struct s_automaton_data
+{
+	int		state;
+	int		last_state;
+	int		event;
+	int		i_saved;
+	char	saved_states[1000];
+}	t_automaton_data;
+
 typedef struct s_command_tree
 {
 	struct s_command_tree	*cmd1;
@@ -143,8 +155,16 @@ typedef struct s_context
 // heredoc
 void		read_here_docs(t_context *ctx);
 int			spread_here_docs(t_command_tree *node, t_dyn_ptr *hd, int n);
+// check_syntax
+int			check_syntax(char *input);
 // check_input
-int			check_input(char *input);
+int			check_quotes(t_context *ctx);
+int			check_parenthesis(t_context *ctx);
+int			is_redirection(char *str);
+int			check_operator(t_context *ctx);
+// exit
+void		builtin_exit(t_context *ctx, char **argv);
+
 
 int			save_env(t_context *ctx, char **original_env);
 void		set_shell(t_context *ctx, char *shell_name);
@@ -155,7 +175,7 @@ int			del_env(t_context *ctx, char *var_name);
 void		get_prompt(t_context *ctx, char *prompt);
 int			read_input(t_context *ctx);
 // Parser
-int			find_closing_par(char *str);
+// int			find_closing_par(char *str);
 void		create_tree(t_command_tree *input);
 void		display_tree(t_command_tree *tree);
 // Built-ins
@@ -176,6 +196,7 @@ char		**split_cmd(char *cmd, t_redirection *redir);
 int			try_builtins(t_context *ctx, char **command);
 char		*find_cmd_path(t_context *ctx, char *cmd);
 char		**list_to_strarray(t_str_list *env);
+char		**get_argv_and_redir(t_context *ctx, char *cmd, t_redirection *redir);
 // int		execute_subshell(t_context *ctx, t_command_tree *node);
 void		execute_input(t_context *ctx);
 int			execute_leaf(t_context *ctx, t_command_tree *node);
@@ -189,6 +210,5 @@ void		do_nothing(int sig);
 // Debug
 void		display_tree(t_command_tree *tree);
 
-int			is_redirection(char *str);
 
 #endif
