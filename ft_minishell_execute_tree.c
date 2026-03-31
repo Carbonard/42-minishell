@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/18 19:24:30 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/03/26 12:53:54 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/03/29 23:57:55 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ int	execute_subshell(t_context *ctx, t_command_tree *node)
 		pid = execute_node(ctx, node);
 		waitpid(pid, &status, 0);
 		ctx->exit_status = get_status(ctx, status);
-		ft_exit(ctx, ctx->exit_status);
+		silent_exit(ctx, ctx->exit_status);
 	}
 	waitpid(pid, &status, 0);
 	ctx->exit_status = get_status(ctx, status);

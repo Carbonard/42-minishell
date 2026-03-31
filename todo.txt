@@ -14,9 +14,6 @@ echo $CMD | ./minishell
 'echo hola
 echo adios'
 
-señales
-	- ctrl + D mientras escribir input antes y despues de un salto de linea
-
 echo hola > /dev/stdout | sleep 3 | echo adios
 
 echo hola || echo adios && echo si
@@ -75,7 +72,15 @@ just one heredoc (?)
 echo |
 ^C
 
-echo |
-^D
-
 echo |||
+
+. (?)
+
+(echo hola && echo adios) > file
+
+print syntax error from io_while instead of check_syntax
+
+echo hola |
+|
+
+cd - (cuando no haya OLDPWD)

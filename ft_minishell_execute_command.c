@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/29 03:50:34 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/03/28 23:26:20 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/03/30 23:59:58 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,33 +70,6 @@ char	**list_to_strarray(t_str_list *env)
 	return (new_env);
 }
 
-void	execute_command(t_context *ctx, char **argv)
-{
-	char			*path;
-	char			**env;
-
-	if (!argv || !argv[0])
-		return ;
-	if (!ft_strncmp(argv[0], "./", 2) || !ft_strncmp(argv[0], "../", 3)
-		|| !ft_strncmp(argv[0], "/", 1))
-		path = ft_strdup(argv[0]);
-	else
-		path = find_cmd_path(ctx, argv[0]);
-	if (path && access(path, X_OK))
-		ctx->exit_status = ES_CMD_NOT_EXEC;
-	env = NULL;
-	if (!path)
-		ctx->exit_status = ES_CMD_NOT_FOUND;
-	else
-		env = list_to_strarray(ctx->env);
-	if (path && !env)
-		ctx->status = MS_E_ENV_NFOUND;
-	else if (path && env)
-		execve(path, argv, env);
-	free(path);
-	free_split(env);
-}
-
 void	manage_redirection(t_context *ctx, t_redirection *redir, char *here_doc)
 {
 	int	fd;
@@ -129,98 +102,32 @@ void	manage_redirection(t_context *ctx, t_redirection *redir, char *here_doc)
 	}
 }
 
-int	need_to_expand(char *str)
+void	execute_command(t_context *ctx, char **argv)
 {
-	int	i;
+	char			*path;
+	char			**env;
 
-	i = 0;
-	while (str[i])
-	{
-		if (str[i] == '\'')
-		{
-			i++;
-			while (str[i] != '\'')
-				i++;
-		}
-		// check condition
-		else if (str[i] == '$' && str[i + 1] && str[i + 1] != ' ')
-			return (i);
-		i++;
-	}
-	return (-1);
-}
-
-char	*expand_var(t_context *ctx, char *str, char *expanded, int var_start)
-{
-	int		var_len;
-	char	*aux1;
-	char	*aux2;
-
-	var_len = 0;
-	while (str[var_start + 1 + var_len]
-		&& str[var_start + 1 + var_len] != ' '
-		&& str[var_start + 1 + var_len] != '\n'
-		&& str[var_start + 1 + var_len] != '"')
-		var_len++;
-	aux2 = ft_substr(str, var_start + 1, var_len);
-	printf("var:%s.\n", aux2);
-	aux1 = ft_strdup(find_env_value(ctx, aux2));
-	free(aux2);
-	aux2 = ft_strjoin(expanded, aux1);
-	free(expanded);
-	free(aux1);
-	aux1 = ft_strdup(ft_strchr(str + var_start, ' '));
-	expanded = ft_strjoin(aux2, aux1);
-	free(aux2);
-	free(aux1);
-	free(str);
-	return (expanded);
-}
-
-char	*expand_cmd(t_context *ctx, char *str)
-{
-	int		var_start;
-	char	*expanded;
-	char	*aux1;
-	char	*aux2;
-
-	var_start = need_to_expand(str);
-	expanded = ft_substr(str, 0, var_start);
-	if (str[var_start + 1] == '?')
-	{
-		aux2 = ft_itoa(ctx->exit_status);
-		aux1 = ft_strjoin(expanded, aux2);
-		free(aux2);
-		free(expanded);
-		expanded = ft_strjoin(aux1, str + var_start + 2);
-		free(aux1);
-	}
+	if (!argv || !argv[0])
+		return ;
+	if (!ft_strncmp(argv[0], "./", 2) || !ft_strncmp(argv[0], "../", 3)
+		|| !ft_strncmp(argv[0], "/", 1))
+		path = ft_strdup(argv[0]);
 	else
-		expanded = expand_var(ctx, str, expanded, var_start);
-	free(str);
-	return (expanded);
+		path = find_cmd_path(ctx, argv[0]);
+	if (path && access(path, X_OK))
+		ctx->exit_status = ES_CMD_NOT_EXEC;
+	env = NULL;
+	if (!path)
+		ctx->exit_status = ES_CMD_NOT_FOUND;
+	else
+		env = list_to_strarray(ctx->env);
+	if (path && !env)
+		ctx->status = MS_E_ENV_NFOUND;
+	else if (path && env)
+		execve(path, argv, env);
+	free(path);
+	free_split(env);
 }
-
-char	**get_argv_and_redir(t_context *ctx, char *cmd, t_redirection *redir)
-{
-	char	*command;
-	char	**argv;
-
-	command = ft_strdup(cmd);
-	while (need_to_expand(command) >= 0)
-		command = expand_cmd(ctx, command);
-	argv = split_cmd(command, redir);
-	free(command);
-	return (argv);
-}
-
-// void	print_exec_error(t_context *ctx, char *cmd)
-// {
-// 	if (ctx->exit_status == ES_CMD_NOT_FOUND)
-// 		printf("%s: command not found\n", cmd);
-// 	else if (ctx->exit_status == ES_CMD_NOT_EXEC)
-// 		printf()
-// }
 
 void	minishell_perror(char *s)
 {
