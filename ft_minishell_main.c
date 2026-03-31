@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/16 14:59:51 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/03/31 19:52:59 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/03/31 21:32:58 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ static void	check_interactive(t_context *ctx, int argc, char **argv)
 	ctx->interactive = 1;
 }
 
-void	set_shell(t_context *ctx, char *shell_name)
+static void	set_shell(t_context *ctx, char *shell_name)
 {
 	char	*shell;
 	char	*var;

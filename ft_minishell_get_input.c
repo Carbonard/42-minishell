@@ -6,13 +6,13 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/18 20:24:41 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/03/31 20:33:59 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/03/31 21:40:52 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_minishell.h"
 
-void	get_prompt(t_context *ctx, char *prompt)
+static void	get_prompt(t_context *ctx, char *prompt)
 {
 	char	home[100];
 	char	pwd[PATH_MAX];
@@ -56,7 +56,7 @@ static char	*read_input_line(t_context *ctx, int print_prompt)
 	return (read_line);
 }
 
-void	check_and_extend_input(t_context *ctx)
+static void	check_and_extend_input(t_context *ctx)
 {
 	char	*input_extension;
 	char	*aux;

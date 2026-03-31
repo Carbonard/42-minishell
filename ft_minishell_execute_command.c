@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/29 03:50:34 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/03/31 17:00:07 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/03/31 21:31:59 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ char	*find_cmd_path(t_context *ctx, char *cmd)
 	return (free_split(env_paths));
 }
 
-char	**list_to_strarray(t_str_list *env)
+static char	**list_to_strarray(t_str_list *env)
 {
 	t_str_list	*aux;
 	char		**new_env;
@@ -70,7 +70,7 @@ char	**list_to_strarray(t_str_list *env)
 	return (new_env);
 }
 
-void	manage_redirection(t_context *ctx, t_redirection *redir, char *here_doc)
+static void	manage_redirection(t_context *ctx, t_redirection *redir, char *here_doc)
 {
 	int	fd;
 
@@ -102,7 +102,7 @@ void	manage_redirection(t_context *ctx, t_redirection *redir, char *here_doc)
 	}
 }
 
-void	execute_command(t_context *ctx, char **argv)
+static void	execute_command(t_context *ctx, char **argv)
 {
 	char			*path;
 	char			**env;
@@ -136,7 +136,7 @@ int	execute_leaf(t_context *ctx, t_command_tree *node)
 	t_redirection	redir;
 
 	cmd_argv = get_argv_and_redir(ctx, node->cmd, &redir);
-	if (try_builtins(ctx, cmd_argv))
+	if (try_builtins(ctx, cmd_argv, &redir, node->here_doc))
 		return (0);
 	ctx->read_exit_status = 0;
 	pid = fork();

@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/16 14:57:20 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/03/31 20:53:07 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/03/31 21:39:27 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -153,9 +153,13 @@ typedef struct s_context
 	t_dyn_ptr		here_docs;
 }	t_context;
 
+// Signals
+void		handler_sigint(int sig);
 // heredoc
 void		read_here_docs(t_context *ctx);
 int			spread_here_docs(t_command_tree *node, t_dyn_ptr *hd, int n);
+// get_input
+int			read_input(t_context *ctx);
 // check_syntax
 int			check_syntax(char *input);
 // check_input
@@ -163,56 +167,49 @@ int			check_quotes(t_context *ctx);
 int			check_parenthesis(t_context *ctx);
 int			is_redirection(char *str);
 int			check_operator(t_context *ctx);
+// parser
+void		create_tree(t_command_tree *input);
 // execute_tree
 int			get_status(t_context *ctx, int wstatus);
 void		execute_input(t_context *ctx);
 // execute_node
 int			execute_node(t_context *ctx, t_command_tree *node);
 // execute_command
+char		*find_cmd_path(t_context *ctx, char *cmd);
 int			execute_leaf(t_context *ctx, t_command_tree *node);
+// argv
+char		**get_argv_and_redir(t_context *ctx, char *cmd, t_redirection *redir);
+// split_cmd
+char		**split_cmd(char *cmd, t_redirection *redir);
 // wildcards
 char		*expand_wildcards(char *cmd);
-// exit
-void		builtin_exit(t_context *ctx, char **argv);
-// error_messages
-void		minishell_perror(t_context *ctx, char *s);
-void		builtins_perror(t_context *ctx, char **argv);
-
-
+// builtins
+int			try_builtins(t_context *ctx, char **argv, t_redirection *redir, char *here_doc);
+// environment
 int			save_env(t_context *ctx, char **original_env);
-void		set_shell(t_context *ctx, char *shell_name);
 int			add_env(t_context *ctx, char *new_var);
 t_str_list	*find_env_node(t_context *ctx, char *var);
 char		*find_env_value(t_context *ctx, char *var);
 int			del_env(t_context *ctx, char *var_name);
-void		get_prompt(t_context *ctx, char *prompt);
-int			read_input(t_context *ctx);
-// Parser
-// int			find_closing_par(char *str);
-void		create_tree(t_command_tree *input);
-void		display_tree(t_command_tree *tree);
-// Built-ins
-// void	exit_builtin(char *cmd);
-void		clear_input(t_context *ctx);
+// builtins_env
+int			print_env(t_context *ctx);
+int			export(t_context *ctx, char *new_var);
+int			unset(t_context *ctx, char *var);
+// builtins_others
 int			valid_flag(const char *arg, char f);
 int			cd(t_context *ctx, char **argv);
 int			echo(char **argv);
 int			pwd(void);
-int			print_env(t_context *ctx);
-int			export(t_context *ctx, char *new_var);
-int			unset(t_context *ctx, char *var);
+// exit
 void		ft_exit(t_context *ctx, long status);
 void		silent_exit(t_context *ctx, long status);
+void		builtin_exit(t_context *ctx, char **argv);
+// clears
+void		clear_input(t_context *ctx);
 void		free_all(t_context *ctx);
-// Execute commands
-char		**split_cmd(char *cmd, t_redirection *redir);
-int			try_builtins(t_context *ctx, char **command);
-char		*find_cmd_path(t_context *ctx, char *cmd);
-char		**list_to_strarray(t_str_list *env);
-char		**get_argv_and_redir(t_context *ctx, char *cmd, t_redirection *redir);
-// Signals
-void		handler_sigint(int sig);
-void		do_nothing(int sig);
+// error_messages
+void		minishell_perror(t_context *ctx, char *s);
+void		builtins_errors(t_context *ctx, char **argv);
 
 // Debug
 void		display_tree(t_command_tree *tree);

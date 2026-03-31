@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/31 16:59:44 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/03/31 19:03:14 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/03/31 21:16:40 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ void	minishell_error(t_context *ctx, char *s)
 	ft_putendl_fd(s, 2);
 }
 
-void	builtins_perror(t_context *ctx, char **argv)
+void	builtins_errors(t_context *ctx, char **argv)
 {
 	if (ctx->exit_status == MS_SUCCESS)
 	{
