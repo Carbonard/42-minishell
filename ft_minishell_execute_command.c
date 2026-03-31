@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/29 03:50:34 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/03/30 23:59:58 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/03/31 17:00:07 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,12 +129,6 @@ void	execute_command(t_context *ctx, char **argv)
 	free_split(env);
 }
 
-void	minishell_perror(char *s)
-{
-	ft_putstr_fd("minishell: ", 2);
-	perror(s);
-}
-
 int	execute_leaf(t_context *ctx, t_command_tree *node)
 {
 	int				pid;
@@ -150,12 +144,12 @@ int	execute_leaf(t_context *ctx, t_command_tree *node)
 	{
 		if (redir.type_in || redir.type_out)
 			manage_redirection(ctx, &redir, node->here_doc);
-		ctx->exit_status = -1;
+		ctx->exit_status = 1;
 		execute_command(ctx, cmd_argv);
 		if (ctx->exit_status == ES_CMD_NOT_FOUND)
 			printf("%s: command not found\n", cmd_argv[0]);
 		else if (cmd_argv[0])
-			minishell_perror(cmd_argv[0]);
+			minishell_perror(ctx, cmd_argv[0]);
 		free_split(cmd_argv);
 		silent_exit(ctx, ctx->exit_status);
 	}

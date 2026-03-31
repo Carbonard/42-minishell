@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/16 14:57:20 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/03/31 16:15:44 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/03/31 19:00:01 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,8 @@ enum e_status
 	MS_E_VAR_NFOUND,
 	MS_E_EQINNAME,
 	MS_E_PATH_NFOUND,
-	MS_TOO_MANY_ARGS
+	MS_TOO_MANY_ARGS,
+	MS_OLDPWD_NOT_SET
 };
 
 enum e_exit_status
@@ -163,8 +164,18 @@ int			check_quotes(t_context *ctx);
 int			check_parenthesis(t_context *ctx);
 int			is_redirection(char *str);
 int			check_operator(t_context *ctx);
+// execute_tree
+int			get_status(t_context *ctx, int wstatus);
+void		execute_input(t_context *ctx);
+// execute_node
+int			execute_node(t_context *ctx, t_command_tree *node);
+// execute_command
+int			execute_leaf(t_context *ctx, t_command_tree *node);
 // exit
 void		builtin_exit(t_context *ctx, char **argv);
+// error_messages
+void		minishell_perror(t_context *ctx, char *s);
+void		builtins_perror(t_context *ctx, char **argv);
 
 
 int			save_env(t_context *ctx, char **original_env);
@@ -198,12 +209,6 @@ int			try_builtins(t_context *ctx, char **command);
 char		*find_cmd_path(t_context *ctx, char *cmd);
 char		**list_to_strarray(t_str_list *env);
 char		**get_argv_and_redir(t_context *ctx, char *cmd, t_redirection *redir);
-// int		execute_subshell(t_context *ctx, t_command_tree *node);
-void		execute_input(t_context *ctx);
-int			execute_leaf(t_context *ctx, t_command_tree *node);
-// int		execute_logic(t_context *ctx, t_command_tree *node);
-// int		execute_pipe(t_context *ctx, t_command_tree *node);
-int			execute_node(t_context *ctx, t_command_tree *node);
 // Signals
 void		handler_sigint(int sig);
 void		do_nothing(int sig);

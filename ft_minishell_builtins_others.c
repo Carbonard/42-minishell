@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_minishell_echo.c                                :+:      :+:    :+:   */
+/*   ft_minishell_builtins_others.c                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/16 16:52:14 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/01/22 18:04:27 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/03/31 18:50:34 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,5 +52,38 @@ int	echo(char **argv)
 	}
 	if (new_line)
 		ft_putchar_fd('\n', 1);
+	return (MS_SUCCESS);
+}
+
+int	pwd(void)
+{
+	char	path[MAX_PWD];
+
+	if (!getcwd(path, MAX_PWD))
+		return (MS_E_PWD_NFOUND);
+	ft_putendl_fd(path, 1);
+	return (MS_SUCCESS);
+}
+
+int	cd(t_context *ctx, char **argv)
+{
+	char	old_dir[MAX_PWD + 20];
+
+	if (argv[1] == NULL)
+		argv[1] = ft_strdup(find_env_value(ctx, "HOME"));
+	else if (argv[2] != NULL)
+		return (MS_TOO_MANY_ARGS);
+	if (!ft_strncmp(argv[1], "-", 2))
+	{
+		free(argv[1]);
+		argv[1] = ft_strdup(find_env_value(ctx, "OLDPWD"));
+		if (!argv[1])
+			return (MS_OLDPWD_NOT_SET);
+	}
+	ft_strlcpy(old_dir, "OLDPWD=", 8);
+	getcwd(old_dir + 7, MAX_PWD);
+	if (chdir(argv[1]))
+		return (MS_E_PATH_NFOUND);
+	export(ctx, old_dir);
 	return (MS_SUCCESS);
 }
