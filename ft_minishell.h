@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/16 14:57:20 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/03/31 19:00:01 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/03/31 20:53:07 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,7 @@
 # include <signal.h>
 # include <dirent.h>
 
-# define MAX_PWD 1024
-# define MAX_PROMPT MAX_PWD + 20
+# define MAX_PROMPT PATH_MAX + 20
 
 extern int last_signal;
 
@@ -171,6 +170,8 @@ void		execute_input(t_context *ctx);
 int			execute_node(t_context *ctx, t_command_tree *node);
 // execute_command
 int			execute_leaf(t_context *ctx, t_command_tree *node);
+// wildcards
+char		*expand_wildcards(char *cmd);
 // exit
 void		builtin_exit(t_context *ctx, char **argv);
 // error_messages

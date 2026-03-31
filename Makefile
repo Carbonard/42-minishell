@@ -14,7 +14,7 @@ DYNARRAYS = dynamic_arrays/libft_dynarray.a
 
 BUILT_INS = ft_minishell_builtins_others.c ft_minishell_builtins_env.c
 
-SRC = ft_minishell_main.c ft_minishell_heredocs.c ft_minishell_check_syntax.c ft_minishell_check_input.c ft_minishell_environment.c ft_minishell_get_input.c ft_minishell_argv.c ft_minishell_parser.c ft_minishell_split_cmd.c ft_minishell_builtins.c ft_minishell_execute_tree.c ft_minishell_execute_node.c ft_minishell_execute_command.c ft_minishell_exit.c ft_minishell_clears.c ft_minishell_debug.c ft_minishell_signals.c ft_minishell_error_messages.c
+SRC = ft_minishell_main.c ft_minishell_heredocs.c ft_minishell_check_syntax.c ft_minishell_check_input.c ft_minishell_environment.c ft_minishell_get_input.c ft_minishell_argv.c ft_minishell_parser.c ft_minishell_split_cmd.c ft_minishell_builtins.c ft_minishell_execute_tree.c ft_minishell_execute_node.c ft_minishell_execute_command.c ft_minishell_exit.c ft_minishell_clears.c ft_minishell_debug.c ft_minishell_signals.c ft_minishell_error_messages.c ft_minishell_wildcards.c
 
 $(LIBFT):
 	make -C libft

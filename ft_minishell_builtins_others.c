@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/16 16:52:14 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/03/31 18:50:34 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/03/31 19:52:03 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,9 +57,9 @@ int	echo(char **argv)
 
 int	pwd(void)
 {
-	char	path[MAX_PWD];
+	char	path[PATH_MAX];
 
-	if (!getcwd(path, MAX_PWD))
+	if (!getcwd(path, PATH_MAX))
 		return (MS_E_PWD_NFOUND);
 	ft_putendl_fd(path, 1);
 	return (MS_SUCCESS);
@@ -67,7 +67,7 @@ int	pwd(void)
 
 int	cd(t_context *ctx, char **argv)
 {
-	char	old_dir[MAX_PWD + 20];
+	char	old_dir[PATH_MAX + 20];
 
 	if (argv[1] == NULL)
 		argv[1] = ft_strdup(find_env_value(ctx, "HOME"));
@@ -81,7 +81,7 @@ int	cd(t_context *ctx, char **argv)
 			return (MS_OLDPWD_NOT_SET);
 	}
 	ft_strlcpy(old_dir, "OLDPWD=", 8);
-	getcwd(old_dir + 7, MAX_PWD);
+	getcwd(old_dir + 7, PATH_MAX);
 	if (chdir(argv[1]))
 		return (MS_E_PATH_NFOUND);
 	export(ctx, old_dir);

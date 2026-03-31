@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/18 20:24:41 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/03/30 18:22:24 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/03/31 20:33:59 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,10 +15,10 @@
 void	get_prompt(t_context *ctx, char *prompt)
 {
 	char	home[100];
-	char	pwd[MAX_PWD];
+	char	pwd[PATH_MAX];
 
 	ft_strlcpy(home, find_env_value(ctx, "HOME"), 100);
-	getcwd(pwd, MAX_PWD);
+	getcwd(pwd, PATH_MAX);
 	ft_strlcpy(prompt, "\e[94m", MAX_PROMPT);
 	if (home[0] && !ft_strncmp(home, pwd, ft_strlen(home)))
 	{
@@ -106,6 +106,6 @@ int	read_input(t_context *ctx)
 	if (check_syntax(ctx->user_input))
 		return (0);
 	add_history(ctx->user_input);
-	printf("final input: //%s//\n", ctx->user_input);
+	// printf("final input: //%s//\n", ctx->user_input);
 	return (1);
 }

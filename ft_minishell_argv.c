@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/30 23:34:26 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/03/30 23:42:46 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/03/31 20:37:59 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,6 +91,7 @@ char	**get_argv_and_redir(t_context *ctx, char *cmd, t_redirection *redir)
 	command = ft_strdup(cmd);
 	while (need_to_expand(command) >= 0)
 		command = expand_cmd(ctx, command);
+	command = expand_wildcards(command);
 	argv = split_cmd(command, redir);
 	free(command);
 	return (argv);

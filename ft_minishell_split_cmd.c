@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/17 17:03:15 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/03/30 23:38:44 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/03/31 20:59:58 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,17 +72,14 @@ int	advance_quotes(char *str)
 	int		i;
 
 	i = 0;
-	// printf("Advancing from %c\n", str[i]);
 	if (str[i] == '\'' || str[i] == '"')
 	{
 		quote = str[i];
 		i++;
 		while (str[i] && str[i] != quote)
 		{
-			// printf("while: %c\n", str[i]);
 			i++;
 		}
-		// printf("end: %c\n", str[i]);
 		return (i + 1);
 	}
 	return (1);
@@ -110,7 +107,7 @@ char	**split_cmd(char *cmd, t_redirection *redir)
 	char		*token;
 	int			i;
 
-	printf("cmd: '%s'\n", cmd);
+	// printf("cmd: '%s'\n", cmd);
 	init_dyn_ptr(&split, 2);
 	redir->type_in = NONE;
 	redir->type_out = NONE;
@@ -130,9 +127,9 @@ char	**split_cmd(char *cmd, t_redirection *redir)
 		}
 		else
 		{
-			printf("original token: '%s'\n", token);
+			// printf("original token: '%s'\n", token);
 			remove_quotes(token);
-			printf("quotes removed: '%s'\n", token);
+			// printf("quotes removed: '%s'\n", token);
 			add_ptr(&split, token);
 		}
 	}

@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/16 14:59:51 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/03/31 16:15:24 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/03/31 19:52:59 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,17 +80,17 @@ void	set_shell(t_context *ctx, char *shell_name)
 	}
 	else
 	{
-		shell = malloc(MAX_PWD + 20);
+		shell = malloc(PATH_MAX + 20);
 		last_slash = ft_strlen(shell_name);
 		while (shell_name[last_slash] != '/')
 			last_slash--;
 		shell_name[last_slash] = 0;
 		tmp[1] = ft_strdup(shell_name);
 		cd(ctx, tmp);
-		// ft_strlcpy(shell, "SHELL=", MAX_PWD + 20);
-		getcwd(shell, MAX_PWD);
-		ft_strlcat(shell, "/", MAX_PWD + 20);
-		ft_strlcat(shell, shell_name + last_slash + 1, MAX_PWD + 20);
+		// ft_strlcpy(shell, "SHELL=", PATH_MAX + 20);
+		getcwd(shell, PATH_MAX);
+		ft_strlcat(shell, "/", PATH_MAX + 20);
+		ft_strlcat(shell, shell_name + last_slash + 1, PATH_MAX + 20);
 		ctx->shell_name = shell_name + last_slash + 1;
 		free(tmp[1]);
 		tmp[1] = ft_strdup("-");
