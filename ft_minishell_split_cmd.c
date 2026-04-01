@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/17 17:03:15 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/03/31 20:59:58 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/04/01 15:40:29 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,7 @@ static void	remove_quotes(char *cmd)
 static int	get_redirection(char *cmd, int i, t_redirection *redir)
 {
 	int	original_i;
+	int	start;
 
 	original_i = i;
 	if (cmd[i] == '<' && cmd [i + 1] == '<')
@@ -50,17 +51,21 @@ static int	get_redirection(char *cmd, int i, t_redirection *redir)
 		redir->type_out = REDIRECTION_OUT;
 	while (cmd[i] == '<' || cmd[i] == '>' || cmd[i] == ' ')
 		i++;
-	// start = i;
-	// while (cmd[i] && cmd[i] != ' ' && !is_redirection(cmd + i))
-	// 	i++;
+	start = i;
+	while (cmd[i] && !is_metachar(cmd[i]))
+		i++;
 	if (cmd[original_i] == '<')
 	{
-		redir->file_in = ft_strdup(cmd + i);//ft_substr(cmd, start, i - start);
+		if (redir->file_in)
+		free(redir->file_in);
+		redir->file_in = ft_substr(cmd, start, i - start);
 		remove_quotes(redir->file_in);
 	}
 	else
 	{
-		redir->file_out = ft_strdup(cmd + i);//ft_substr(cmd, start, i - start);
+		if (redir->file_out)
+		free(redir->file_out);
+		redir->file_out = ft_substr(cmd, start, i - start);
 		remove_quotes(redir->file_out);
 	}
 	return (i);
@@ -109,8 +114,6 @@ char	**split_cmd(char *cmd, t_redirection *redir)
 
 	// printf("cmd: '%s'\n", cmd);
 	init_dyn_ptr(&split, 2);
-	redir->type_in = NONE;
-	redir->type_out = NONE;
 	i = 0;
 	while (cmd[i])
 	{
@@ -122,6 +125,7 @@ char	**split_cmd(char *cmd, t_redirection *redir)
 		i += ft_strlen(token);
 		if (is_redirection(token))
 		{
+			printf("redirection: '%s'\n", token);
 			get_redirection(token, 0, redir);
 			free(token);
 		}

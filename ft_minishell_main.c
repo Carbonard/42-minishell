@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/16 14:59:51 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/03/31 21:32:58 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/04/01 22:32:03 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,9 @@
 
 static void	io_while(t_context *ctx)
 {
-	ctx->status = MS_SUCCESS;
 	while (ctx->status != MS_EXIT)
 	{
+		ctx->status = MS_SUCCESS;
 		init_dyn_ptr(&ctx->here_docs, 1);
 		if (read_input(ctx))
 		{
@@ -50,8 +50,8 @@ static void	check_interactive(t_context *ctx, int argc, char **argv)
 	}
 	if (argc < 3)
 	{
-		printf("minishell: -c: option requires an argument\n");
-		exit (2);
+		custom_error(ctx->shell_name, "-c: option requires an argument");
+		silent_exit(ctx, 2);
 	}
 	if (!isatty(0))
 		return ;
@@ -70,9 +70,6 @@ static void	set_shell(t_context *ctx, char *shell_name)
 	char	**tmp;
 	int		last_slash;
 
-	tmp = malloc(3 * sizeof(char *));
-	tmp[0] = ft_strdup("cd");
-	tmp[2] = NULL;
 	if (shell_name[0] != '.' && shell_name[0] != '/' && shell_name[0] != '~')
 	{
 		ctx->shell_name = shell_name;
@@ -85,9 +82,11 @@ static void	set_shell(t_context *ctx, char *shell_name)
 		while (shell_name[last_slash] != '/')
 			last_slash--;
 		shell_name[last_slash] = 0;
+		tmp = malloc(3 * sizeof(char *));
+		tmp[0] = ft_strdup("cd");
 		tmp[1] = ft_strdup(shell_name);
+		tmp[2] = NULL;
 		cd(ctx, tmp);
-		// ft_strlcpy(shell, "SHELL=", PATH_MAX + 20);
 		getcwd(shell, PATH_MAX);
 		ft_strlcat(shell, "/", PATH_MAX + 20);
 		ft_strlcat(shell, shell_name + last_slash + 1, PATH_MAX + 20);
@@ -110,14 +109,17 @@ int	main(int argc, char **argv, char **env)
 {
 	t_context	ctx;
 	struct sigaction	act;
-	
+
+	ctx.cmd_tree.cmd1 = NULL;
+	ctx.cmd_tree.cmd2 = NULL;
+	ctx.status = MS_SUCCESS;
+	ctx.exit_status = 0;
 	act.sa_handler = SIG_IGN;
 	signal(SIGINT, handler_sigint);
 	sigaction(SIGQUIT, &act, NULL);
-	check_interactive(&ctx, argc, argv);
 	save_env(&ctx, env);
 	set_shell(&ctx, argv[0]);
-	// ctx.cmd_tree = malloc(sizeof(t_command_tree));
+	check_interactive(&ctx, argc, argv);
 	io_while(&ctx);
 	free_all(&ctx);
 	return (0);

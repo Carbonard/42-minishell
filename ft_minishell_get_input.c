@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/18 20:24:41 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/03/31 21:40:52 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/04/01 21:31:22 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,11 +70,14 @@ static void	check_and_extend_input(t_context *ctx)
 		return ;
 	}
 	if (!input_extension && check_quotes(ctx))
-		printf("minishell: unexpected EOF while looking for matching `\"'\n");
+		ctx->status = MS_SE_QUOTES;
 	else if (!input_extension)
-		printf("minishell: syntax error: unexpected end of file\n");
+		ctx->status = MS_SE_EOF;
 	if (!input_extension)
-		aux = ft_strdup("exit");
+	{
+		shell_perror(ctx, NULL);
+		ft_exit(ctx, 2);
+	}
 	else
 		aux = ft_strjoin_char(ctx->user_input, input_extension, '\n');
 	free(input_extension);

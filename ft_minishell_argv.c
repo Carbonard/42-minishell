@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/30 23:34:26 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/03/31 20:37:59 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/04/01 15:46:59 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ char	*expand_var(t_context *ctx, char *str, char *expanded, int var_start)
 		&& str[var_start + 1 + var_len] != '"')
 		var_len++;
 	aux2 = ft_substr(str, var_start + 1, var_len);
-	printf("var:'%s'\n", aux2);
+	// printf("var:'%s'\n", aux2);
 	aux1 = ft_strdup(find_env_value(ctx, aux2));
 	free(aux2);
 	aux2 = ft_strjoin(expanded, aux1);
@@ -88,6 +88,10 @@ char	**get_argv_and_redir(t_context *ctx, char *cmd, t_redirection *redir)
 	char	*command;
 	char	**argv;
 
+	redir->file_in = NULL;
+	redir->file_out = NULL;
+	redir->type_in = NONE;
+	redir->type_out = NONE;
 	command = ft_strdup(cmd);
 	while (need_to_expand(command) >= 0)
 		command = expand_cmd(ctx, command);

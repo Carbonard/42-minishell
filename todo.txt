@@ -61,8 +61,6 @@ echo"$a"	-> echo hola command not found
 
 exit status cuando commando sin permisos
 
-cd too many arguments
-
 ls fadfa || (echo $? && echo $?)
 
 expand ~
@@ -84,3 +82,36 @@ echo hola |
 |
 
 cd - (cuando no haya OLDPWD)
+
+exit 8	999999999999999999
+
+fix open fd when exit
+
+
+
+
+Errors:
+
+shell_custom_error(char *error_msg)
+	minishell: unexpected EOF ...
+	minishell: syntax error near ...
+shell_perror(char *s)
+	minishell: syntax error: unexpected ...
+	minishell: -c: option requires ...
+	minishell: cmd: too many arguments (x2)
+	minishell: cmd: OLDPWD ...
+	minishell: cmd: permission denied (perror)
+shell_arg_perror(char **argv)
+	minishell: cmd: argv[1]: numeric argument required
+arg_error()
+	cmd: command not found
+
+
+
+
+
+minishell: cmd: generic_err
+minishell: cmd: personal_err
+cmd: personal_err
+cmd: generic_err
+minishell: cmd: arg: generic

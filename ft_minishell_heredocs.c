@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/29 17:22:13 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/03/31 00:40:06 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/04/01 15:01:03 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,14 @@ void	read_hd(t_context *ctx, char *eof)
 	add_ptr(&ctx->here_docs, here_doc);
 }
 
+int	is_metachar(char c)
+{
+	if (c == '<' || c == '>' || c == '|' || c == '&' || c == ' ' || c == '\t'
+		|| c == '\n' || c == '(' || c == ')' || c == ';')
+		return (1);
+	return (0);
+}
+
 void	read_here_docs(t_context *ctx)
 {
 	int		i;
@@ -56,7 +64,8 @@ void	read_here_docs(t_context *ctx)
 				i++;
 			len = 0;
 			// condiciones while
-			while (ctx->user_input[i + len] && ctx->user_input[i + len] != ' ')
+			while (ctx->user_input[i + len]
+				&& !is_metachar(ctx->user_input[i + len]))
 				len++;
 			eof = ft_substr(ctx->user_input, i, len);
 			read_hd(ctx, eof);

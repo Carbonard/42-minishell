@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/16 14:57:20 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/03/31 21:39:27 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/04/01 22:36:15 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,10 @@ enum e_status
 	MS_E_EQINNAME,
 	MS_E_PATH_NFOUND,
 	MS_TOO_MANY_ARGS,
-	MS_OLDPWD_NOT_SET
+	MS_OLDPWD_NOT_SET,
+	MS_NON_NUMERIC_ARG,
+	MS_SE_QUOTES,
+	MS_SE_EOF
 };
 
 enum e_exit_status
@@ -137,6 +140,8 @@ typedef struct s_redirection
 	char	*file_in;
 	int		type_out;
 	char	*file_out;
+	int		original_in;
+	int		original_out;
 }	t_redirection;
 
 typedef struct s_context
@@ -158,6 +163,7 @@ void		handler_sigint(int sig);
 // heredoc
 void		read_here_docs(t_context *ctx);
 int			spread_here_docs(t_command_tree *node, t_dyn_ptr *hd, int n);
+int			is_metachar(char c);
 // get_input
 int			read_input(t_context *ctx);
 // check_syntax
@@ -176,6 +182,7 @@ void		execute_input(t_context *ctx);
 int			execute_node(t_context *ctx, t_command_tree *node);
 // execute_command
 char		*find_cmd_path(t_context *ctx, char *cmd);
+void		manage_redirection(t_context *ctx, t_redirection *redir, char *here_doc);
 int			execute_leaf(t_context *ctx, t_command_tree *node);
 // argv
 char		**get_argv_and_redir(t_context *ctx, char *cmd, t_redirection *redir);
@@ -208,7 +215,8 @@ void		builtin_exit(t_context *ctx, char **argv);
 void		clear_input(t_context *ctx);
 void		free_all(t_context *ctx);
 // error_messages
-void		minishell_perror(t_context *ctx, char *s);
+void		shell_perror(t_context *ctx, char *s);
+void		custom_error(char *s, char *error_msg);
 void		builtins_errors(t_context *ctx, char **argv);
 
 // Debug

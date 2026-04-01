@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/29 03:50:34 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/03/31 21:31:59 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/04/01 21:51:29 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,13 +70,15 @@ static char	**list_to_strarray(t_str_list *env)
 	return (new_env);
 }
 
-static void	manage_redirection(t_context *ctx, t_redirection *redir, char *here_doc)
+void	manage_redirection(t_context *ctx, t_redirection *redir, char *here_doc)
 {
 	int	fd;
 
 	if (redir->type_in == REDIRECTION_IN)
 	{
 		fd = open(redir->file_in, O_RDONLY);
+		free(redir->file_in);
+		redir->file_in = NULL;
 		dup2(fd, STDIN_FILENO);
 		close(fd);
 	}
@@ -91,12 +93,16 @@ static void	manage_redirection(t_context *ctx, t_redirection *redir, char *here_
 	if (redir->type_out == REDIRECTION_OUT)
 	{
 		fd = open(redir->file_out, O_WRONLY | O_CREAT | O_TRUNC, 0664);
+		free(redir->file_out);
+		redir->file_out = NULL;
 		dup2(fd, STDOUT_FILENO);
 		close(fd);
 	}
 	else if (redir->type_out == REDIRECTION_APP)
 	{
 		fd = open(redir->file_out, O_WRONLY | O_CREAT | O_APPEND, 0664);
+		free(redir->file_out);
+		redir->file_out = NULL;
 		dup2(fd, STDOUT_FILENO);
 		close(fd);
 	}
@@ -136,6 +142,7 @@ int	execute_leaf(t_context *ctx, t_command_tree *node)
 	t_redirection	redir;
 
 	cmd_argv = get_argv_and_redir(ctx, node->cmd, &redir);
+	// ctx->exit_status = 0;
 	if (try_builtins(ctx, cmd_argv, &redir, node->here_doc))
 		return (0);
 	ctx->read_exit_status = 0;
@@ -147,9 +154,9 @@ int	execute_leaf(t_context *ctx, t_command_tree *node)
 		ctx->exit_status = 1;
 		execute_command(ctx, cmd_argv);
 		if (ctx->exit_status == ES_CMD_NOT_FOUND)
-			printf("%s: command not found\n", cmd_argv[0]);
+			custom_error(cmd_argv[0], "command not found");
 		else if (cmd_argv[0])
-			minishell_perror(ctx, cmd_argv[0]);
+			shell_perror(ctx, cmd_argv[0]);
 		free_split(cmd_argv);
 		silent_exit(ctx, ctx->exit_status);
 	}
