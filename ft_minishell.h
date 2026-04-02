@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/16 14:57:20 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/04/01 22:36:15 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/04/02 22:36:34 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,23 @@
 # include <dirent.h>
 
 # define MAX_PROMPT PATH_MAX + 20
+
+# ifndef PATH_MAX
+	#  define PATH_MAX 4096
+# endif
+
+// # define ARG_MAX 2097152
+
+// #define ARG_MAX 3605 + 12 + 20
+
+# ifndef ARG_MAX
+#  ifdef _POSIX_ARG_MAX
+#   define ARG_MAX _POSIX_ARG_MAX
+#  else
+#   define ARG_MAX 131072
+#  endif
+# endif
+
 
 extern int last_signal;
 
@@ -49,7 +66,9 @@ enum e_status
 	MS_OLDPWD_NOT_SET,
 	MS_NON_NUMERIC_ARG,
 	MS_SE_QUOTES,
-	MS_SE_EOF
+	MS_SE_EOF,
+	MS_LONG_PATH,
+	MS_LONG_ARGS
 };
 
 enum e_exit_status
@@ -158,6 +177,15 @@ typedef struct s_context
 	t_dyn_ptr		here_docs;
 }	t_context;
 
+typedef struct s_exec_args
+{
+	char 		exec_args[ARG_MAX];
+	char		*path;
+	char		*static_argv[20];
+	char		*env[100];
+	size_t		args_length;
+}	t_exec_args;
+
 // Signals
 void		handler_sigint(int sig);
 // heredoc
@@ -181,7 +209,9 @@ void		execute_input(t_context *ctx);
 // execute_node
 int			execute_node(t_context *ctx, t_command_tree *node);
 // execute_command
-char		*find_cmd_path(t_context *ctx, char *cmd);
+int			find_cmd_path(t_context *ctx, char *path, char *cmd);
+void		execute_command(t_context *ctx, char **argv);
+// manage_leaf
 void		manage_redirection(t_context *ctx, t_redirection *redir, char *here_doc);
 int			execute_leaf(t_context *ctx, t_command_tree *node);
 // argv

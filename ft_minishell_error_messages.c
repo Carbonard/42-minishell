@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/31 16:59:44 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/04/01 22:40:03 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/04/02 21:35:34 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,8 +29,14 @@ void	shell_perror(t_context *ctx, char *s)
 		ft_putendl_fd("syntax error: unexpected end of file", 2);
 	else if (ctx->status == MS_SE_QUOTES)
 		ft_putendl_fd("unexpected EOF while looking for matching `\"'", 2);
+	else if (ctx->status == MS_LONG_ARGS)
+		ft_putendl_fd(strerror(E2BIG), 2);
+	else if (ctx->status == MS_LONG_PATH)
+		ft_putendl_fd(strerror(ENAMETOOLONG), 2);
 	else
 		perror(NULL);
+	if (!ctx->exit_status)
+		ctx->exit_status = 1;
 }
 
 void	custom_error(char *s, char *error_msg)

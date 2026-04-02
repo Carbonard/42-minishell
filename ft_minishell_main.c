@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/16 14:59:51 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/04/01 22:32:03 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/04/02 17:38:26 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,44 +65,38 @@ static void	check_interactive(t_context *ctx, int argc, char **argv)
 
 static void	set_shell(t_context *ctx, char *shell_name)
 {
-	char	*shell;
+	char	shell[PATH_MAX];
 	char	*var;
-	char	**tmp;
+	char	*cd_argv[3];
 	int		last_slash;
 
 	if (shell_name[0] != '.' && shell_name[0] != '/' && shell_name[0] != '~')
 	{
 		ctx->shell_name = shell_name;
-		shell = find_cmd_path(ctx, shell_name);
+		find_cmd_path(ctx, shell, shell_name);
 	}
 	else
 	{
-		shell = malloc(PATH_MAX + 20);
 		last_slash = ft_strlen(shell_name);
 		while (shell_name[last_slash] != '/')
 			last_slash--;
 		shell_name[last_slash] = 0;
-		tmp = malloc(3 * sizeof(char *));
-		tmp[0] = ft_strdup("cd");
-		tmp[1] = ft_strdup(shell_name);
-		tmp[2] = NULL;
-		cd(ctx, tmp);
+		cd_argv[0] = "cd";
+		cd_argv[1] = shell_name;
+		cd_argv[2] = NULL;
+		cd(ctx, cd_argv);
 		getcwd(shell, PATH_MAX);
-		ft_strlcat(shell, "/", PATH_MAX + 20);
-		ft_strlcat(shell, shell_name + last_slash + 1, PATH_MAX + 20);
+		ft_strlcat(shell, "/", PATH_MAX);
+		ft_strlcat(shell, shell_name + last_slash + 1, PATH_MAX);
 		ctx->shell_name = shell_name + last_slash + 1;
-		free(tmp[1]);
-		tmp[1] = ft_strdup("-");
-		cd(ctx, tmp);
-		free(tmp[0]);
-		free(tmp[1]);
-		free(tmp);
+		cd_argv[1] = ft_strdup("-");
+		cd(ctx, cd_argv);
+		free(cd_argv[1]);
 		unset(ctx, "OLDPWD");
 	}
 	var = ft_strjoin("SHELL=", shell);
 	export(ctx, var);
 	free(var);
-	free(shell);
 }
 
 int	main(int argc, char **argv, char **env)

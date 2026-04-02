@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/31 16:26:36 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/03/31 16:53:56 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/04/02 22:48:25 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,8 @@ static int	execute_logic(t_context *ctx, t_command_tree *node)
 	return (pid);
 }
 
-static void	execute_pipe_child(t_context *ctx, int fileno, t_command_tree *next_node)
+static void
+	execute_pipe_child(t_context *ctx, int fileno, t_command_tree *next_node)
 {
 	int	pipe_extrem;
 	int	pid;

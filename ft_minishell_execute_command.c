@@ -5,161 +5,126 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/01/29 03:50:34 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/04/01 21:51:29 by rselva-2         ###   ########.fr       */
+/*   Created: 2026/04/02 22:35:42 by rselva-2          #+#    #+#             */
+/*   Updated: 2026/04/02 22:57:19 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_minishell.h"
 
-char	*find_cmd_path(t_context *ctx, char *cmd)
+int	find_cmd_path(t_context *ctx, char *path, char *cmd)
 {
 	char		**env_paths;
-	char		*abs_path;
-	char		*tmp;
 	int			i;
 
 	env_paths = ft_split(find_env_value(ctx, "PATH"), ':');
 	i = 0;
 	while (env_paths && env_paths[i])
 	{
-		tmp = ft_strjoin(env_paths[i], "/");
-		if (!tmp)
-			return (free_split(env_paths));
-		abs_path = ft_strjoin(tmp, cmd);
-		free(tmp);
-		if (!abs_path)
-			return (free_split(env_paths));
-		if (!access(abs_path, F_OK))
+		ft_strlcpy(path, env_paths[i], PATH_MAX);
+		ft_strlcat(path, "/", PATH_MAX);
+		ft_strlcat(path, cmd, PATH_MAX);
+		if (!access(path, F_OK))
 		{
 			free_split(env_paths);
-			return (abs_path);
+			ctx->exit_status = ES_SUCCESS;
+			return (ft_strlen(path));
 		}
-		free(abs_path);
 		i++;
 	}
-	return (free_split(env_paths));
+	free_split(env_paths);
+	ctx->exit_status = ES_CMD_NOT_FOUND;
+	return (0);
 }
 
-static char	**list_to_strarray(t_str_list *env)
+static void	get_path(t_context *ctx, char *argv0, t_exec_args *args)
 {
-	t_str_list	*aux;
-	char		**new_env;
-	int			size;
-
-	size = 0;
-	aux = env;
-	while (aux)
+	args->path = args->exec_args;
+	if (!ft_strncmp(argv0, "./", 2) || !ft_strncmp(argv0, "../", 3)
+		|| !ft_strncmp(argv0, "/", 1))
 	{
-		size++;
-		aux = aux->next;
+		if (ft_strlen(argv0) >= PATH_MAX - 1)
+		{
+			ctx->status = MS_LONG_PATH;
+			ctx->exit_status = 126;
+		}
+		else
+			args->args_length = ft_strlcpy(args->path, argv0, PATH_MAX) + 1;
 	}
-	new_env = malloc((size + 1) * sizeof(char *));
-	if (!new_env)
-		return (NULL);
-	size = 0;
-	while (env)
+	else
+		args->args_length = find_cmd_path(ctx, args->path, argv0) + 1;
+	if (!ctx->exit_status && !ctx->status && access(args->path, X_OK))
+		ctx->exit_status = ES_CMD_NOT_EXEC;
+}
+
+static void	save_argv(t_context *ctx, char **argv, t_exec_args *args)
+{
+	int	argv_i;
+
+	if (ctx->status || ctx->exit_status)
+		return ;
+	argv_i = 0;
+	while (*argv && argv_i < ARG_MAX - 1)
 	{
-		new_env[size] = ft_strdup(env->content);
-		if (!new_env[size])
-			return (free_split(new_env));
-		size++;
+		args->static_argv[argv_i] = args->exec_args + args->args_length;
+		args->args_length += ft_strlcpy(args->static_argv[argv_i], *argv,
+				ARG_MAX - args->args_length) + 1;
+		argv_i++;
+		argv++;
+	}
+	args->static_argv[argv_i] = NULL;
+	if (args->args_length >= ARG_MAX || argv_i >= ARG_MAX - 1)
+	{
+		ctx->status = MS_LONG_ARGS;
+		ctx->exit_status = 126;
+	}
+}
+
+static size_t
+	list_to_strarray(t_context *ctx, char *args, char *new_env[], size_t length)
+{
+	t_str_list	*env;
+	int			env_i;
+
+	if (ctx->status || ctx->exit_status)
+		return (0);
+	env = ctx->env;
+	env_i = 0;
+	while (env && env_i < ARG_MAX - 1 && length < ARG_MAX)
+	{
+		new_env[env_i] = args + length;
+		length += ft_strlcpy(new_env[env_i], env->content, ARG_MAX - length);
+		length++;
+		env_i++;
 		env = env->next;
 	}
-	new_env[size] = NULL;
-	return (new_env);
+	new_env[env_i] = NULL;
+	if (length >= ARG_MAX || env_i >= ARG_MAX - 1)
+	{
+		ctx->status = MS_LONG_ARGS;
+		ctx->exit_status = 126;
+	}
+	return (length);
 }
 
-void	manage_redirection(t_context *ctx, t_redirection *redir, char *here_doc)
+void	execute_command(t_context *ctx, char **argv)
 {
-	int	fd;
-
-	if (redir->type_in == REDIRECTION_IN)
-	{
-		fd = open(redir->file_in, O_RDONLY);
-		free(redir->file_in);
-		redir->file_in = NULL;
-		dup2(fd, STDIN_FILENO);
-		close(fd);
-	}
-	else if (redir->type_in == HERE_DOC)
-	{
-		pipe(ctx->pipe_fds);
-		ft_putstr_fd(here_doc, ctx->pipe_fds[1]);
-		close(ctx->pipe_fds[1]);
-		dup2(ctx->pipe_fds[0], STDIN_FILENO);
-		close(ctx->pipe_fds[0]);
-	}
-	if (redir->type_out == REDIRECTION_OUT)
-	{
-		fd = open(redir->file_out, O_WRONLY | O_CREAT | O_TRUNC, 0664);
-		free(redir->file_out);
-		redir->file_out = NULL;
-		dup2(fd, STDOUT_FILENO);
-		close(fd);
-	}
-	else if (redir->type_out == REDIRECTION_APP)
-	{
-		fd = open(redir->file_out, O_WRONLY | O_CREAT | O_APPEND, 0664);
-		free(redir->file_out);
-		redir->file_out = NULL;
-		dup2(fd, STDOUT_FILENO);
-		close(fd);
-	}
-}
-
-static void	execute_command(t_context *ctx, char **argv)
-{
-	char			*path;
-	char			**env;
+	t_exec_args	args;
 
 	if (!argv || !argv[0])
 		return ;
-	if (!ft_strncmp(argv[0], "./", 2) || !ft_strncmp(argv[0], "../", 3)
-		|| !ft_strncmp(argv[0], "/", 1))
-		path = ft_strdup(argv[0]);
-	else
-		path = find_cmd_path(ctx, argv[0]);
-	if (path && access(path, X_OK))
-		ctx->exit_status = ES_CMD_NOT_EXEC;
-	env = NULL;
-	if (!path)
-		ctx->exit_status = ES_CMD_NOT_FOUND;
-	else
-		env = list_to_strarray(ctx->env);
-	if (path && !env)
-		ctx->status = MS_E_ENV_NFOUND;
-	else if (path && env)
-		execve(path, argv, env);
-	free(path);
-	free_split(env);
-}
-
-int	execute_leaf(t_context *ctx, t_command_tree *node)
-{
-	int				pid;
-	char			**cmd_argv;
-	t_redirection	redir;
-
-	cmd_argv = get_argv_and_redir(ctx, node->cmd, &redir);
-	// ctx->exit_status = 0;
-	if (try_builtins(ctx, cmd_argv, &redir, node->here_doc))
-		return (0);
-	ctx->read_exit_status = 0;
-	pid = fork();
-	if (pid == 0)
+	get_path(ctx, argv[0], &args);
+	save_argv(ctx, argv, &args);
+	args.args_length = list_to_strarray(ctx, args.exec_args, args.env,
+			args.args_length);
+	if (!ctx->status && !ctx->exit_status)
 	{
-		if (redir.type_in || redir.type_out)
-			manage_redirection(ctx, &redir, node->here_doc);
-		ctx->exit_status = 1;
-		execute_command(ctx, cmd_argv);
-		if (ctx->exit_status == ES_CMD_NOT_FOUND)
-			custom_error(cmd_argv[0], "command not found");
-		else if (cmd_argv[0])
-			shell_perror(ctx, cmd_argv[0]);
-		free_split(cmd_argv);
-		silent_exit(ctx, ctx->exit_status);
+		free_all(ctx);
+		free_split(argv);
+		execve(args.path, args.static_argv, args.env);
 	}
-	free_split(cmd_argv);
-	return (pid);
+	if (ctx->exit_status == ES_CMD_NOT_FOUND)
+		custom_error(args.path, "command not found");
+	else
+		shell_perror(ctx, args.path);
 }
