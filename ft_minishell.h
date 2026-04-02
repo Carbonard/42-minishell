@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_minishell.h                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: nyxssa <nyxssa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/16 14:57:20 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/03/31 21:39:27 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/03/31 22:42:20 by nyxssa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,10 @@
 # include <fcntl.h>
 # include <signal.h>
 # include <dirent.h>
+
+# ifndef PATH_MAX
+#  define PATH_MAX 4096
+# endif
 
 # define MAX_PROMPT PATH_MAX + 20
 
@@ -180,6 +184,7 @@ int			execute_leaf(t_context *ctx, t_command_tree *node);
 // argv
 char		**get_argv_and_redir(t_context *ctx, char *cmd, t_redirection *redir);
 // split_cmd
+int			advance_quotes(char *str);
 char		**split_cmd(char *cmd, t_redirection *redir);
 // wildcards
 char		*expand_wildcards(char *cmd);
