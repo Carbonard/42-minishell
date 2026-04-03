@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/17 21:35:56 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/04/01 22:29:32 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/04/03 15:44:40 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ int	try_builtins(t_context *ctx, char **argv, t_redirection *redir, char *here_d
 	else if (!ft_strncmp(argv[0], "echo", 5))
 		ctx->status = echo(argv);
 	else if (!ft_strncmp(argv[0], "export", 7))
-		ctx->status = export(ctx, argv[1]);
+		ctx->status = builtin_export(ctx, argv);
 	else if (!ft_strncmp(argv[0], "unset", 6))
 		ctx->status = unset(ctx, argv[1]);
 	else if (!ft_strncmp(argv[0], "exit", 5))

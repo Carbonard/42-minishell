@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/30 23:34:26 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/04/01 15:46:59 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/04/03 14:48:18 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,8 @@ int	need_to_expand(char *str)
 				i++;
 		}
 		// check condition
-		else if (str[i] == '$' && str[i + 1] && str[i + 1] != ' ')
+		else if (str[i] == '$' && str[i + 1] && str[i + 1] != ' '
+				&& str[i + 1] != '=')
 			return (i);
 		i++;
 	}
@@ -77,7 +78,7 @@ char	*expand_cmd(t_context *ctx, char *str)
 		expanded = ft_strjoin(aux1, str + var_start + 2);
 		free(aux1);
 	}
-	else
+	else if (!ft_strchr(INVALID_EXPORT_CHARS, str[var_start + 1]))
 		expanded = expand_var(ctx, str, expanded, var_start);
 	free(str);
 	return (expanded);

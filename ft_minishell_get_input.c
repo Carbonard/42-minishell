@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/18 20:24:41 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/04/01 21:31:22 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/04/03 00:07:36 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,12 @@
 
 static void	get_prompt(t_context *ctx, char *prompt)
 {
-	char	home[100];
+	char	home[PATH_MAX];
 	char	pwd[PATH_MAX];
 
 	ft_strlcpy(home, find_env_value(ctx, "HOME"), 100);
 	getcwd(pwd, PATH_MAX);
-	ft_strlcpy(prompt, "\e[94m", MAX_PROMPT);
+	ft_strlcpy(prompt, "\001\e[94m\002", MAX_PROMPT);
 	if (home[0] && !ft_strncmp(home, pwd, ft_strlen(home)))
 	{
 		ft_strlcat(prompt, "~", MAX_PROMPT);
@@ -27,7 +27,7 @@ static void	get_prompt(t_context *ctx, char *prompt)
 	}
 	else
 		ft_strlcat(prompt, pwd, MAX_PROMPT);
-	ft_strlcat(prompt, "$ \e[0m", MAX_PROMPT);
+	ft_strlcat(prompt, "$ \001\e[0m\002", MAX_PROMPT);
 }
 
 static char	*read_input_line(t_context *ctx, int print_prompt)

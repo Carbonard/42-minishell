@@ -1,7 +1,3 @@
-built-ins
-	- cd
-	- errores
-
 free at exit
 	- input
 	- tree
@@ -18,48 +14,26 @@ echo hola > /dev/stdout | sleep 3 | echo adios
 
 echo hola || echo adios && echo si
 
-errores:
-	- en execute_leaf si algo falla
-	- en builtins traducir errores
-
-señales
-	- ctrl + C
-	- ctrl + \
-
-Nombre del binario en errores
-
 dos redirecciones deberian crear archivos
 
-redirecciones en builtins
-
-leer hasta metacaracteres
-
-variables staticas 
+leer hasta metacaracteres (?)
 
 echo ${REAL_VAR}aaaa
-
-exit exit
 
 cat << EOF | grep -e |>>''
 
 cat
 ^C
 
-*
+echo |
+^C
 
-cosas sin permisos
+echo |||
 
-mensaje error de command not found
+echo hola |
+|
 
 export ?=algo
-
-redirecciones builtins
-
-export a=' hola'
-echo$a		-> imprime hola
-echo"$a"	-> echo hola command not found
-
-exit status cuando commando sin permisos
 
 ls fadfa || (echo $? && echo $?)
 
@@ -67,25 +41,13 @@ expand ~
 
 just one heredoc (?)
 
-echo |
-^C
-
-echo |||
-
 . (?)
 
 (echo hola && echo adios) > file
 
 print syntax error from io_while instead of check_syntax
 
-echo hola |
-|
-
-cd - (cuando no haya OLDPWD)
-
 exit 8	999999999999999999
-
-fix open fd when exit
 
 
 

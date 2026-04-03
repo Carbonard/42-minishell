@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/16 14:57:20 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/04/02 23:05:12 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/04/03 15:44:58 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@
 #  define PATH_MAX 4096
 # endif
 
-# define MAX_PROMPT PATH_MAX + 20
+# define MAX_PROMPT PATH_MAX + 30
 
 # ifndef PATH_MAX
 	#  define PATH_MAX 4096
@@ -45,6 +45,8 @@
 #   define ARG_MAX 131072
 #  endif
 # endif
+
+#define INVALID_EXPORT_CHARS "*@#?+-$!"
 
 
 extern int last_signal;
@@ -72,7 +74,8 @@ enum e_status
 	MS_SE_QUOTES,
 	MS_SE_EOF,
 	MS_LONG_PATH,
-	MS_LONG_ARGS
+	MS_LONG_ARGS,
+	MS_NOT_VALID_ID
 };
 
 enum e_exit_status
@@ -235,7 +238,8 @@ char		*find_env_value(t_context *ctx, char *var);
 int			del_env(t_context *ctx, char *var_name);
 // builtins_env
 int			print_env(t_context *ctx);
-int			export(t_context *ctx, char *new_var);
+int			export(t_context *ctx, char *var);
+int			builtin_export(t_context *ctx, char **argv);
 int			unset(t_context *ctx, char *var);
 // builtins_others
 int			valid_flag(const char *arg, char f);
