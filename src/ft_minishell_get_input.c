@@ -6,11 +6,11 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/18 20:24:41 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/04/03 00:07:36 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/04/03 20:42:18 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ft_minishell.h"
+#include "ft_minishell_input.h"
 
 static void	get_prompt(t_context *ctx, char *prompt)
 {
@@ -62,7 +62,7 @@ static void	check_and_extend_input(t_context *ctx)
 	char	*aux;
 
 	input_extension = read_input_line(ctx, 0);
-	if (last_signal)
+	if (g_last_signal)
 	{
 		free(input_extension);
 		free(ctx->user_input);
@@ -89,7 +89,7 @@ int	read_input(t_context *ctx)
 {
 	ctx->status = MS_SUCCESS;
 	ctx->user_input = read_input_line(ctx, 1);
-	last_signal = 0;
+	g_last_signal = 0;
 	if (!ctx->user_input)
 	{
 		ctx->status = MS_EXIT;
@@ -97,13 +97,13 @@ int	read_input(t_context *ctx)
 	}
 	if (check_syntax(ctx->user_input))
 		return (0);
-	while (!last_signal && !check_syntax(ctx->user_input)
+	while (!g_last_signal && !check_syntax(ctx->user_input)
 		&& (check_quotes(ctx) || check_parenthesis(ctx) || check_operator(ctx)))
 		check_and_extend_input(ctx);
-	if (last_signal)
+	if (g_last_signal)
 	{
-		printf("signal: %d\n", last_signal);
-		last_signal = 0;
+		printf("signal: %d\n", g_last_signal);
+		g_last_signal = 0;
 		return (0);
 	}
 	if (check_syntax(ctx->user_input))

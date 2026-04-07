@@ -6,11 +6,11 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/20 00:02:17 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/04/01 22:19:14 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/04/03 18:55:58 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ft_minishell.h"
+#include "ft_minishell_builtins.h"
 
 void	silent_exit(t_context *ctx, long status)
 {

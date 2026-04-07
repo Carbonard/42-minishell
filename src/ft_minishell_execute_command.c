@@ -6,11 +6,11 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/02 22:35:42 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/04/02 22:57:19 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/04/07 21:38:02 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ft_minishell.h"
+#include "ft_minishell_execution.h"
 
 int	find_cmd_path(t_context *ctx, char *path, char *cmd)
 {
@@ -75,6 +75,7 @@ static void	save_argv(t_context *ctx, char **argv, t_exec_args *args)
 	args->static_argv[argv_i] = NULL;
 	if (args->args_length >= ARG_MAX || argv_i >= ARG_MAX - 1)
 	{
+		printf("last argv: %i: %s\n", argv_i-1, args->static_argv[argv_i-1]);
 		ctx->status = MS_LONG_ARGS;
 		ctx->exit_status = 126;
 	}
@@ -85,7 +86,7 @@ static size_t
 {
 	t_str_list	*env;
 	int			env_i;
-
+// printf("ARG_MAX:%u KB\nstack used: %ld KB\n", ARG_MAX/1024, ((char*)ctx - (char*)&env_i)/1024);
 	if (ctx->status || ctx->exit_status)
 		return (0);
 	env = ctx->env;
@@ -101,6 +102,7 @@ static size_t
 	new_env[env_i] = NULL;
 	if (length >= ARG_MAX || env_i >= ARG_MAX - 1)
 	{
+		printf("last env: %i: %s\n", env_i - 1, new_env[env_i - 1]);
 		ctx->status = MS_LONG_ARGS;
 		ctx->exit_status = 126;
 	}
@@ -122,7 +124,9 @@ void	execute_command(t_context *ctx, char **argv)
 		free_all(ctx);
 		free_split(argv);
 		execve(args.path, args.static_argv, args.env);
+		printf("Execve failed\n");
 	}
+	printf("args_length: %lu\n", args.args_length);
 	if (ctx->exit_status == ES_CMD_NOT_FOUND)
 		custom_error(args.path, "command not found");
 	else

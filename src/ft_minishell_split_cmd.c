@@ -6,11 +6,11 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/17 17:03:15 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/04/01 15:40:29 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/04/07 21:37:06 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ft_minishell.h"
+#include "ft_minishell_execution.h"
 
 static void	remove_quotes(char *cmd)
 {
@@ -125,7 +125,7 @@ char	**split_cmd(char *cmd, t_redirection *redir)
 		i += ft_strlen(token);
 		if (is_redirection(token))
 		{
-			printf("redirection: '%s'\n", token);
+			// printf("redirection: '%s'\n", token);
 			get_redirection(token, 0, redir);
 			free(token);
 		}

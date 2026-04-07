@@ -1,20 +1,33 @@
-.PHONY: all clean fclean
+.PHONY: all clean fclean re
+
+INCLUDE_DIR = ./includes
 
 CC = cc
-
-CFLAGS = -Wall -Werror -Wextra -g3# -fsanitize=address
-
+CFLAGS = -Wall -Werror -Wextra -I $(INCLUDE_DIR) -I ./libft -g3 # -fsanitize=address
 CLIBS = -L./libft -L./dynamic_arrays -lft -lft_dynarray -lreadline
 
 NAME = minishell
+all: $(NAME)
 
 LIBFT = libft/libft.a
-
 DYNARRAYS = dynamic_arrays/libft_dynarray.a
 
-BUILT_INS = ft_minishell_builtins_others.c ft_minishell_builtins_env.c
+BUILTINS = ft_minishell_builtins ft_minishell_builtins_others ft_minishell_builtins_env ft_minishell_exit ft_minishell_clears
+INPUT = ft_minishell_get_input ft_minishell_heredocs ft_minishell_check_syntax ft_minishell_check_input
+EXECUTION = ft_minishell_argv ft_minishell_parser ft_minishell_split_cmd ft_minishell_execute_tree ft_minishell_execute_node ft_minishell_execute_leaf ft_minishell_execute_command
+OTHER = ft_minishell_main ft_minishell_environment ft_minishell_debug ft_minishell_error_messages ft_minishell_wildcards ft_minishell_wildcards_sort ft_minishell_utils
 
-SRC = ft_minishell_main.c ft_minishell_heredocs.c ft_minishell_check_syntax.c ft_minishell_check_input.c ft_minishell_environment.c ft_minishell_get_input.c ft_minishell_argv.c ft_minishell_parser.c ft_minishell_split_cmd.c ft_minishell_builtins.c ft_minishell_execute_tree.c ft_minishell_execute_node.c ft_minishell_execute_leaf.c ft_minishell_execute_command.c ft_minishell_exit.c ft_minishell_clears.c ft_minishell_debug.c ft_minishell_signals.c ft_minishell_error_messages.c ft_minishell_wildcards.c
+SRC_DIR = src
+FILES = $(BUILTINS) $(INPUT) $(EXECUTION) $(OTHER)
+SRC = $(FILES:%=$(SRC_DIR)/%.c)
+
+OBJ_DIR = obj
+OBJ = $(SRC:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
+
+print:
+	@echo $(SRC)
+	@echo '---------------------------------'
+	@echo $(OBJ)
 
 $(LIBFT):
 	make -C libft
@@ -22,22 +35,19 @@ $(LIBFT):
 $(DYNARRAYS):
 	make -C dynamic_arrays
 
-# echo: ft_minishell_echo.c $(LIBFT)
-# 	$(CC) $(CFLAGS) $^ $(CLIBS) -o echo
+$(OBJ_DIR):
+	@mkdir -p $@
 
-# pwd: ft_minishell_pwd.c $(LIBFT)
-# 	$(CC) $(CFLAGS) $^ $(CLIBS) -o pwd
+$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c $(INCLUDE_DIR)/ft_minishell.h | $(OBJ_DIR)
+	$(CC) $(CFLAGS) $< -c -o $@
 
-# env: ft_minishell_env.c $(LIBFT)
-# 	$(CC) $(CFLAGS) $^ $(CLIBS) -o env
-
-# cd: ft_minishell_cd.c $(LIBFT)
-# 	$(CC) $(CFLAGS) $^ $(CLIBS) -o cd
-
-$(NAME): $(LIBFT) $(DYNARRAYS) $(BUILT_INS) $(SRC)
-	$(CC) $(CFLAGS) $^ $(CLIBS) -o $@
+$(NAME): $(LIBFT) $(DYNARRAYS) $(OBJ)
+	$(CC) $(CFLAGS) $(OBJ) $(CLIBS) -o $@
 
 clean:
+	@rm -rf $(OBJ_DIR)
+
+fclean: clean
 	@rm -f $(NAME)
 
-re: clean $(NAME)
+re: fclean all

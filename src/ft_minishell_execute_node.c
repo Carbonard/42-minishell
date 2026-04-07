@@ -6,11 +6,11 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/31 16:26:36 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/04/02 22:48:25 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/04/03 18:57:40 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ft_minishell.h"
+#include "ft_minishell_execution.h"
 
 static int	execute_subshell(t_context *ctx, t_command_tree *node)
 {

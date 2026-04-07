@@ -6,11 +6,11 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/29 03:50:34 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/04/02 22:54:01 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/04/03 20:29:05 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ft_minishell.h"
+#include "ft_minishell_execution.h"
 
 static void
 	manage_redirection_in(t_context *ctx, t_redirection *redir, char *here_doc)

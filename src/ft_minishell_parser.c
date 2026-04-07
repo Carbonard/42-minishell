@@ -6,11 +6,11 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/16 16:54:26 by nyxssa            #+#    #+#             */
-/*   Updated: 2026/03/30 00:07:02 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/04/03 18:58:07 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ft_minishell.h"
+#include "ft_minishell_execution.h"
 
 // This function assumes that the closing parenthesis exists
 int	find_closing_par(char *str)

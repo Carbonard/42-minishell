@@ -6,11 +6,11 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/29 17:22:13 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/04/01 15:01:03 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/04/03 19:05:54 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ft_minishell.h"
+#include "ft_minishell_input.h"
 
 void	read_hd(t_context *ctx, char *eof)
 {
@@ -39,14 +39,6 @@ void	read_hd(t_context *ctx, char *eof)
 		ft_putchar_fd('\n', 1);
 	//else mensaje de error
 	add_ptr(&ctx->here_docs, here_doc);
-}
-
-int	is_metachar(char c)
-{
-	if (c == '<' || c == '>' || c == '|' || c == '&' || c == ' ' || c == '\t'
-		|| c == '\n' || c == '(' || c == ')' || c == ';')
-		return (1);
-	return (0);
 }
 
 void	read_here_docs(t_context *ctx)

@@ -6,11 +6,15 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/16 14:59:51 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/04/03 15:46:08 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/04/03 20:44:56 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ft_minishell.h"
+#include "ft_minishell_builtins.h"
+#include "ft_minishell_input.h"
+#include "ft_minishell_execution.h"
+
+int	g_last_signal;
 
 static void	io_while(t_context *ctx)
 {
@@ -25,7 +29,7 @@ static void	io_while(t_context *ctx)
 			create_tree(&ctx->cmd_tree);
 			spread_here_docs(&ctx->cmd_tree, &ctx->here_docs, 0);
 			execute_input(ctx);
-		}	
+		}
 		else if (ctx->status == MS_EXIT)
 			return ;
 		// else
@@ -99,9 +103,20 @@ static void	set_shell(t_context *ctx, char *shell_name)
 	free(var);
 }
 
+void	handler_sigint(int sig)
+{
+	(void)sig;
+	g_last_signal = sig;
+	write(1, "\n", 1);
+	rl_on_new_line();
+	rl_replace_line("", 0);
+	rl_redisplay();
+	return ;
+}
+
 int	main(int argc, char **argv, char **env)
 {
-	t_context	ctx;
+	t_context			ctx;
 	struct sigaction	act;
 
 	ctx.cmd_tree.cmd1 = NULL;

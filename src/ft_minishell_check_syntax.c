@@ -6,11 +6,11 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/29 18:58:57 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/03/30 19:20:48 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/04/07 21:44:38 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ft_minishell.h"
+#include "ft_minishell_input.h"
 
 static int	get_event(char *input, int i)
 {
@@ -103,6 +103,7 @@ int	check_syntax(char *input)
 	t_automaton_data	data;
 
 	data.state = S_INITIAL;
+	data.last_state = S_INITIAL;
 	i = 0;
 	while (input[i] && data.state != S_ERROR)
 	{

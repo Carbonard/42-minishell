@@ -6,11 +6,11 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/29 20:14:14 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/03/30 00:23:53 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/04/03 19:06:47 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ft_minishell.h"
+#include "ft_minishell_input.h"
 
 int	check_quotes(t_context *ctx)
 {
@@ -67,15 +67,6 @@ static int	is_operator(char *str)
 	if ((str[0] == '&' && str[1] == '&') || (str[0] == '|' && str[1] == '|'))
 		return (2);
 	if (str[0] == '|')
-		return (1);
-	return (0);
-}
-
-int	is_redirection(char *str)
-{
-	if ((str[0] == '<' && str[1] == '<') || (str[0] == '>' && str[1] == '>'))
-		return (2);
-	if (str[0] == '<' || str[0] == '>')
 		return (1);
 	return (0);
 }

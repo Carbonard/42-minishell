@@ -6,11 +6,12 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/17 21:35:56 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/04/03 15:44:40 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/04/03 19:00:47 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ft_minishell.h"
+#include "ft_minishell_builtins.h"
+#include "ft_minishell_execution.h"
 
 static void	manage_builtin_redir(t_context *ctx, t_redirection *redir, char *here_doc)
 {
