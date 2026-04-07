@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/27 17:06:30 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/01/29 13:39:43 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/04/07 23:51:50 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,8 @@ int	init_dyn_ptr(t_dyn_ptr *d_array, size_t size)
 		d_array->size = 0;
 		return (0);
 	}
+	if (size)
+		d_array->arr[0] = NULL;
 	return (1);
 }
 

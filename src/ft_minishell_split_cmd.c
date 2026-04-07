@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/17 17:03:15 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/04/07 21:37:06 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/04/07 23:54:35 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,13 +42,13 @@ static int	get_redirection(char *cmd, int i, t_redirection *redir)
 
 	original_i = i;
 	if (cmd[i] == '<' && cmd [i + 1] == '<')
-		redir->type_in = HERE_DOC;
+		add_int(&(redir->type_in), HERE_DOC);
 	else if (cmd[i] == '>' && cmd [i + 1] == '>')
-		redir->type_out = REDIRECTION_APP;
+		add_int(&(redir->type_out), REDIRECTION_APP);
 	else if (cmd[i] == '<')
-		redir->type_in = REDIRECTION_IN;
+		add_int(&(redir->type_in), REDIRECTION_IN);
 	else if (cmd[i] == '>')
-		redir->type_out = REDIRECTION_OUT;
+		add_int(&(redir->type_out), REDIRECTION_OUT);
 	while (cmd[i] == '<' || cmd[i] == '>' || cmd[i] == ' ')
 		i++;
 	start = i;
@@ -56,17 +56,13 @@ static int	get_redirection(char *cmd, int i, t_redirection *redir)
 		i++;
 	if (cmd[original_i] == '<')
 	{
-		if (redir->file_in)
-		free(redir->file_in);
-		redir->file_in = ft_substr(cmd, start, i - start);
-		remove_quotes(redir->file_in);
+		add_ptr(&(redir->file_in), ft_substr(cmd, start, i - start));
+		remove_quotes(redir->file_in.arr[redir->file_out.length - 1]);
 	}
 	else
 	{
-		if (redir->file_out)
-		free(redir->file_out);
-		redir->file_out = ft_substr(cmd, start, i - start);
-		remove_quotes(redir->file_out);
+		add_ptr(&(redir->file_out), ft_substr(cmd, start, i - start));
+		remove_quotes(redir->file_out.arr[redir->file_out.length - 1]);
 	}
 	return (i);
 }
@@ -115,7 +111,7 @@ char	**split_cmd(char *cmd, t_redirection *redir)
 	// printf("cmd: '%s'\n", cmd);
 	init_dyn_ptr(&split, 2);
 	i = 0;
-	while (cmd[i])
+	while (cmd && cmd[i])
 	{
 		while (cmd[i] == ' ' || cmd[i] == '\n')
 			i++;

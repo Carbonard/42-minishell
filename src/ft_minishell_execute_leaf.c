@@ -6,26 +6,26 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/29 03:50:34 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/04/03 20:29:05 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/04/07 23:56:36 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_minishell_execution.h"
 
 static void
-	manage_redirection_in(t_context *ctx, t_redirection *redir, char *here_doc)
+	manage_redirection_in(t_context *ctx, int type, char *file, char *here_doc)
 {
 	int	fd;
 
-	if (redir->type_in == REDIRECTION_IN)
+	if (type == REDIRECTION_IN)
 	{
-		fd = open(redir->file_in, O_RDONLY);
-		free(redir->file_in);
-		redir->file_in = NULL;
+		fd = open(file, O_RDONLY);
+		free(file);
+		file = NULL;
 		dup2(fd, STDIN_FILENO);
 		close(fd);
 	}
-	else if (redir->type_in == HERE_DOC)
+	else if (type == HERE_DOC)
 	{
 		pipe(ctx->pipe_fds);
 		ft_putstr_fd(here_doc, ctx->pipe_fds[1]);
@@ -35,23 +35,23 @@ static void
 	}
 }
 
-static void	manage_redirection_out(t_redirection *redir)
+static void	manage_redirection_out(int type, char *file)
 {
 	int	fd;
 
-	if (redir->type_out == REDIRECTION_OUT)
+	if (type == REDIRECTION_OUT)
 	{
-		fd = open(redir->file_out, O_WRONLY | O_CREAT | O_TRUNC, 0664);
-		free(redir->file_out);
-		redir->file_out = NULL;
+		fd = open(file, O_WRONLY | O_CREAT | O_TRUNC, 0664);
+		free(file);
+		file = NULL;
 		dup2(fd, STDOUT_FILENO);
 		close(fd);
 	}
-	else if (redir->type_out == REDIRECTION_APP)
+	else if (type == REDIRECTION_APP)
 	{
-		fd = open(redir->file_out, O_WRONLY | O_CREAT | O_APPEND, 0664);
-		free(redir->file_out);
-		redir->file_out = NULL;
+		fd = open(file, O_WRONLY | O_CREAT | O_APPEND, 0664);
+		free(file);
+		file = NULL;
 		dup2(fd, STDOUT_FILENO);
 		close(fd);
 	}
@@ -59,8 +59,24 @@ static void	manage_redirection_out(t_redirection *redir)
 
 void	manage_redirection(t_context *ctx, t_redirection *redir, char *here_doc)
 {
-	manage_redirection_in(ctx, redir, here_doc);
-	manage_redirection_out(redir);
+	size_t	i;
+
+	i = 0;
+	while (i < redir->file_in.length)
+	{
+		manage_redirection_in(ctx, redir->type_in.arr[i], redir->file_in.arr[i], here_doc);
+		i++;
+	}
+	i = 0;
+	while (i < redir->file_out.length)
+	{
+		manage_redirection_out(redir->type_out.arr[i], redir->file_out.arr[i]);
+		i++;
+	}
+	free(redir->file_in.arr);
+	free(redir->file_out.arr);
+	free(redir->type_in.arr);
+	free(redir->type_out.arr);
 }
 
 int	execute_leaf(t_context *ctx, t_command_tree *node)
@@ -77,7 +93,7 @@ int	execute_leaf(t_context *ctx, t_command_tree *node)
 	pid = fork();
 	if (pid == 0)
 	{
-		if (redir.type_in || redir.type_out)
+		if (redir.type_in.length || redir.type_out.length)
 			manage_redirection(ctx, &redir, node->here_doc);
 		ctx->exit_status = 0;
 		execute_command(ctx, cmd_argv);

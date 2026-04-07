@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/16 14:57:20 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/04/03 20:42:38 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/04/07 23:23:38 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,6 +82,16 @@ enum e_operators
 	HERE_DOC
 };
 
+typedef struct s_redirection
+{
+	t_dyn_int	type_in;
+	t_dyn_ptr	file_in;
+	t_dyn_int	type_out;
+	t_dyn_ptr	file_out;
+	int			original_in;
+	int			original_out;
+}	t_redirection;
+
 typedef struct s_command_tree
 {
 	struct s_command_tree	*cmd1;
@@ -90,17 +100,8 @@ typedef struct s_command_tree
 	int						sep;
 	int						subshell;
 	char					*here_doc;
+	char					*redirections;
 }	t_command_tree;
-
-typedef struct s_redirection
-{
-	int		type_in;
-	char	*file_in;
-	int		type_out;
-	char	*file_out;
-	int		original_in;
-	int		original_out;
-}	t_redirection;
 
 typedef struct s_context
 {

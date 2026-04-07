@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/31 16:26:36 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/04/03 18:57:40 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/04/07 23:52:07 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,13 +14,24 @@
 
 static int	execute_subshell(t_context *ctx, t_command_tree *node)
 {
-	int	pid;
-	int	status;
+	int				pid;
+	int				status;
+	t_redirection	redir;
 
+	init_dyn_int(&(redir.type_in), 1);
+	init_dyn_int(&(redir.type_out), 1);
+	init_dyn_ptr(&(redir.file_in), 1);
+	init_dyn_ptr(&(redir.file_out), 1);
+	free(split_cmd(node->redirections, &redir));
+	free(node->redirections);
+	printf("1\n");
+	printf("2\n");
 	ctx->read_exit_status = 0;
 	pid = fork();
 	if (pid == 0)
 	{
+		if (redir.type_in.length || redir.type_out.length)
+			manage_redirection(ctx, &redir, node->here_doc);
 		node->subshell = 0;
 		pid = execute_node(ctx, node);
 		waitpid(pid, &status, 0);

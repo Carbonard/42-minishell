@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/16 16:54:26 by nyxssa            #+#    #+#             */
-/*   Updated: 2026/04/03 18:58:07 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/04/07 22:36:39 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,27 +85,27 @@ int	skip_redirections(char *str, int i)
 	return (i);
 }
 
-static int	remove_parenthesis(char *str)
+static int	remove_parenthesis(char *str, char **redirections)
 {
-	int	parenthesis_checker_i;
-	int	final;
-	int	removed;
+	int		parenthesis_checker_i;
+	int		final;
+	int		removed;
 
 	removed = 0;
-	while (*str == ' ' || *str == '(')
-	{
-		if (*str == '(')
-		{
-			parenthesis_checker_i = find_closing_par(str);
-			final = skip_redirections(str, parenthesis_checker_i + 1);
-			if (str[final] == 0)
-			{
-				str[0] = ' ';
-				str[parenthesis_checker_i] = ' ';
-				removed = 1;
-			}
-		}
+	while (*str == ' ')
 		str++;
+	if (*str == '(')
+	{
+		parenthesis_checker_i = find_closing_par(str);
+		final = skip_redirections(str, parenthesis_checker_i + 1);
+		if (str[final] == 0)
+		{
+			str[0] = ' ';
+			str[parenthesis_checker_i] = 0;
+			removed = 1;
+			if (final > parenthesis_checker_i + 1)
+				*redirections = ft_strdup(str + parenthesis_checker_i + 1);
+		}
 	}
 	return (removed);
 }
@@ -179,7 +179,8 @@ void	create_tree(t_command_tree *input)
 	first = NULL;
 	second = NULL;
 	input->sep = NONE;
-	input->subshell = remove_parenthesis(input->cmd);
+	input->redirections = NULL;
+	input->subshell = remove_parenthesis(input->cmd, &(input->redirections));
 	if (input->subshell)
 		ft_printf("parenthesis removed\n");
 	if (!divide_by_logic_op(input, &first, &second))

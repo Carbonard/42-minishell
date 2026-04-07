@@ -41,9 +41,9 @@ expand ~
 
 just one heredoc (?)
 
-. (?)
+expansion in heredoc
 
-(echo hola && echo adios) > file
+. (?)
 
 print syntax error from io_while instead of check_syntax
 

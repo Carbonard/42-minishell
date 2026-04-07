@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/29 18:58:57 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/04/07 21:44:38 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/04/07 22:44:06 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,6 +104,7 @@ int	check_syntax(char *input)
 
 	data.state = S_INITIAL;
 	data.last_state = S_INITIAL;
+	data.i_saved = 0;
 	i = 0;
 	while (input[i] && data.state != S_ERROR)
 	{

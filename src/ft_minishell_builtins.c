@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/17 21:35:56 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/04/03 19:00:47 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/04/07 23:58:47 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,19 +15,25 @@
 
 static void	manage_builtin_redir(t_context *ctx, t_redirection *redir, char *here_doc)
 {
-	if (redir->type_in)
+	if (redir->type_in.length)
 		redir->original_in = dup(STDIN_FILENO);
-	if (redir->type_out)
+	if (redir->type_out.length)
 		redir->original_out = dup(STDOUT_FILENO);
 	manage_redirection(ctx, redir, here_doc);
 }
 
 static void	close_redirections(t_redirection *redir)
 {
-	if (redir->type_in)
+	if (redir->type_in.length)
+	{
 		dup2(redir->original_in, STDIN_FILENO);
-	if (redir->type_out)
+		close(redir->original_in);
+	}
+	if (redir->type_out.length)
+	{
 		dup2(redir->original_out, STDOUT_FILENO);
+		close(redir->original_out);
+	}
 }
 
 int	try_builtins(t_context *ctx, char **argv, t_redirection *redir, char *here_doc)

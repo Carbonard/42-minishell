@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/30 23:34:26 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/04/03 18:53:40 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/04/07 23:54:24 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,8 @@ char	*expand_var(t_context *ctx, char *str, char *expanded, int var_start)
 	while (str[var_start + 1 + var_len]
 		&& str[var_start + 1 + var_len] != ' '
 		&& str[var_start + 1 + var_len] != '\n'
-		&& str[var_start + 1 + var_len] != '"')
+		&& str[var_start + 1 + var_len] != '"'
+		&& str[var_start + 1 + var_len] != '=')
 		var_len++;
 	aux2 = ft_substr(str, var_start + 1, var_len);
 	// printf("var:'%s'\n", aux2);
@@ -89,10 +90,10 @@ char	**get_argv_and_redir(t_context *ctx, char *cmd, t_redirection *redir)
 	char	*command;
 	char	**argv;
 
-	redir->file_in = NULL;
-	redir->file_out = NULL;
-	redir->type_in = NONE;
-	redir->type_out = NONE;
+	init_dyn_int(&(redir->type_in), 1);
+	init_dyn_int(&(redir->type_out), 1);
+	init_dyn_ptr(&(redir->file_in), 1);
+	init_dyn_ptr(&(redir->file_out), 1);
 	command = ft_strdup(cmd);
 	while (need_to_expand(command) >= 0)
 		command = expand_cmd(ctx, command);
