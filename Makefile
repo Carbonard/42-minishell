@@ -3,7 +3,7 @@
 INCLUDE_DIR = ./includes
 
 CC = cc
-CFLAGS = -Wall -Werror -Wextra -I $(INCLUDE_DIR) -I ./libft -g3 # -fsanitize=address
+CFLAGS = -Wall -Werror -Wextra -I $(INCLUDE_DIR) -I ./libft -g3 -fsanitize=address
 CLIBS = -L./libft -L./dynamic_arrays -lft -lft_dynarray -lreadline
 
 NAME = minishell

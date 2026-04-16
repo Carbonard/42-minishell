@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/17 17:03:15 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/04/07 23:54:35 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/04/15 04:50:22 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,12 +54,14 @@ static int	get_redirection(char *cmd, int i, t_redirection *redir)
 	start = i;
 	while (cmd[i] && !is_metachar(cmd[i]))
 		i++;
-	if (cmd[original_i] == '<')
+	if (cmd[original_i] == '<' && cmd[original_i + 1] != '<')
 	{
+		// printf("/");
 		add_ptr(&(redir->file_in), ft_substr(cmd, start, i - start));
-		remove_quotes(redir->file_in.arr[redir->file_out.length - 1]);
+		// printf("the fuck: %s\n", redir->file_in.arr[redir->file_out.length - 1]);
+		remove_quotes(redir->file_in.arr[redir->file_in.length - 1]);
 	}
-	else
+	else if (cmd[original_i] == '>')
 	{
 		add_ptr(&(redir->file_out), ft_substr(cmd, start, i - start));
 		remove_quotes(redir->file_out.arr[redir->file_out.length - 1]);

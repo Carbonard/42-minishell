@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/29 17:22:13 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/04/03 19:05:54 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/04/15 03:50:23 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ void	read_hd(t_context *ctx, char *eof)
 	here_doc = NULL;
 	ft_putstr_fd("> ", 1);
 	new_line = get_next_line(0);
-	while (new_line
+	while (new_line && !g_last_signal
 		&& (ft_strncmp(new_line, eof, len) || new_line[len] != '\n'))
 	{
 		aux = ft_strjoin(here_doc, new_line);

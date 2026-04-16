@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/16 14:57:20 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/04/07 23:23:38 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/04/16 19:18:51 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,8 @@ enum e_status
 	MS_SE_EOF,
 	MS_LONG_PATH,
 	MS_LONG_ARGS,
-	MS_NOT_VALID_ID
+	MS_NOT_VALID_ID,
+	MS_EMPTY_CMD
 };
 
 enum e_exit_status
@@ -118,24 +119,25 @@ typedef struct s_context
 }	t_context;
 
 // Signals
-void		handler_sigint(int sig);
+void	handler_sigint(int sig);
+void	no_handler_sigint(int sig);
 // environment
-char		*find_env_value(t_context *ctx, char *var);
+char	*find_env_value(t_context *ctx, char *var);
 // exit
-void		ft_exit(t_context *ctx, long status);
-void		silent_exit(t_context *ctx, long status);
-void		builtin_exit(t_context *ctx, char **argv);
+void	ft_exit(t_context *ctx, long status);
+void	silent_exit(t_context *ctx, long status);
+void	builtin_exit(t_context *ctx, char **argv);
 // clears
-void		clear_input(t_context *ctx);
-void		free_all(t_context *ctx);
+void	clear_input(t_context *ctx);
+void	free_all(t_context *ctx);
 // error_messages
-void		shell_perror(t_context *ctx, char *s);
-void		custom_error(char *s, char *error_msg);
+void	shell_perror(t_context *ctx, char *s);
+void	custom_error(char *s, char *error_msg);
 // utils
-int			is_metachar(char c);
-int			is_redirection(char *str);
+int		is_metachar(char c);
+int		is_redirection(char *str);
 
 // Debug
-void		display_tree(t_command_tree *tree);
+void	display_tree(t_command_tree *tree);
 
 #endif

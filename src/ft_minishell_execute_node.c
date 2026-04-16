@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/31 16:26:36 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/04/07 23:52:07 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/04/16 15:53:54 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,6 @@ static int	execute_subshell(t_context *ctx, t_command_tree *node)
 	init_dyn_ptr(&(redir.file_out), 1);
 	free(split_cmd(node->redirections, &redir));
 	free(node->redirections);
-	printf("1\n");
-	printf("2\n");
 	ctx->read_exit_status = 0;
 	pid = fork();
 	if (pid == 0)

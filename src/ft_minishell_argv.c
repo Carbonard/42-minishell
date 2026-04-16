@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/30 23:34:26 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/04/07 23:54:24 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/04/16 19:02:11 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,8 +26,8 @@ int	need_to_expand(char *str)
 				i++;
 		}
 		// check condition
-		else if (str[i] == '$' && str[i + 1] && str[i + 1] != ' '
-				&& str[i + 1] != '=')
+		else if (str[i] == '$' && (ft_isalpha(str[i + 1]) || str[i+1] == '_'
+				|| str[i+1] == '?'))
 			return (i);
 		i++;
 	}
@@ -42,10 +42,8 @@ char	*expand_var(t_context *ctx, char *str, char *expanded, int var_start)
 
 	var_len = 0;
 	while (str[var_start + 1 + var_len]
-		&& str[var_start + 1 + var_len] != ' '
-		&& str[var_start + 1 + var_len] != '\n'
-		&& str[var_start + 1 + var_len] != '"'
-		&& str[var_start + 1 + var_len] != '=')
+		&& (ft_isalnum(str[var_start + 1 + var_len])
+			|| str[var_start + 1 + var_len] == '_'))
 		var_len++;
 	aux2 = ft_substr(str, var_start + 1, var_len);
 	// printf("var:'%s'\n", aux2);

@@ -25,17 +25,15 @@ cat << EOF | grep -e |>>''
 cat
 ^C
 
-echo |
-^C
 
 echo |||
 
 echo hola |
 |
 
-export ?=algo
+$? after syntax error
 
-ls fadfa || (echo $? && echo $?)
+export ?=algo (+)
 
 expand ~
 
@@ -43,12 +41,11 @@ just one heredoc (?)
 
 expansion in heredoc
 
-. (?)
-
 print syntax error from io_while instead of check_syntax
 
 exit 8	999999999999999999
 
+HD in history (?)
 
 
 

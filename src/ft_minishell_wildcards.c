@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/03 15:47:56 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/04/03 18:59:25 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/04/15 03:33:35 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,8 @@ int	find_wildcards(char *cmd)
 {
 	int	i;
 
+	if (!*cmd)
+		return (0);
 	i = 1;
 	while (cmd[i])
 	{

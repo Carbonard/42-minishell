@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/29 03:50:34 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/04/07 23:56:36 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/04/15 04:52:40 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,9 +74,13 @@ void	manage_redirection(t_context *ctx, t_redirection *redir, char *here_doc)
 		i++;
 	}
 	free(redir->file_in.arr);
+	redir->file_in.arr = NULL;
 	free(redir->file_out.arr);
+	redir->file_out.arr = NULL;
 	free(redir->type_in.arr);
+	redir->type_in.arr = NULL;
 	free(redir->type_out.arr);
+	redir->type_out.arr = NULL;
 }
 
 int	execute_leaf(t_context *ctx, t_command_tree *node)
@@ -86,6 +90,12 @@ int	execute_leaf(t_context *ctx, t_command_tree *node)
 	t_redirection	redir;
 
 	cmd_argv = get_argv_and_redir(ctx, node->cmd, &redir);
+	if (cmd_argv[0] == NULL)
+	{
+		// ctx->status = MS_EMPTY_CMD;
+		ctx->read_exit_status = 1;
+		return (0);
+	}
 	// ctx->exit_status = 0;
 	if (try_builtins(ctx, cmd_argv, &redir, node->here_doc))
 		return (0);
@@ -101,5 +111,13 @@ int	execute_leaf(t_context *ctx, t_command_tree *node)
 		silent_exit(ctx, ctx->exit_status);
 	}
 	free_split(cmd_argv);
+	if (redir.file_in.arr)
+		free(redir.file_in.arr);
+	if (redir.file_out.arr)
+		free(redir.file_out.arr);
+	if (redir.type_in.arr)
+		free(redir.type_in.arr);
+	if (redir.type_out.arr)
+		free(redir.type_out.arr);
 	return (pid);
 }

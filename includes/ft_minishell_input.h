@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/03 18:09:40 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/04/03 20:43:50 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/04/16 17:33:55 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,13 +57,13 @@ typedef struct s_automaton_data
 }	t_automaton_data;
 
 // heredoc
-void		read_here_docs(t_context *ctx);
-int			spread_here_docs(t_command_tree *node, t_dyn_ptr *hd, int n);
+void	read_here_docs(t_context *ctx);
+int		spread_here_docs(t_command_tree *node, t_dyn_ptr *hd, int n);
 // get_input
-int			read_input(t_context *ctx);
+int		read_input(t_context *ctx);
 // check_syntax
-int			check_syntax(char *input);
+int		check_syntax(t_context *ctx);
 // check_input
-int			check_quotes(t_context *ctx);
-int			check_parenthesis(t_context *ctx);
-int			check_operator(t_context *ctx);
+int		check_quotes(t_context *ctx);
+int		check_parenthesis(t_context *ctx);
+int		check_operator(t_context *ctx);

@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/02 22:35:42 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/04/07 21:38:02 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/04/16 17:58:19 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@ int	find_cmd_path(t_context *ctx, char *path, char *cmd)
 		i++;
 	}
 	free_split(env_paths);
+	strlcpy(path, cmd, ARG_MAX);
 	ctx->exit_status = ES_CMD_NOT_FOUND;
 	return (0);
 }
@@ -126,7 +127,7 @@ void	execute_command(t_context *ctx, char **argv)
 		execve(args.path, args.static_argv, args.env);
 		printf("Execve failed\n");
 	}
-	printf("args_length: %lu\n", args.args_length);
+	// printf("args_length: %lu\n", args.args_length);
 	if (ctx->exit_status == ES_CMD_NOT_FOUND)
 		custom_error(args.path, "command not found");
 	else

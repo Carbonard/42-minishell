@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/29 18:58:57 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/04/07 22:44:06 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/04/16 19:26:33 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 static int	get_event(char *input, int i)
 {
-	if (input[i] == ' ')
+	if (input[i] == ' ' || input[i] == '\n')
 		return (E_SPACE);
 	else if (input[i] == '"')
 		return (E_DOUBLE_QUOTE);
@@ -97,21 +97,20 @@ static void	action(t_automaton_data *data, int *i)
 		action_2(data);
 }
 
-int	check_syntax(char *input)
+int	check_syntax(t_context *ctx)
 {
 	int					i;
 	t_automaton_data	data;
 
+	ctx->status = MS_SUCCESS;
 	data.state = S_INITIAL;
 	data.last_state = S_INITIAL;
 	data.i_saved = 0;
 	i = 0;
-	while (input[i] && data.state != S_ERROR)
+	while (ctx->user_input && ctx->user_input[i] && data.state != S_ERROR)
 	{
-		data.event = get_event(input, i);
-		// printf("1 state after reading %c: %i, %i\n", input[i], last_state, state);
+		data.event = get_event(ctx->user_input, i);
 		data.last_state = data.state;
-		// printf("2 state after reading %c: %i, %i\n", input[i], last_state, state);
 		data.state = change_state(data.state, data.event);
 		// printf("3 state after reading %c: %i, %i\n", input[i], last_state, state);
 		action(&data, &i);
@@ -120,11 +119,12 @@ int	check_syntax(char *input)
 	}
 	if (data.state == S_ERROR || data.state == S_REDIR)
 	{
-		ft_putstr_fd("syntax error near unexpected token ", 2);
-		ft_putchar_fd(input[i-1], 2);
-		ft_putchar_fd('\n', 2);
-		return (1);
+		ft_putstr_fd(ctx->shell_name, 2);
+		ft_putstr_fd(": syntax error near unexpected token `", 2);
+		ft_putchar_fd(ctx->user_input[i-1], 2);
+		ft_putendl_fd("'", 2);
+		ctx->status = MS_E_SYNTAX;
 	}
-	return (0);
+	return (ctx->status);
 }
  
