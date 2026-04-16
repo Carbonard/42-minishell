@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/27 17:06:30 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/04/07 23:51:16 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/04/17 00:03:55 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,8 @@ int	add_int(t_dyn_int *d_array, int number)
 	size_t	new_size;
 
 	new_size = d_array->size;
+	if (d_array->length >= new_size && new_size == 0)
+		new_size++;
 	while (d_array->length >= new_size)
 		new_size *= 2;
 	if (new_size != d_array->size)

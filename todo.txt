@@ -22,9 +22,10 @@ echo ${REAL_VAR}aaaa
 
 cat << EOF | grep -e |>>''
 
-cat
-^C
+(((echo hola && ls dfa) | cat -e ) && echo bien) > tumadre
 
+cmd |
+history
 
 echo |||
 

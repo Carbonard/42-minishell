@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/30 23:34:26 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/04/16 19:02:11 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/04/16 23:22:40 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,10 +88,6 @@ char	**get_argv_and_redir(t_context *ctx, char *cmd, t_redirection *redir)
 	char	*command;
 	char	**argv;
 
-	init_dyn_int(&(redir->type_in), 1);
-	init_dyn_int(&(redir->type_out), 1);
-	init_dyn_ptr(&(redir->file_in), 1);
-	init_dyn_ptr(&(redir->file_out), 1);
 	command = ft_strdup(cmd);
 	while (need_to_expand(command) >= 0)
 		command = expand_cmd(ctx, command);

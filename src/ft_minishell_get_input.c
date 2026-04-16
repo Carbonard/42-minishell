@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/18 20:24:41 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/04/16 20:23:45 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/04/16 22:16:01 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,11 +30,15 @@ static void	get_prompt(t_context *ctx, char *prompt)
 	ft_strlcat(prompt, "$ \001\e[0m\002", MAX_PROMPT);
 }
 
-static char	*read_input_line(t_context *ctx, int print_prompt)
+static char	*read_input_line(t_context *ctx)
 {
-	char	prompt[MAX_PROMPT];
-	char	*read_line;
+	char			prompt[MAX_PROMPT];
+	char			*read_line;
+	struct sigaction new_act;
+	struct sigaction old_act;
 
+	new_act = (struct sigaction){.sa_flags = 0, .sa_handler = rl_handler_sigint};
+	sigaction(SIGINT, &new_act, &old_act);
 	if (ctx->interactive)
 	{
 		read_line = get_next_line(STDIN_FILENO);
@@ -43,29 +47,24 @@ static char	*read_input_line(t_context *ctx, int print_prompt)
 	}
 	else
 	{
-		if (print_prompt)
-		{
-			get_prompt(ctx, prompt);
-			read_line = readline(prompt);
-		}
-		else
-			read_line = readline("> ");
+		get_prompt(ctx, prompt);
+		read_line = readline(prompt);
 	}
 	if (!read_line && !ctx->user_input && !ctx->interactive)
 		read_line = ft_strdup("exit");
+	sigaction(SIGINT, &old_act, NULL);
 	return (read_line);
 }
 
-static char	*check_and_extend_input_aux(t_context *ctx)
+static void	check_and_extend_input(t_context *ctx)
 {
 	char	*input_extension;
 
 	ft_putstr_fd("> ", 1);
 	input_extension = get_next_line(0);
-	if (input_extension && input_extension[ft_strlen(input_extension) - 1] == '\n')
-		input_extension[ft_strlen(input_extension) - 1] = 0;
+	// input_extension = readline("> ");
 	if (g_last_signal)
-		return (input_extension);
+		return ;
 	if (!input_extension && check_quotes(ctx))
 		ctx->status = MS_SE_QUOTES;
 	else if (!input_extension)
@@ -75,30 +74,44 @@ static char	*check_and_extend_input_aux(t_context *ctx)
 		shell_perror(ctx, NULL);
 		ft_exit(ctx, 2);
 	}
-	return (input_extension);
-}
-
-static void	check_and_extend_input(t_context *ctx)
-{
-	struct sigaction	act1, act2;
-	char				*line;
-
-	act1 = (struct sigaction){.sa_flags = 0, .sa_handler = no_handler_sigint};
-	sigaction(SIGINT, &act1, &act2);
-	line = check_and_extend_input_aux(ctx);
 	if (!g_last_signal)
 	{
-		char *aux = ft_strjoin_char(ctx->user_input, line, '\n');
+		char *aux = ft_strjoin_char(ctx->user_input, input_extension, '\n');
 		free(ctx->user_input);
-		free(line);
+		free(input_extension);
 		ctx->user_input = aux;
 	}
-	sigaction(SIGINT, &act2, &act1);
+}
+
+void	history(char *input)
+{
+	int 	i;
+	char	quote;
+
+	if (!input || !input[0])
+		return ;
+	i = 0;
+	while (input[i])
+	{
+		if (input[i] == '\'' || input[i] == '"')
+		{
+			quote = input[i];
+			i++;
+			while (input[i] && input[i] != quote)
+				i++;
+		}
+		if (input[i] == '\n' && input[i + 1])
+			input[i] = ' ';
+		i++;
+	}
+	if (input[i-1] == '\n')
+		input[i-1] = 0;
+	add_history(input);
 }
 
 int	read_input(t_context *ctx)
 {
-	ctx->user_input = read_input_line(ctx, 1);
+	ctx->user_input = read_input_line(ctx);
 	g_last_signal = 0;
 	if (!ctx->user_input)
 	{
@@ -116,11 +129,11 @@ int	read_input(t_context *ctx)
 	if (g_last_signal)
 	{
 		g_last_signal = 0;
-		add_history(ctx->user_input);
+		history(ctx->user_input);
 		return (0);
 	}
 	if (ctx->status)
 		return (0);
-	add_history(ctx->user_input);
+	history(ctx->user_input);
 	return (1);
 }

@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/16 14:57:20 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/04/16 19:18:51 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/04/16 22:20:55 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,6 +102,7 @@ typedef struct s_command_tree
 	int						subshell;
 	char					*here_doc;
 	char					*redirections;
+	t_redirection			redir;
 }	t_command_tree;
 
 typedef struct s_context
@@ -119,8 +120,8 @@ typedef struct s_context
 }	t_context;
 
 // Signals
-void	handler_sigint(int sig);
-void	no_handler_sigint(int sig);
+void	rl_handler_sigint(int sig);
+void	generic_handler_sigint(int sig);
 // environment
 char	*find_env_value(t_context *ctx, char *var);
 // exit

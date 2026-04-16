@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/16 14:59:51 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/04/16 20:30:08 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/04/17 00:25:36 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,44 +16,40 @@
 
 int	g_last_signal;
 
-void	handler_sigint(int sig)
+void	rl_handler_sigint(int sig)
 {
 	(void)sig;
 	g_last_signal = sig;
 	write(1, "\n", 1);
-	printf("%i\n", getpid());
+	// printf("%i\n", getpid());
 	rl_on_new_line();
 	rl_replace_line("", 0);
 	rl_redisplay();
 	return ;
 }
 
-void	no_handler_sigint(int sig)
+void	generic_handler_sigint(int sig)
 {
 	(void)sig;
 	g_last_signal = sig;
+	write(1, "\n", 1);
 	// rl_on_new_line();
 	// rl_replace_line("", 0);
+	// rl_clear_history();
 	return ;
 }
 
 static void	io_while(t_context *ctx)
 {
-	struct sigaction	act1, act2;
-
-	act1 = (struct sigaction){.sa_flags = 0, .sa_handler = no_handler_sigint};
 	while (ctx->status != MS_EXIT)
 	{
 		ctx->status = MS_SUCCESS;
 		init_dyn_ptr(&ctx->here_docs, 1);
-		if (read_input(ctx))// && ctx->user_input && ctx->user_input[0])
+		if (read_input(ctx))
 		{
-			sigaction(SIGINT, &act1, &act2);
 			read_here_docs(ctx);
-			sigaction(SIGINT, &act2, &act1);
 			if (g_last_signal)
 			{
-				printf("djdsjk\n");
 				clear_input(ctx);
 				continue;
 			}
@@ -64,8 +60,6 @@ static void	io_while(t_context *ctx)
 		}
 		else if (ctx->status == MS_EXIT)
 			return ;
-		// else
-		// 	print_syntax_error();
 		clear_input(ctx);
 	}
 }
@@ -141,15 +135,11 @@ int	main(int argc, char **argv, char **env)
 	struct sigaction	act, actt;
 
 	g_last_signal = 0;
-	ctx.cmd_tree.cmd1 = NULL;
-	ctx.cmd_tree.cmd2 = NULL;
-	ctx.status = MS_SUCCESS;
-	ctx.exit_status = 0;
-	ctx.user_input = NULL;
-	actt = (struct sigaction){.sa_handler = handler_sigint};
+	ctx = (t_context){.cmd_tree.cmd1 = NULL, .cmd_tree.cmd2 = NULL,
+		.status = MS_SUCCESS, .exit_status = 0, .user_input = NULL};
+	actt = (struct sigaction){.sa_handler = generic_handler_sigint};
 	act = (struct sigaction){.sa_handler = SIG_IGN};
 	sigaction(SIGINT, &actt, NULL);
-	// signal(SIGINT, handler_sigint);
 	act.sa_handler = SIG_IGN;
 	sigaction(SIGQUIT, &act, NULL);
 	save_env(&ctx, env);

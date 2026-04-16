@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/16 16:54:26 by nyxssa            #+#    #+#             */
-/*   Updated: 2026/04/07 22:36:39 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/04/17 00:42:57 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,8 +103,11 @@ static int	remove_parenthesis(char *str, char **redirections)
 			str[0] = ' ';
 			str[parenthesis_checker_i] = 0;
 			removed = 1;
-			if (final > parenthesis_checker_i + 1)
+			if (ft_strchr(str + parenthesis_checker_i + 1, '<')
+				|| ft_strchr(str + parenthesis_checker_i + 1, '>'))
 				*redirections = ft_strdup(str + parenthesis_checker_i + 1);
+			else
+				*redirections = NULL;
 		}
 	}
 	return (removed);
@@ -176,13 +179,15 @@ void	create_tree(t_command_tree *input)
 	t_command_tree	*first;
 	t_command_tree	*second;
 
+	init_dyn_int(&(input->redir.type_in), 0);
+	init_dyn_int(&(input->redir.type_out), 0);
+	init_dyn_ptr(&(input->redir.file_in), 0);
+	init_dyn_ptr(&(input->redir.file_out), 0);
 	first = NULL;
 	second = NULL;
 	input->sep = NONE;
 	input->redirections = NULL;
 	input->subshell = remove_parenthesis(input->cmd, &(input->redirections));
-	if (input->subshell)
-		ft_printf("parenthesis removed\n");
 	if (!divide_by_logic_op(input, &first, &second))
 		divide_by_pipes(input, &first, &second);
 	input->cmd1 = first;

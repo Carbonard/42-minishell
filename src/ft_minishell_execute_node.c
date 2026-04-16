@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/31 16:26:36 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/04/16 15:53:54 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/04/17 00:42:39 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,20 +16,15 @@ static int	execute_subshell(t_context *ctx, t_command_tree *node)
 {
 	int				pid;
 	int				status;
-	t_redirection	redir;
 
-	init_dyn_int(&(redir.type_in), 1);
-	init_dyn_int(&(redir.type_out), 1);
-	init_dyn_ptr(&(redir.file_in), 1);
-	init_dyn_ptr(&(redir.file_out), 1);
-	free(split_cmd(node->redirections, &redir));
+	free(split_cmd(node->redirections, &(node->redir)));
 	free(node->redirections);
 	ctx->read_exit_status = 0;
 	pid = fork();
 	if (pid == 0)
 	{
-		if (redir.type_in.length || redir.type_out.length)
-			manage_redirection(ctx, &redir, node->here_doc);
+		if (node->redir.type_in.length || node->redir.type_out.length)
+			manage_redirection(ctx, &node->redir, node->here_doc);
 		node->subshell = 0;
 		pid = execute_node(ctx, node);
 		waitpid(pid, &status, 0);
@@ -75,7 +70,7 @@ static void
 	pid = execute_node(ctx, next_node);
 	waitpid(pid, &status, 0);
 	status = get_status(ctx, status);
-	exit(status);
+	silent_exit(ctx, status);
 }
 
 static int	execute_pipe(t_context *ctx, t_command_tree *node)

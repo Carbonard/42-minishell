@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/29 17:22:13 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/04/15 03:50:23 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/04/16 20:45:08 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,8 +35,6 @@ void	read_hd(t_context *ctx, char *eof)
 	}
 	if (new_line)
 		free(new_line);
-	else
-		ft_putchar_fd('\n', 1);
 	//else mensaje de error
 	add_ptr(&ctx->here_docs, here_doc);
 }

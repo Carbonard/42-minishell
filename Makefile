@@ -1,9 +1,9 @@
-.PHONY: all clean fclean re
+.PHONY: all clean fclean re force
 
 INCLUDE_DIR = ./includes
 
 CC = cc
-CFLAGS = -Wall -Werror -Wextra -I $(INCLUDE_DIR) -I ./libft -g3 -fsanitize=address
+CFLAGS = -Wall -Werror -Wextra -I $(INCLUDE_DIR) -I ./libft -g3 #-fsanitize=address
 CLIBS = -L./libft -L./dynamic_arrays -lft -lft_dynarray -lreadline
 
 NAME = minishell
@@ -29,10 +29,10 @@ print:
 	@echo '---------------------------------'
 	@echo $(OBJ)
 
-$(LIBFT):
+$(LIBFT): force
 	make -C libft
 
-$(DYNARRAYS):
+$(DYNARRAYS): force
 	make -C dynamic_arrays
 
 $(OBJ_DIR):
