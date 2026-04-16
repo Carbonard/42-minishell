@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/29 18:58:57 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/04/16 19:26:33 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/04/17 00:51:00 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -124,6 +124,7 @@ int	check_syntax(t_context *ctx)
 		ft_putchar_fd(ctx->user_input[i-1], 2);
 		ft_putendl_fd("'", 2);
 		ctx->status = MS_E_SYNTAX;
+		ctx->exit_status = 2;
 	}
 	return (ctx->status);
 }

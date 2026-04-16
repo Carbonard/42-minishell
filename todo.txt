@@ -4,17 +4,12 @@ free at exit
 	- si falla env
 
 check unset VAR=value
+
 (echo hola) > file
 
 echo $CMD | ./minishell
 'echo hola
 echo adios'
-
-echo hola > /dev/stdout | sleep 3 | echo adios
-
-echo hola || echo adios && echo si
-
-dos redirecciones deberian crear archivos
 
 leer hasta metacaracteres (?)
 
@@ -22,25 +17,16 @@ echo ${REAL_VAR}aaaa
 
 cat << EOF | grep -e |>>''
 
-(((echo hola && ls dfa) | cat -e ) && echo bien) > tumadre
-
 cmd |
 history
 
 echo |||
 
-echo hola |
-|
-
-$? after syntax error
-
-export ?=algo (+)
-
 expand ~
 
 just one heredoc (?)
 
-expansion in heredoc
+expansion in HD
 
 print syntax error from io_while instead of check_syntax
 
@@ -48,30 +34,4 @@ exit 8	999999999999999999
 
 HD in history (?)
 
-
-
-Errors:
-
-shell_custom_error(char *error_msg)
-	minishell: unexpected EOF ...
-	minishell: syntax error near ...
-shell_perror(char *s)
-	minishell: syntax error: unexpected ...
-	minishell: -c: option requires ...
-	minishell: cmd: too many arguments (x2)
-	minishell: cmd: OLDPWD ...
-	minishell: cmd: permission denied (perror)
-shell_arg_perror(char **argv)
-	minishell: cmd: argv[1]: numeric argument required
-arg_error()
-	cmd: command not found
-
-
-
-
-
-minishell: cmd: generic_err
-minishell: cmd: personal_err
-cmd: personal_err
-cmd: generic_err
-minishell: cmd: arg: generic
+wildcards

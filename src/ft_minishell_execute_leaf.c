@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/29 03:50:34 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/04/17 00:24:47 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/04/17 01:12:06 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,8 +71,8 @@ void	manage_redirection(t_context *ctx, t_redirection *redir, char *here_doc)
 
 int	execute_leaf(t_context *ctx, t_command_tree *node)
 {
-	int				pid;
-	char			**cmd_argv;
+	int		pid;
+	char	**cmd_argv;
 
 	cmd_argv = get_argv_and_redir(ctx, node->cmd, &(node->redir));
 	if (cmd_argv[0] == NULL)

@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/16 18:55:11 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/04/03 18:54:01 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/04/17 01:48:57 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,15 +31,15 @@ static int	invalid_identifier(char *var)
 {
 	int		i;
 
+	if (!ft_isalpha(var[0]) && var[0] != '_')
+		return (1);
 	i = 0;
-	while (INVALID_EXPORT_CHARS[i])
+	while (var[i] && var[i] != '=')
 	{
-		if (ft_strchr(var, INVALID_EXPORT_CHARS[i]))
+		if (!isalnum(var[i]) && var[i] != '_')
 			return (1);
 		i++;
 	}
-	if (ft_isdigit(var[0]) || var[0] == '=')
-		return (1);
 	return (0);
 }
 
