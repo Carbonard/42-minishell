@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/16 14:57:20 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/04/16 22:20:55 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/04/17 21:39:33 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,6 +101,7 @@ typedef struct s_command_tree
 	int						sep;
 	int						subshell;
 	char					*here_doc;
+	char					*eof;
 	char					*redirections;
 	t_redirection			redir;
 }	t_command_tree;
@@ -117,6 +118,7 @@ typedef struct s_context
 	t_command_tree	cmd_tree;
 	int				pipe_fds[2];
 	t_dyn_ptr		here_docs;
+	t_dyn_ptr		eofs;
 }	t_context;
 
 // Signals

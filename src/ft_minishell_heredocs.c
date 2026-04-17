@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/29 17:22:13 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/04/17 20:09:18 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/04/17 22:06:17 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,12 +42,14 @@ void	read_hd(t_context *ctx, char *eof)
 		free(here_doc);
 		free(new_line);
 		here_doc = aux;
+		here_doc[ft_strlen(here_doc) - 1] = 0;
 		// free(new_line);
 	}
 	//else mensaje de error
-	else
+	else if (!ctx->interactive)
 		ft_putchar_fd('\n', 1);
 	add_ptr(&ctx->here_docs, here_doc);
+	add_ptr(&ctx->eofs, eof);
 }
 
 void	read_here_docs(t_context *ctx)
@@ -70,7 +72,7 @@ void	read_here_docs(t_context *ctx)
 				len++;
 			eof = ft_substr(ctx->user_input, i, len);
 			read_hd(ctx, eof);
-			free(eof);
+			// free(eof);
 		}
 		i++;
 	}
@@ -97,9 +99,10 @@ void	expand_heredoc(t_context *ctx)
 	}
 }
 
-int	spread_here_docs(t_command_tree *node, t_dyn_ptr *hd, int n)
+int	spread_here_docs(t_command_tree *node, t_dyn_ptr *hd, t_dyn_ptr *eofs, int n)
 {
-	int	i;
+	int		i;
+	char	*last_line;
 
 	if (node->sep == NONE)
 	{
@@ -108,6 +111,11 @@ int	spread_here_docs(t_command_tree *node, t_dyn_ptr *hd, int n)
 		{
 			if (node->cmd[i] == '<' && node->cmd[i + 1] == '<')
 			{
+				last_line = ft_strrchr(hd->arr[n], '\n');
+				if (!last_line && !ft_strncmp(hd->arr[n], eofs->arr[n], ft_strlen(eofs->arr[n])))
+					hd->arr[n][0] = 0;
+				else if (last_line && (!ft_strncmp(last_line + 1, eofs->arr[n], ft_strlen(eofs->arr[n]) + 1)))
+					*(last_line + 1) = 0;
 				node->here_doc = hd->arr[n];
 				n++;
 			}
@@ -116,8 +124,8 @@ int	spread_here_docs(t_command_tree *node, t_dyn_ptr *hd, int n)
 	}
 	else
 	{
-		n = spread_here_docs(node->cmd1, hd, n);
-		n = spread_here_docs(node->cmd2, hd, n);
+		n = spread_here_docs(node->cmd1, hd, eofs, n);
+		n = spread_here_docs(node->cmd2, hd, eofs, n);
 	}
 	return (n);
 }

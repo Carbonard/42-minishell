@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/16 14:59:51 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/04/17 20:10:33 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/04/17 21:56:37 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,9 @@ void add_input_history(t_context *ctx)
 		add_history(history_entry);
 	free(history_entry);
 }
+
 static void	io_while(t_context *ctx);
+
 void manage_multiple_input(t_context *ctx)
 {
 	int	pipe_fds[2];
@@ -108,7 +110,8 @@ static void	io_while(t_context *ctx)
 	while (ctx->status != MS_EXIT)
 	{
 		ctx->status = MS_SUCCESS;
-		init_dyn_ptr(&ctx->here_docs, 1);
+		init_dyn_ptr(&ctx->here_docs, 0);
+		init_dyn_ptr(&ctx->eofs, 0);
 		if (read_input(ctx))
 		{
 			if (ft_strchr(ctx->user_input, '\n'))
@@ -125,7 +128,7 @@ static void	io_while(t_context *ctx)
 				expand_heredoc(ctx);
 				ctx->cmd_tree.cmd = ctx->user_input;
 				create_tree(&ctx->cmd_tree);
-				spread_here_docs(&ctx->cmd_tree, &ctx->here_docs, 0);
+				spread_here_docs(&ctx->cmd_tree, &ctx->here_docs, &ctx->eofs, 0);
 				execute_input(ctx);
 			}
 		}
