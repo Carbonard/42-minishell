@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/29 17:22:13 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/04/17 17:59:33 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/04/17 20:09:18 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,8 @@ void	read_hd(t_context *ctx, char *eof)
 
 	len = ft_strlen(eof);
 	here_doc = NULL;
-	ft_putstr_fd("> ", 1);
+	if (!ctx->interactive)
+		ft_putstr_fd("> ", 1);
 	new_line = get_next_line(0);
 	while (new_line && !g_last_signal
 		&& (ft_strncmp(new_line, eof, len) || new_line[len] != '\n'))
@@ -31,11 +32,18 @@ void	read_hd(t_context *ctx, char *eof)
 		free(here_doc);
 		free(new_line);
 		here_doc = aux;
-		ft_putstr_fd("> ", 1);
+		if (!ctx->interactive)
+			ft_putstr_fd("> ", 1);
 		new_line = get_next_line(0);
 	}
 	if (new_line)
+	{
+		aux = ft_strjoin(here_doc, new_line);
+		free(here_doc);
 		free(new_line);
+		here_doc = aux;
+		// free(new_line);
+	}
 	//else mensaje de error
 	else
 		ft_putchar_fd('\n', 1);

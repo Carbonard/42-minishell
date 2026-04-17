@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/16 14:59:51 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/04/17 16:56:07 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/04/17 20:10:33 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,8 +79,28 @@ void add_input_history(t_context *ctx)
 		history_entry = aux;
 		i++;
 	}
-	add_history(history_entry);
+	if (history_entry && history_entry[0] && history_entry[0]!= ' ')
+		add_history(history_entry);
 	free(history_entry);
+}
+static void	io_while(t_context *ctx);
+void manage_multiple_input(t_context *ctx)
+{
+	int	pipe_fds[2];
+	int	original_in;
+
+	original_in = dup(STDIN_FILENO);
+	pipe(pipe_fds);
+	dup2(pipe_fds[0], STDIN_FILENO);
+	ft_putstr_fd(ctx->user_input, pipe_fds[1]);
+	close(pipe_fds[0]);
+	close(pipe_fds[1]);
+	clear_input(ctx);
+	ctx->interactive = 1;
+	io_while(ctx);
+	ctx->interactive = 0;
+	dup2(original_in, STDIN_FILENO);
+	close(original_in);
 }
 
 static void	io_while(t_context *ctx)
@@ -91,24 +111,29 @@ static void	io_while(t_context *ctx)
 		init_dyn_ptr(&ctx->here_docs, 1);
 		if (read_input(ctx))
 		{
-			read_here_docs(ctx);
-			add_input_history(ctx);
-			if (g_last_signal)
+			if (ft_strchr(ctx->user_input, '\n'))
+				manage_multiple_input(ctx);
+			else
 			{
-				clear_input(ctx);
-				continue;
+				read_here_docs(ctx);
+				add_input_history(ctx);
+				if (g_last_signal)
+				{
+					clear_input(ctx);
+					continue;
+				}
+				expand_heredoc(ctx);
+				ctx->cmd_tree.cmd = ctx->user_input;
+				create_tree(&ctx->cmd_tree);
+				spread_here_docs(&ctx->cmd_tree, &ctx->here_docs, 0);
+				execute_input(ctx);
 			}
-			expand_heredoc(ctx);
-			ctx->cmd_tree.cmd = ctx->user_input;
-			create_tree(&ctx->cmd_tree);
-			spread_here_docs(&ctx->cmd_tree, &ctx->here_docs, 0);
-			// printf("cc\n");
-			execute_input(ctx);
 		}
 		else if (ctx->status == MS_EXIT)
-			return ;
+			break ;
 		clear_input(ctx);
 	}
+	ctx->status = MS_SUCCESS;
 }
 
 static void	check_interactive(t_context *ctx, int argc, char **argv)
@@ -194,5 +219,5 @@ int	main(int argc, char **argv, char **env)
 	check_interactive(&ctx, argc, argv);
 	io_while(&ctx);
 	free_all(&ctx);
-	return (0);
+	return (ctx.exit_status);
 }
