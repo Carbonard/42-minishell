@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/29 03:50:34 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/04/17 01:12:06 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/04/17 16:38:26 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@ static void
 {
 	int	fd;
 
+	// printf("Redirectinos in\n");
 	if (type == REDIRECTION_IN)
 	{
 		fd = open(file, O_RDONLY);
@@ -25,6 +26,7 @@ static void
 	}
 	else if (type == HERE_DOC)
 	{
+		// printf("WTF\n");
 		pipe(ctx->pipe_fds);
 		ft_putstr_fd(here_doc, ctx->pipe_fds[1]);
 		close(ctx->pipe_fds[1]);
@@ -55,14 +57,15 @@ void	manage_redirection(t_context *ctx, t_redirection *redir, char *here_doc)
 {
 	size_t	i;
 
+	// printf("Redirectinos: %ld, %ld\n", redir->type_in.length, redir->file_out.length);
 	i = 0;
-	while (i < redir->file_in.length)
+	while (i < redir->type_in.length)
 	{
 		manage_redirection_in(ctx, redir->type_in.arr[i], redir->file_in.arr[i], here_doc);
 		i++;
 	}
 	i = 0;
-	while (i < redir->file_out.length)
+	while (i < redir->type_out.length)
 	{
 		manage_redirection_out(redir->type_out.arr[i], redir->file_out.arr[i]);
 		i++;
@@ -75,6 +78,7 @@ int	execute_leaf(t_context *ctx, t_command_tree *node)
 	char	**cmd_argv;
 
 	cmd_argv = get_argv_and_redir(ctx, node->cmd, &(node->redir));
+// printf("node.cmd=%s\nredir:%i\n", node->cmd, node->redir.type_in.arr[0]);
 	if (cmd_argv[0] == NULL)
 	{
 		free_split(cmd_argv);

@@ -35,3 +35,5 @@ exit 8	999999999999999999
 HD in history (?)
 
 wildcards
+
+reuse history with HD (put input in pipe and read from it?)

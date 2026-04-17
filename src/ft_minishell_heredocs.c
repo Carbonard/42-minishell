@@ -6,11 +6,12 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/29 17:22:13 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/04/16 20:45:08 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/04/17 17:59:33 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_minishell_input.h"
+#include "ft_minishell_execution.h"
 
 void	read_hd(t_context *ctx, char *eof)
 {
@@ -36,6 +37,8 @@ void	read_hd(t_context *ctx, char *eof)
 	if (new_line)
 		free(new_line);
 	//else mensaje de error
+	else
+		ft_putchar_fd('\n', 1);
 	add_ptr(&ctx->here_docs, here_doc);
 }
 
@@ -62,6 +65,27 @@ void	read_here_docs(t_context *ctx)
 			free(eof);
 		}
 		i++;
+	}
+}
+
+void	expand_heredoc(t_context *ctx)
+{
+	size_t	hd_i;
+	// int		str_i;
+
+	hd_i = 0;
+	while (hd_i < ctx->here_docs.length)
+	{
+		if (ctx->here_docs.arr[hd_i])
+			ctx->here_docs.arr[hd_i] = expand_input(ctx, ctx->here_docs.arr[hd_i]);
+		// str_i = need_to_expand(ctx->here_docs.arr[hd_i], 0);
+		// while (str_i > 0)
+		// {
+		// 	ctx->here_docs.arr[hd_i] = expand_cmd(ctx, ctx->here_docs.arr[hd_i], &str_i);
+		// 	str_i++;
+		// 	str_i = need_to_expand(ctx->here_docs.arr[hd_i], str_i);
+		// }
+		hd_i++;
 	}
 }
 

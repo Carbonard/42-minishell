@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/16 14:59:51 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/04/17 00:25:36 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/04/17 16:56:07 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,6 @@ void	rl_handler_sigint(int sig)
 	(void)sig;
 	g_last_signal = sig;
 	write(1, "\n", 1);
-	// printf("%i\n", getpid());
 	rl_on_new_line();
 	rl_replace_line("", 0);
 	rl_redisplay();
@@ -39,6 +38,51 @@ void	generic_handler_sigint(int sig)
 	return ;
 }
 
+static void	remove_newlines(char *input)
+{
+	int 	i;
+	char	quote;
+
+	if (!input || !input[0])
+		return ;
+	i = 0;
+	while (input[i])
+	{
+		if (input[i] == '\'' || input[i] == '"')
+		{
+			quote = input[i];
+			i++;
+			while (input[i] && input[i] != quote)
+				i++;
+		}
+		if (input[i] == '\n' && input[i + 1])
+			input[i] = ' ';
+		i++;
+	}
+	if (input[i-1] == '\n')
+		input[i-1] = 0;
+}
+
+void add_input_history(t_context *ctx)
+{
+	char	*history_entry;
+	char	*aux;
+	size_t	i;
+
+	remove_newlines(ctx->user_input);
+	history_entry = ft_strdup(ctx->user_input);
+	i = 0;
+	while (i < ctx->here_docs.length)
+	{
+		aux = ft_strjoin_char(history_entry, ctx->here_docs.arr[i], '\n');
+		free(history_entry);
+		history_entry = aux;
+		i++;
+	}
+	add_history(history_entry);
+	free(history_entry);
+}
+
 static void	io_while(t_context *ctx)
 {
 	while (ctx->status != MS_EXIT)
@@ -48,14 +92,17 @@ static void	io_while(t_context *ctx)
 		if (read_input(ctx))
 		{
 			read_here_docs(ctx);
+			add_input_history(ctx);
 			if (g_last_signal)
 			{
 				clear_input(ctx);
 				continue;
 			}
+			expand_heredoc(ctx);
 			ctx->cmd_tree.cmd = ctx->user_input;
 			create_tree(&ctx->cmd_tree);
 			spread_here_docs(&ctx->cmd_tree, &ctx->here_docs, 0);
+			// printf("cc\n");
 			execute_input(ctx);
 		}
 		else if (ctx->status == MS_EXIT)

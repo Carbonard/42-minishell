@@ -6,13 +6,13 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/30 23:34:26 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/04/17 01:48:39 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/04/17 17:56:26 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_minishell_execution.h"
 
-int	need_to_expand(char *str, int i)
+static int	need_to_expand(char *str, int i)
 {
 	while (str[i])
 	{
@@ -31,7 +31,7 @@ int	need_to_expand(char *str, int i)
 	return (-1);
 }
 
-char	*expand_var(t_context *ctx, char *str, int var_start, int *i)
+static char	*expand_var(t_context *ctx, char *str, int var_start, int *i)
 {
 	int		var_len;
 	char	*aux1;
@@ -46,7 +46,7 @@ char	*expand_var(t_context *ctx, char *str, int var_start, int *i)
 		var_len++;
 	aux2 = ft_substr(str, var_start + 1, var_len);
 	aux1 = ft_strdup(find_env_value(ctx, aux2));
-	*i += ft_strlen(aux1) - ft_strlen(aux2);
+	*i += ft_strlen(aux1);
 	free(aux2);
 	aux2 = ft_strjoin(expanded, aux1);
 	free(expanded);
@@ -58,7 +58,7 @@ char	*expand_var(t_context *ctx, char *str, int var_start, int *i)
 	return (expanded);
 }
 
-char	*expand_cmd(t_context *ctx, char *str, int *i)
+static char	*expand_cmd(t_context *ctx, char *str, int *i)
 {
 	int		var_start;
 	char	*expanded;
@@ -70,7 +70,7 @@ char	*expand_cmd(t_context *ctx, char *str, int *i)
 	{
 		expanded = ft_substr(str, 0, var_start);
 		aux2 = ft_itoa(ctx->exit_status);
-		*i += -1 + ft_strlen(aux2);
+		*i += ft_strlen(aux2);
 		aux1 = ft_strjoin(expanded, aux2);
 		free(aux2);
 		free(expanded);
@@ -83,20 +83,33 @@ char	*expand_cmd(t_context *ctx, char *str, int *i)
 	return (expanded);
 }
 
+char	*expand_input(t_context *ctx, char *input)
+{
+	int		i;
+
+	i = need_to_expand(input, 0);
+	while (i >= 0)
+	{
+		input = expand_cmd(ctx, input, &i);
+		i = need_to_expand(input, i);
+	}
+	return (input);
+}
+
 char	**get_argv_and_redir(t_context *ctx, char *cmd, t_redirection *redir)
 {
 	char	*command;
 	char	**argv;
-	int		i;
+	// int		i;
 
-	command = ft_strdup(cmd);
-	i = need_to_expand(command, 0);
-	while (i > 0)
-	{
-		command = expand_cmd(ctx, command, &i);
-		i++;
-		i = need_to_expand(command, i);
-	}
+	command = expand_input(ctx, ft_strdup(cmd));
+	// i = need_to_expand(command, 0);
+	// while (i > 0)
+	// {
+	// 	command = expand_cmd(ctx, command, &i);
+	// 	i++;
+	// 	i = need_to_expand(command, i);
+	// }
 	command = expand_wildcards(command);
 	argv = split_cmd(command, redir);
 	free(command);
