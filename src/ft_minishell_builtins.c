@@ -6,20 +6,20 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/17 21:35:56 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/04/07 23:58:47 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/04/18 22:29:53 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_minishell_builtins.h"
 #include "ft_minishell_execution.h"
 
-static void	manage_builtin_redir(t_context *ctx, t_redirection *redir, char *here_doc)
+static int	manage_builtin_redir(t_context *ctx, t_redirection *redir, char *here_doc)
 {
 	if (redir->type_in.length)
 		redir->original_in = dup(STDIN_FILENO);
 	if (redir->type_out.length)
 		redir->original_out = dup(STDOUT_FILENO);
-	manage_redirection(ctx, redir, here_doc);
+	return (manage_redirection(ctx, redir, here_doc));
 }
 
 static void	close_redirections(t_redirection *redir)
@@ -43,7 +43,12 @@ int	try_builtins(t_context *ctx, char **argv, t_redirection *redir, char *here_d
 		&& ft_strncmp(argv[0], "unset", 6) && ft_strncmp(argv[0], "exit", 5)
 		&& ft_strncmp(argv[0], "cd", 3))
 		return (0);
-	manage_builtin_redir(ctx, redir, here_doc);
+	if (!manage_builtin_redir(ctx, redir, here_doc))
+	{
+		close_redirections(redir);
+		free_split(argv);
+		return (1);
+	}
 	if (!ft_strncmp(argv[0], "pwd", 4))
 		ctx->status = pwd();
 	else if (!ft_strncmp(argv[0], "env", 4))
@@ -53,7 +58,7 @@ int	try_builtins(t_context *ctx, char **argv, t_redirection *redir, char *here_d
 	else if (!ft_strncmp(argv[0], "export", 7))
 		ctx->status = builtin_export(ctx, argv);
 	else if (!ft_strncmp(argv[0], "unset", 6))
-		ctx->status = unset(ctx, argv[1]);
+		ctx->status = unset(ctx, argv);
 	else if (!ft_strncmp(argv[0], "exit", 5))
 		builtin_exit(ctx, argv);
 	else if (!ft_strncmp(argv[0], "cd", 3))

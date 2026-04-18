@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/16 16:52:14 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/04/03 18:55:21 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/04/18 20:10:37 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,6 +79,7 @@ int	cd(t_context *ctx, char **argv)
 		argv[1] = ft_strdup(find_env_value(ctx, "OLDPWD"));
 		if (!argv[1])
 			return (MS_OLDPWD_NOT_SET);
+		ft_putendl_fd(argv[1], 1);
 	}
 	ft_strlcpy(old_dir, "OLDPWD=", 8);
 	getcwd(old_dir + 7, PATH_MAX);

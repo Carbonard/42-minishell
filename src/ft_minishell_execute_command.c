@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/02 22:35:42 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/04/16 17:58:19 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/04/18 21:56:06 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ int	find_cmd_path(t_context *ctx, char *path, char *cmd)
 	ctx->exit_status = ES_CMD_NOT_FOUND;
 	return (0);
 }
-
+#include <sys/stat.h>
 static void	get_path(t_context *ctx, char *argv0, t_exec_args *args)
 {
 	args->path = args->exec_args;
@@ -47,13 +47,20 @@ static void	get_path(t_context *ctx, char *argv0, t_exec_args *args)
 		if (ft_strlen(argv0) >= PATH_MAX - 1)
 		{
 			ctx->status = MS_LONG_PATH;
-			ctx->exit_status = 126;
+			ctx->exit_status = ES_CMD_NOT_EXEC;
 		}
 		else
 			args->args_length = ft_strlcpy(args->path, argv0, PATH_MAX) + 1;
 	}
 	else
 		args->args_length = find_cmd_path(ctx, args->path, argv0) + 1;
+	struct stat state;
+	stat(args->path, &state);
+	if (!ctx->exit_status && !ctx->status && (state.st_mode & S_IFMT) == S_IFDIR)
+	{
+		ctx->exit_status = ES_CMD_NOT_EXEC;
+		ctx->status = MS_CMD_IS_DIR;
+	}
 	if (!ctx->exit_status && !ctx->status && access(args->path, X_OK))
 		ctx->exit_status = ES_CMD_NOT_EXEC;
 }
@@ -78,7 +85,7 @@ static void	save_argv(t_context *ctx, char **argv, t_exec_args *args)
 	{
 		printf("last argv: %i: %s\n", argv_i-1, args->static_argv[argv_i-1]);
 		ctx->status = MS_LONG_ARGS;
-		ctx->exit_status = 126;
+		ctx->exit_status = ES_CMD_NOT_EXEC;
 	}
 }
 
@@ -105,7 +112,7 @@ static size_t
 	{
 		printf("last env: %i: %s\n", env_i - 1, new_env[env_i - 1]);
 		ctx->status = MS_LONG_ARGS;
-		ctx->exit_status = 126;
+		ctx->exit_status = ES_CMD_NOT_EXEC;
 	}
 	return (length);
 }
@@ -113,6 +120,7 @@ static size_t
 void	execute_command(t_context *ctx, char **argv)
 {
 	t_exec_args	args;
+	int			execve_tried;
 
 	if (!argv || !argv[0])
 		return ;
@@ -120,16 +128,19 @@ void	execute_command(t_context *ctx, char **argv)
 	save_argv(ctx, argv, &args);
 	args.args_length = list_to_strarray(ctx, args.exec_args, args.env,
 			args.args_length);
+	execve_tried = 0;
 	if (!ctx->status && !ctx->exit_status)
+
 	{
+		execve_tried = 1;
 		free_all(ctx);
 		free_split(argv);
 		execve(args.path, args.static_argv, args.env);
-		printf("Execve failed\n");
 	}
-	// printf("args_length: %lu\n", args.args_length);
 	if (ctx->exit_status == ES_CMD_NOT_FOUND)
 		custom_error(args.path, "command not found");
 	else
 		shell_perror(ctx, args.path);
+	if (!execve_tried)
+		free_split(argv);
 }

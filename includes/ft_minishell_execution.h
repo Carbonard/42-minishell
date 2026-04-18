@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/03 18:11:57 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/04/17 14:52:23 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/04/18 20:53:11 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ void	execute_input(t_context *ctx);
 // execute_node
 int		execute_node(t_context *ctx, t_command_tree *node);
 // manage_leaf
-void	manage_redirection(t_context *ctx, t_redirection *redir, char *heredoc);
+int		manage_redirection(t_context *ctx, t_redirection *redir, char *heredoc);
 int		execute_leaf(t_context *ctx, t_command_tree *node);
 // argv
 char	**get_argv_and_redir(t_context *ctx, char *cmd, t_redirection *redir);

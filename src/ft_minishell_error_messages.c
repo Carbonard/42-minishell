@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/31 16:59:44 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/04/16 17:01:39 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/04/18 21:50:21 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,8 @@ void	shell_perror(t_context *ctx, char *s)
 		ft_putendl_fd(strerror(E2BIG), 2);
 	else if (ctx->status == MS_LONG_PATH)
 		ft_putendl_fd(strerror(ENAMETOOLONG), 2);
+	else if (ctx->status == MS_CMD_IS_DIR)
+		ft_putendl_fd("Is a directory", 2);
 	else
 		perror(NULL);
 	if (!ctx->exit_status)
@@ -53,7 +55,7 @@ void	shell_arg_error(t_context *ctx, char **argv)
 	ft_putstr_fd(argv[0], 2);
 	ft_putstr_fd(": ", 2);
 	if (ctx->status == MS_NOT_VALID_ID)
-		ft_putchar_fd('\'', 2);
+		ft_putchar_fd('`', 2);
 	ft_putstr_fd(argv[1], 2);
 	if (ctx->status == MS_NOT_VALID_ID)
 		ft_putchar_fd('\'', 2);

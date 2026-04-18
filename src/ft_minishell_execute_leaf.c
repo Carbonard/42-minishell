@@ -6,13 +6,13 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/29 03:50:34 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/04/17 16:38:26 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/04/18 21:31:29 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_minishell_execution.h"
 
-static void
+static int
 	manage_redirection_in(t_context *ctx, int type, char *file, char *here_doc)
 {
 	int	fd;
@@ -21,6 +21,11 @@ static void
 	if (type == REDIRECTION_IN)
 	{
 		fd = open(file, O_RDONLY);
+		if (fd < 0)
+		{
+			shell_perror(ctx, file);
+			return (1);
+		}
 		dup2(fd, STDIN_FILENO);
 		close(fd);
 	}
@@ -33,43 +38,63 @@ static void
 		dup2(ctx->pipe_fds[0], STDIN_FILENO);
 		close(ctx->pipe_fds[0]);
 	}
+	return (0);
 }
 
-static void	manage_redirection_out(int type, char *file)
+static int	manage_redirection_out(t_context *ctx, int type, char *file)
 {
 	int	fd;
 
 	if (type == REDIRECTION_OUT)
 	{
 		fd = open(file, O_WRONLY | O_CREAT | O_TRUNC, 0664);
+		if (fd < 0)
+		{
+			shell_perror(ctx, file);
+			return (1);
+		}
 		dup2(fd, STDOUT_FILENO);
 		close(fd);
 	}
 	else if (type == REDIRECTION_APP)
 	{
 		fd = open(file, O_WRONLY | O_CREAT | O_APPEND, 0664);
+		if (fd < 0)
+		{
+			shell_perror(ctx, file);
+			return (1);
+		}
 		dup2(fd, STDOUT_FILENO);
 		close(fd);
 	}
+	return (0);
 }
 
-void	manage_redirection(t_context *ctx, t_redirection *redir, char *here_doc)
+int	manage_redirection(t_context *ctx, t_redirection *redir, char *here_doc)
 {
 	size_t	i;
 
-	// printf("Redirectinos: %ld, %ld\n", redir->type_in.length, redir->file_out.length);
 	i = 0;
 	while (i < redir->type_in.length)
 	{
-		manage_redirection_in(ctx, redir->type_in.arr[i], redir->file_in.arr[i], here_doc);
+		if (manage_redirection_in(ctx, redir->type_in.arr[i], redir->file_in.arr[i], here_doc))
+		{
+			ctx->status = MS_BADFILE;
+			return (0);
+		}
 		i++;
 	}
 	i = 0;
 	while (i < redir->type_out.length)
 	{
-		manage_redirection_out(redir->type_out.arr[i], redir->file_out.arr[i]);
+		if (manage_redirection_out(ctx, redir->type_out.arr[i], redir->file_out.arr[i]))
+		{
+			ctx->status = MS_BADFILE;
+			return (0);
+		}
 		i++;
 	}
+	return (1);
 }
 
 int	execute_leaf(t_context *ctx, t_command_tree *node)
@@ -93,9 +118,13 @@ int	execute_leaf(t_context *ctx, t_command_tree *node)
 	{
 		if (node->redir.type_in.length || node->redir.type_out.length)
 			manage_redirection(ctx, &(node->redir), node->here_doc);
-		ctx->exit_status = 0;
-		execute_command(ctx, cmd_argv);
-		free_split(cmd_argv);
+		if (ctx->status == MS_SUCCESS)
+		{
+			ctx->exit_status = 0;
+			execute_command(ctx, cmd_argv);
+		}
+		else
+			free_split(cmd_argv);
 		silent_exit(ctx, ctx->exit_status);
 	}
 	free_split(cmd_argv);

@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/18 20:24:41 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/04/17 14:26:22 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/04/18 15:53:48 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ static char	*read_input_line(t_context *ctx)
 
 	new_act = (struct sigaction){.sa_flags = 0, .sa_handler = rl_handler_sigint};
 	sigaction(SIGINT, &new_act, &old_act);
-	if (ctx->interactive)
+	if (ctx->no_tty)
 	{
 		read_line = get_next_line(STDIN_FILENO);
 		if (read_line && read_line[ft_strlen(read_line) - 1] == '\n')
@@ -50,7 +50,7 @@ static char	*read_input_line(t_context *ctx)
 		get_prompt(ctx, prompt);
 		read_line = readline(prompt);
 	}
-	if (!read_line && !ctx->user_input && !ctx->interactive)
+	if (!read_line && !ctx->user_input && !ctx->no_tty)
 		read_line = ft_strdup("exit");
 	sigaction(SIGINT, &old_act, NULL);
 	return (read_line);

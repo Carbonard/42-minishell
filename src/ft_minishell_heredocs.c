@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/29 17:22:13 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/04/17 22:06:17 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/04/18 15:53:48 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ void	read_hd(t_context *ctx, char *eof)
 
 	len = ft_strlen(eof);
 	here_doc = NULL;
-	if (!ctx->interactive)
+	if (!ctx->no_tty)
 		ft_putstr_fd("> ", 1);
 	new_line = get_next_line(0);
 	while (new_line && !g_last_signal
@@ -32,7 +32,7 @@ void	read_hd(t_context *ctx, char *eof)
 		free(here_doc);
 		free(new_line);
 		here_doc = aux;
-		if (!ctx->interactive)
+		if (!ctx->no_tty)
 			ft_putstr_fd("> ", 1);
 		new_line = get_next_line(0);
 	}
@@ -46,7 +46,7 @@ void	read_hd(t_context *ctx, char *eof)
 		// free(new_line);
 	}
 	//else mensaje de error
-	else if (!ctx->interactive)
+	else if (!ctx->no_tty)
 		ft_putchar_fd('\n', 1);
 	add_ptr(&ctx->here_docs, here_doc);
 	add_ptr(&ctx->eofs, eof);

@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/03 18:16:41 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/04/03 19:07:23 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/04/18 22:25:56 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ int			del_env(t_context *ctx, char *var_name);
 int			print_env(t_context *ctx);
 int			export(t_context *ctx, char *var);
 int			builtin_export(t_context *ctx, char **argv);
-int			unset(t_context *ctx, char *var);
+int			unset(t_context *ctx, char **argv);
 // builtins_others
 int			valid_flag(const char *arg, char f);
 int			cd(t_context *ctx, char **argv);

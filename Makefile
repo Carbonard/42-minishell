@@ -12,14 +12,14 @@ all: $(NAME)
 LIBFT = libft/libft.a
 DYNARRAYS = dynamic_arrays/libft_dynarray.a
 
-BUILTINS = ft_minishell_builtins ft_minishell_builtins_others ft_minishell_builtins_env ft_minishell_exit ft_minishell_clears
-INPUT = ft_minishell_get_input ft_minishell_heredocs ft_minishell_check_syntax ft_minishell_check_input
-EXECUTION = ft_minishell_argv ft_minishell_parser ft_minishell_split_cmd ft_minishell_execute_tree ft_minishell_execute_node ft_minishell_execute_leaf ft_minishell_execute_command
-OTHER = ft_minishell_main ft_minishell_environment ft_minishell_debug ft_minishell_error_messages ft_minishell_wildcards ft_minishell_wildcards_sort ft_minishell_utils
+BUILTINS = builtins builtins_others builtins_env exit clears
+INPUT = get_input heredocs check_syntax check_input
+EXECUTION = argv parser split_cmd execute_tree execute_node execute_leaf execute_command
+OTHER = main environment debug error_messages wildcards wildcards_sort utils signals history init_config
 
 SRC_DIR = src
 FILES = $(BUILTINS) $(INPUT) $(EXECUTION) $(OTHER)
-SRC = $(FILES:%=$(SRC_DIR)/%.c)
+SRC = $(FILES:%=$(SRC_DIR)/ft_minishell_%.c)
 
 OBJ_DIR = obj
 OBJ = $(SRC:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
@@ -30,19 +30,26 @@ print:
 	@echo $(OBJ)
 
 $(LIBFT): force
-	make -C libft
+	@make -C libft
 
 $(DYNARRAYS): force
-	make -C dynamic_arrays
+	@make -C dynamic_arrays
 
 $(OBJ_DIR):
 	@mkdir -p $@
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c $(INCLUDE_DIR)/ft_minishell.h | $(OBJ_DIR)
-	$(CC) $(CFLAGS) $< -c -o $@
+	@$(CC) $(CFLAGS) $< -c -o $@
 
 $(NAME): $(LIBFT) $(DYNARRAYS) $(OBJ)
-	$(CC) $(CFLAGS) $(OBJ) $(CLIBS) -o $@
+	@$(CC) $(CFLAGS) $(OBJ) $(CLIBS) -o $@
+
+bash: $(NAME)
+	@mv $(NAME) bash
+
+test: bash
+	@echo "Use the following command:"
+	@echo 'source ./tester.sh'
 
 clean:
 	@rm -rf $(OBJ_DIR)

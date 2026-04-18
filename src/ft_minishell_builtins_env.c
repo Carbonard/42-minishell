@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/16 18:55:11 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/04/17 01:48:57 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/04/18 22:32:15 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,17 +81,22 @@ int	builtin_export(t_context *ctx, char **argv)
 	return (final_status);
 }
 
-int	unset(t_context *ctx, char *var)
+int	unset(t_context *ctx, char **argv)
 {
 	t_str_list	*item;
+	char		*var;
+	int			arg_i;
 
-	if (ft_strchr(var, '='))
-		return (MS_SUCCESS);
-	item = find_env_node(ctx, var);
-	if (item)
+	arg_i = 1;
+	while (argv[arg_i])
 	{
-		ft_str_delitem(&ctx->env, item);
-		return (MS_SUCCESS);
+		var = argv[arg_i];
+		if (ft_strchr(var, '='))
+			return (MS_SUCCESS);
+		item = find_env_node(ctx, var);
+		if (item)
+			ft_str_delitem(&ctx->env, item);
+		arg_i++;
 	}
 	return (MS_SUCCESS);
 }

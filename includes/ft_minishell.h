@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/16 14:57:20 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/04/17 21:39:33 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/04/18 21:50:00 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,8 @@ enum e_status
 	MS_LONG_PATH,
 	MS_LONG_ARGS,
 	MS_NOT_VALID_ID,
-	MS_EMPTY_CMD
+	MS_BADFILE,
+	MS_CMD_IS_DIR
 };
 
 enum e_exit_status
@@ -114,16 +115,22 @@ typedef struct s_context
 	int				read_exit_status;
 	t_str_list		*env;
 	char			*user_input;
-	int				interactive;
+	int				no_tty;
 	t_command_tree	cmd_tree;
 	int				pipe_fds[2];
 	t_dyn_ptr		here_docs;
 	t_dyn_ptr		eofs;
 }	t_context;
 
-// Signals
+
+// init_config
+void	check_interactive(t_context *ctx, int argc, char **argv);
+void	set_shell(t_context *ctx, char *shell_name);
+// signals
 void	rl_handler_sigint(int sig);
 void	generic_handler_sigint(int sig);
+// history
+void	add_input_history(t_context *ctx);
 // environment
 char	*find_env_value(t_context *ctx, char *var);
 // exit
