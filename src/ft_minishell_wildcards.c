@@ -6,13 +6,13 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/03 15:47:56 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/04/15 03:33:35 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/04/18 05:50:27 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_minishell_execution.h"
 
-char	*expand_wc(char *cmd, int wc_i, t_dyn_ptr *entries)
+char	*expand_wc(char *cmd, char *start, t_dyn_ptr *entries)
 {
 	int		length;
 	size_t	i;
@@ -27,63 +27,136 @@ char	*expand_wc(char *cmd, int wc_i, t_dyn_ptr *entries)
 		i++;
 	}
 	new_cmd = malloc(length);
-	ft_strlcpy(new_cmd, cmd, wc_i + 1);
+	ft_strlcpy(new_cmd, cmd, start - cmd + 1);
+// printf("1. %s\n", new_cmd);
 	i = 0;
-	while (i < entries->length - 1)
+	while (i < entries->length)
 	{
-		if (!(wc_i == 0 && i == 0))
-			ft_strlcat(new_cmd, " ", length);
 		ft_strlcat(new_cmd, entries->arr[i], length);
+		if (i < entries->length - 1)
+			ft_strlcat(new_cmd, " ", length);
+// printf("2. %s\n", new_cmd);
 		i++;
 	}
-	ft_strlcat(new_cmd, cmd + wc_i + 1, length);
+	ft_strlcat(new_cmd, ft_strchr(start, ' '), length);
+// printf("3. %s\n", new_cmd);
 	free(cmd);
 	return (new_cmd);
 }
 
-int	find_wildcards(char *cmd)
+char	**wilcard_split(char *pattern)
+{
+	char	**split;
+	char	**new_split;
+	int		size;
+
+	split = ft_split(pattern, '*');
+	size = 0;
+	while (split[size])
+		size++;
+	if (pattern[0] == '*')
+		size++;
+	if (pattern[ft_strlen(pattern) - 1] == '*')
+		size++;
+	new_split = malloc((size + 1) * sizeof(char *));
+	if (pattern[0] == '*')
+		new_split[0] = ft_calloc(1,1);
+	size = 1;
+	while (*split)
+	{
+		new_split[size] = *split;
+		size++;
+		split++;
+	}
+	if (pattern[ft_strlen(pattern) - 1] == '*' && size)
+		new_split[size] = ft_calloc(1,1);
+	free(split);
+	return (new_split);
+}
+
+int	check_entry(char* ent_name, char *pattern, char**match)
 {
 	int	i;
 
-	if (!*cmd)
-		return (0);
-	i = 1;
-	while (cmd[i])
+	i = 0;
+	if (pattern[0] != '*')
 	{
-		if (cmd[i] == '*' && cmd[i - 1] == ' '
-			&& (cmd[i + 1] == ' ' || cmd[i + 1] == '\n' || !cmd[i + 1]))
-			return (i);
-		// do smth if there's a file named * or whtevr
-		i += advance_quotes(cmd + i);
+		if (ft_strncmp(match[0], ent_name, ft_strlen(match[0])))
+			return (0);
+		i++;
+		ent_name += ft_strlen(match[i]);
 	}
+	while (match[i])
+	{
+		if (!ft_strnstr(ent_name, match[i], ft_strlen(ent_name)))
+			return (0);
+		ent_name = ft_strnstr(ent_name, match[i], ft_strlen(ent_name));
+		ent_name += ft_strlen(match[i]);
+		i++;
+	}
+	if (!(pattern[ft_strlen(pattern) - 1] != '*' && ft_strncmp(
+		ent_name + ft_strlen(ent_name) - ft_strlen(match[i - 1]), match[i - 1],
+		ft_strlen(match[i - 1]))))
+			return (1);
 	return (0);
+}
+
+int	save_coincidences(t_dyn_ptr *entries, char *pattern)
+{
+	char			wd[PATH_MAX];
+	DIR				*dir;
+	struct dirent	*entry;
+	char			**match;
+
+	dir = opendir(getcwd(wd, PATH_MAX));
+	entry = readdir(dir);
+	match = ft_split(pattern, '*');
+	while (entry)
+	{
+		if (entry->d_name[0] != '.'
+			&& check_entry(entry->d_name, pattern, match))
+			add_ptr(entries, ft_strdup(entry->d_name));
+		entry = readdir(dir);
+	}
+	free_split(match);
+	closedir(dir);
+	return (entries->length);
 }
 
 char	*expand_wildcards(char *cmd)
 {
-	int				i;
-	char			wd[PATH_MAX];
-	DIR				*dir;
-	struct dirent	*entry;
-	t_dyn_ptr		entries;
+	char		*start;
+	char		*end;
+	char		*word;
+	t_dyn_ptr	entries;
+	int			index;
 
-	i = find_wildcards(cmd);
-	while (i)
+	start = cmd;
+	index = 0;
+	while (start && *start)
 	{
-		init_dyn_ptr(&entries, 1);
-		dir = opendir(getcwd(wd, PATH_MAX));
-		entry = readdir(dir);
-		while (entry)
+		end = ft_strchr(start + 1, ' ');
+		if (end)
+			word = ft_substr(start, 0, end - start);
+		else
+			word = ft_strdup(start);
+		init_dyn_ptr(&entries, 0);
+		if (ft_strchr(word, '*'))
 		{
-			if (entry->d_name[0] != '.')
-				add_ptr(&entries, entry->d_name);
-			entry = readdir(dir);
+			if (save_coincidences(&entries, word))
+				cmd = expand_wc(cmd, start, &entries);
 		}
-		add_ptr(&entries, NULL);
-		cmd = expand_wc(cmd, i, &entries);
-		closedir(dir);
+		free(word);
 		free_dyn_ptr(&entries);
-		i = find_wildcards(cmd);
+		if (end)
+		{
+			index += (end - start);
+			start = cmd + index;
+			while (*start == ' ')
+				start++;
+		}
+		else
+			start = NULL;
 	}
 	return (cmd);
 }
