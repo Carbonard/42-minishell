@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/18 22:18:08 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/04/03 18:55:33 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/04/18 23:24:23 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,6 @@ int	add_env(t_context *ctx, char *new_var)
 	new_item = ft_str_lstnew(new_var);
 	if (!new_item)
 		return (MS_E_ENV_MALLOC);
-		//Borrar todo?
 	ft_str_lstadd_back(&ctx->env, new_item);
 	return (MS_SUCCESS);
 }

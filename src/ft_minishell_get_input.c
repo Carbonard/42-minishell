@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/18 20:24:41 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/04/18 15:53:48 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/04/18 23:26:44 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,8 @@ static char	*read_input_line(t_context *ctx)
 	struct sigaction new_act;
 	struct sigaction old_act;
 
-	new_act = (struct sigaction){.sa_flags = 0, .sa_handler = rl_handler_sigint};
+	new_act.sa_flags = 0;
+	new_act.sa_handler = rl_handler_sigint;
 	sigaction(SIGINT, &new_act, &old_act);
 	if (ctx->no_tty)
 	{
@@ -62,7 +63,6 @@ static void	check_and_extend_input(t_context *ctx)
 
 	ft_putstr_fd("> ", 1);
 	input_extension = get_next_line(0);
-	// input_extension = readline("> ");
 	if (g_last_signal)
 		return ;
 	if (!input_extension && check_quotes(ctx))
@@ -82,32 +82,6 @@ static void	check_and_extend_input(t_context *ctx)
 		ctx->user_input = aux;
 	}
 }
-
-// void	history(char *input)
-// {
-// 	int 	i;
-// 	char	quote;
-
-// 	if (!input || !input[0])
-// 		return ;
-// 	i = 0;
-// 	while (input[i])
-// 	{
-// 		if (input[i] == '\'' || input[i] == '"')
-// 		{
-// 			quote = input[i];
-// 			i++;
-// 			while (input[i] && input[i] != quote)
-// 				i++;
-// 		}
-// 		if (input[i] == '\n' && input[i + 1])
-// 			input[i] = ' ';
-// 		i++;
-// 	}
-// 	if (input[i-1] == '\n')
-// 		input[i-1] = 0;
-// 	add_history(input);
-// }
 
 int	read_input(t_context *ctx)
 {
@@ -129,11 +103,9 @@ int	read_input(t_context *ctx)
 	if (g_last_signal)
 	{
 		g_last_signal = 0;
-		// history(ctx->user_input);
 		return (0);
 	}
 	if (ctx->status)
 		return (0);
-	// history(ctx->user_input);
 	return (1);
 }

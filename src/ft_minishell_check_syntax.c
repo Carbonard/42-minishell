@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/29 18:58:57 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/04/17 00:51:00 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/04/18 23:19:59 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,16 +43,30 @@ static int	get_event(char *input, int i)
 
 static int	change_state(int current_state, int event)
 {
-						// E_SPACE,		 E_SINGLE_QUOTE,E_DOUBLE_QUOTE, E_AND,		E_OR,		 E_PIPE,	 E_REDIR_R,	 E_REDIR_L, E_DOUBLE_REDIR_R, E_DOUBLE_REDIR_L, E_OPEN_PAR,	 E_CLOSING_PAR, E_OTHER,
 	static int const	conversor[S_TOTAL][E_TOTAL] = {
-		[S_INITIAL] =	 {S_INITIAL,	 S_SING_QUOT,	S_DOUB_QUOT,	S_ERROR,	S_ERROR,	 S_ERROR,	 S_REDIR,	 S_REDIR,	 S_REDIR,		 S_REDIR,			 S_OPEN_PAR, S_ERROR,		 S_COMMAND},
-		[S_SING_QUOT] =	 {S_SING_QUOT,	 S_LAST,	 	S_SING_QUOT,	S_SING_QUOT,S_SING_QUOT, S_SING_QUOT,S_SING_QUOT,S_SING_QUOT,S_SING_QUOT,	 S_SING_QUOT,		 S_SING_QUOT,S_SING_QUOT,	 S_SING_QUOT},
-		[S_DOUB_QUOT] =	 {S_DOUB_QUOT,	 S_DOUB_QUOT,	S_LAST,			S_DOUB_QUOT,S_DOUB_QUOT, S_DOUB_QUOT,S_DOUB_QUOT,S_DOUB_QUOT,S_DOUB_QUOT,	 S_DOUB_QUOT,		 S_DOUB_QUOT,S_DOUB_QUOT,	 S_DOUB_QUOT},
-		[S_CLOS_PAR] =	 {S_CLOS_PAR,	 S_ERROR,	 	S_ERROR,		S_INITIAL,	S_INITIAL,	 S_INITIAL,	 S_REDIR,	 S_REDIR,	 S_REDIR,		 S_REDIR,			 S_ERROR,	 S_LAST,		 S_ERROR},
-		[S_REDIR] =		 {S_REDIR,		 S_SING_QUOT,	S_DOUB_QUOT,	S_ERROR,	S_ERROR,	 S_ERROR,	 S_ERROR,	 S_ERROR,	 S_ERROR,		 S_ERROR,			 S_ERROR,	 S_ERROR,		 S_READ_REDIR},
-		[S_READ_REDIR] = {S_LAST,		 S_SING_QUOT,	S_DOUB_QUOT,	S_LAST,		S_LAST,		 S_LAST,	 S_REDIR,	 S_REDIR,	 S_REDIR,		 S_REDIR,			 S_ERROR,	 S_LAST,		 S_READ_REDIR},
-		[S_COMMAND] =	 {S_COMMAND,	 S_SING_QUOT,	S_DOUB_QUOT,	S_INITIAL,	S_INITIAL,	 S_INITIAL,	 S_REDIR,	 S_REDIR,	 S_REDIR,		 S_REDIR,			 S_ERROR,	 S_LAST,		 S_COMMAND}
+	[S_INITIAL] = {S_INITIAL, S_SING_QUOT, S_DOUB_QUOT, S_ERROR, S_ERROR,
+		S_ERROR, S_REDIR, S_REDIR, S_REDIR, S_REDIR, S_OPEN_PAR, S_ERROR,
+		S_COMMAND},
+	[S_SING_QUOT] = {S_SING_QUOT, S_LAST, S_SING_QUOT, S_SING_QUOT,
+		S_SING_QUOT, S_SING_QUOT, S_SING_QUOT, S_SING_QUOT, S_SING_QUOT,
+		S_SING_QUOT, S_SING_QUOT, S_SING_QUOT, S_SING_QUOT},
+	[S_DOUB_QUOT] = {S_DOUB_QUOT, S_DOUB_QUOT, S_LAST, S_DOUB_QUOT,
+		S_DOUB_QUOT, S_DOUB_QUOT, S_DOUB_QUOT, S_DOUB_QUOT, S_DOUB_QUOT,
+		S_DOUB_QUOT, S_DOUB_QUOT, S_DOUB_QUOT, S_DOUB_QUOT},
+	[S_CLOS_PAR] = {S_CLOS_PAR, S_ERROR, S_ERROR, S_INITIAL, S_INITIAL,
+		S_INITIAL, S_REDIR, S_REDIR, S_REDIR, S_REDIR, S_ERROR, S_LAST,
+		S_ERROR},
+	[S_REDIR] = {S_REDIR, S_SING_QUOT, S_DOUB_QUOT, S_ERROR, S_ERROR,
+		S_ERROR, S_ERROR, S_ERROR, S_ERROR, S_ERROR, S_ERROR, S_ERROR,
+		S_READ_REDIR},
+	[S_READ_REDIR] = {S_LAST, S_SING_QUOT, S_DOUB_QUOT, S_LAST, S_LAST,
+		S_LAST, S_REDIR, S_REDIR, S_REDIR, S_REDIR, S_ERROR, S_LAST,
+		S_READ_REDIR},
+	[S_COMMAND] = {S_COMMAND, S_SING_QUOT, S_DOUB_QUOT, S_INITIAL,
+		S_INITIAL, S_INITIAL, S_REDIR, S_REDIR, S_REDIR, S_REDIR, S_ERROR,
+		S_LAST, S_COMMAND}
 	};
+
 	return (conversor[current_state][event]);
 }
 
@@ -80,7 +94,8 @@ static void	action_2(t_automaton_data *data)
 
 static void	action(t_automaton_data *data, int *i)
 {
-	if (data->event == E_AND || data->event == E_OR || data->event == E_DOUBLE_REDIR_L || data->event == E_DOUBLE_REDIR_R)
+	if (data->event == E_AND || data->event == E_OR
+		|| data->event == E_DOUBLE_REDIR_L || data->event == E_DOUBLE_REDIR_R)
 		(*i)++;
 	if (data->state == S_OPEN_PAR)
 	{
@@ -88,7 +103,8 @@ static void	action(t_automaton_data *data, int *i)
 		data->i_saved++;
 		data->state = S_INITIAL;
 	}
-	else if ((data->state == S_SING_QUOT || data->state == S_DOUB_QUOT) && data->state != data->last_state)
+	else if ((data->state == S_SING_QUOT || data->state == S_DOUB_QUOT)
+		&& data->state != data->last_state)
 	{
 		data->saved_states[data->i_saved] = data->last_state;
 		data->i_saved++;
@@ -103,18 +119,14 @@ int	check_syntax(t_context *ctx)
 	t_automaton_data	data;
 
 	ctx->status = MS_SUCCESS;
-	data.state = S_INITIAL;
-	data.last_state = S_INITIAL;
-	data.i_saved = 0;
+	ft_bzero(&data, sizeof(t_automaton_data));
 	i = 0;
 	while (ctx->user_input && ctx->user_input[i] && data.state != S_ERROR)
 	{
 		data.event = get_event(ctx->user_input, i);
 		data.last_state = data.state;
 		data.state = change_state(data.state, data.event);
-		// printf("3 state after reading %c: %i, %i\n", input[i], last_state, state);
 		action(&data, &i);
-		// printf("4 state after reading %c: %i, %i\n", input[i], last_state, state);
 		i++;
 	}
 	if (data.state == S_ERROR || data.state == S_REDIR)

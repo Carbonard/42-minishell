@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/17 17:03:15 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/04/17 16:16:06 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/04/19 00:33:21 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,39 +35,38 @@ static void	remove_quotes(char *cmd)
 	*(cmd - shift) = 0;
 }
 
-static int	get_redirection(char *cmd, int i, t_redirection *redir)
+static int	get_redirection(char *token, int i, t_redirection *redir)
 {
 	int	original_i;
 	int	start;
 
 	original_i = i;
-	if (cmd[i] == '<' && cmd [i + 1] == '<')
+	if (token[i] == '<' && token [i + 1] == '<')
 		add_int(&(redir->type_in), HERE_DOC);
-	else if (cmd[i] == '>' && cmd [i + 1] == '>')
+	else if (token[i] == '>' && token [i + 1] == '>')
 		add_int(&(redir->type_out), REDIRECTION_APP);
-	else if (cmd[i] == '<')
+	else if (token[i] == '<')
 		add_int(&(redir->type_in), REDIRECTION_IN);
-	else if (cmd[i] == '>')
+	else if (token[i] == '>')
 		add_int(&(redir->type_out), REDIRECTION_OUT);
-	while (cmd[i] == '<' || cmd[i] == '>' || cmd[i] == ' ')
+	while (token[i] == '<' || token[i] == '>' || token[i] == ' ')
 		i++;
 	start = i;
-	while (cmd[i] && !is_metachar(cmd[i]))
+	while (token[i] && !is_metachar(token[i]))
 		i++;
-	if (cmd[original_i] == '<')
+	if (token[original_i] == '<')
 	{
-		if (cmd[original_i + 1] != '<')
+		if (token[original_i + 1] != '<')
 		{
-			add_ptr(&(redir->file_in), ft_substr(cmd, start, i - start));
-			// printf("the fuck: %s\n", redir->file_in.arr[redir->file_out.length - 1]);
+			add_ptr(&(redir->file_in), ft_substr(token, start, i - start));
 			remove_quotes(redir->file_in.arr[redir->file_in.length - 1]);
 		}
 		else
 			add_ptr(&(redir->file_in), ft_calloc(1,1));
 	}
-	else if (cmd[original_i] == '>')
+	else if (token[original_i] == '>')
 	{
-		add_ptr(&(redir->file_out), ft_substr(cmd, start, i - start));
+		add_ptr(&(redir->file_out), ft_substr(token, start, i - start));
 		remove_quotes(redir->file_out.arr[redir->file_out.length - 1]);
 	}
 	return (i);
@@ -97,7 +96,6 @@ char *get_token(char *cmd)
 	int		i;
 
 	i = 0;
-	// printf("cmd: '%s'\n", cmd);
 	if (is_redirection(cmd))
 	{
 		while (cmd[i] && (cmd[i] == ' ' || cmd[i] == '>' || cmd[i] == '<'))
@@ -114,7 +112,6 @@ char	**split_cmd(char *cmd, t_redirection *redir)
 	char		*token;
 	int			i;
 
-	// printf("cmd: '%s'\n", cmd);
 	init_dyn_ptr(&split, 2);
 	i = 0;
 	while (cmd && cmd[i])
@@ -126,19 +123,14 @@ char	**split_cmd(char *cmd, t_redirection *redir)
 		token = get_token(cmd + i);
 		i += ft_strlen(token);
 		if (is_redirection(token))
-		{
-			// printf("redirection: '%s'\n", token);
 			get_redirection(token, 0, redir);
+		if (is_redirection(token))
 			free(token);
-		}
 		else
 		{
-			// printf("original token: '%s'\n", token);
 			remove_quotes(token);
-			// printf("quotes removed: '%s'\n", token);
 			add_ptr(&split, token);
 		}
 	}
-	add_ptr(&split, NULL);
 	return (split.arr);
 }

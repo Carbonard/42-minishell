@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/16 14:59:51 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/04/18 19:21:54 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/04/18 23:15:47 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 
 static void	io_while(t_context *ctx);
 
-void manage_multiple_input(t_context *ctx)
+void	manage_multiple_input(t_context *ctx)
 {
 	int	pipe_fds[2];
 	int	original_in;
@@ -48,17 +48,17 @@ static void	io_while(t_context *ctx)
 				manage_multiple_input(ctx);
 			else
 			{
-				read_here_docs(ctx);
+				read_heredocs(ctx);
 				add_input_history(ctx);
 				if (g_last_signal)
 				{
 					clear_input(ctx);
-					continue;
+					continue ;
 				}
 				expand_heredoc(ctx);
 				ctx->cmd_tree.cmd = ctx->user_input;
 				create_tree(&ctx->cmd_tree);
-				spread_here_docs(&ctx->cmd_tree, &ctx->here_docs, &ctx->eofs, 0);
+				spread_heredocs(&ctx->cmd_tree, &ctx->here_docs, &ctx->eofs, 0);
 				execute_input(ctx);
 			}
 		}
@@ -72,7 +72,8 @@ static void	io_while(t_context *ctx)
 int	main(int argc, char **argv, char **env)
 {
 	t_context			ctx;
-	struct sigaction	act, actt;
+	struct sigaction	act;
+	struct sigaction	actt;
 
 	g_last_signal = 0;
 	ctx = (t_context){.cmd_tree.cmd1 = NULL, .cmd_tree.cmd2 = NULL,

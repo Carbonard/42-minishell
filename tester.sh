@@ -1,0 +1,17 @@
+#!/bin/bash
+
+make bash
+
+echo 'Executing minishell...'
+< test_battery.sh ./bash >minishell_output.log 2>minishell_error.log
+echo 'Executing bash...'
+< test_battery.sh source test_battery.sh >bash_output.log 2>bash_error.log
+
+echo 'Output diff:'
+diff --color=auto minishell_output.log bash_output.log
+echo 'Error diff:'
+diff --color=auto minishell_error.log bash_error.log
+
+echo 'Executing with valgrind...'
+
+cat test_battery.sh | valgrind --leak-check=full --show-leak-kinds=all --track-fds=yes --trace-children=no --child-silent-after-fork=no --suppressions=readline.supp ./bash |& grep -E 'are definitely|are still|FILE DESCRIPTORS' | grep -v '(3 std)'

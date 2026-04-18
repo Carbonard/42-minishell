@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/03 18:11:57 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/04/18 20:53:11 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/04/19 00:25:36 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,3 +46,8 @@ int		try_builtins(t_context *ctx, char **argv, t_redirection *redir,
 // execute_command
 int		find_cmd_path(t_context *ctx, char *path, char *cmd);
 void	execute_command(t_context *ctx, char **argv);
+// utils
+int		find_closing_par(char *str);
+int		find_open_par(char *str, int i);
+int		find_open_quote(char *str, int i);
+int		remove_parenthesis(char *str, char **redirections);

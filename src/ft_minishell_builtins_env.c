@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/16 18:55:11 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/04/18 22:32:15 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/04/18 23:03:55 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ int	export(t_context *ctx, char *var)
 
 int	builtin_export(t_context *ctx, char **argv)
 {
-	int status;
+	int	status;
 	int	final_status;
 
 	final_status = MS_SUCCESS;

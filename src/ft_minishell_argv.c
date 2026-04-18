@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/30 23:34:26 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/04/17 17:56:26 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/04/18 23:28:00 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,9 +22,10 @@ static int	need_to_expand(char *str, int i)
 			while (str[i] != '\'')
 				i++;
 		}
-		// check condition
-		else if (str[i] == '$' && (ft_isalpha(str[i + 1]) || str[i+1] == '_'
-				|| str[i+1] == '?'))
+		else if (str[i] == '$'
+			&& (ft_isalpha(str[i + 1])
+				|| str[i + 1] == '_'
+				|| str[i + 1] == '?'))
 			return (i);
 		i++;
 	}
@@ -77,8 +78,8 @@ static char	*expand_cmd(t_context *ctx, char *str, int *i)
 		expanded = ft_strjoin(aux1, str + var_start + 2);
 		free(aux1);
 	}
-	else if (!ft_strchr(INVALID_EXPORT_CHARS, str[var_start + 1])){
-		expanded = expand_var(ctx, str, var_start, i);}
+	else if (!ft_strchr(INVALID_EXPORT_CHARS, str[var_start + 1]))
+		expanded = expand_var(ctx, str, var_start, i);
 	free(str);
 	return (expanded);
 }
@@ -100,16 +101,8 @@ char	**get_argv_and_redir(t_context *ctx, char *cmd, t_redirection *redir)
 {
 	char	*command;
 	char	**argv;
-	// int		i;
 
 	command = expand_input(ctx, ft_strdup(cmd));
-	// i = need_to_expand(command, 0);
-	// while (i > 0)
-	// {
-	// 	command = expand_cmd(ctx, command, &i);
-	// 	i++;
-	// 	i = need_to_expand(command, i);
-	// }
 	command = expand_wildcards(command);
 	argv = split_cmd(command, redir);
 	free(command);

@@ -6,10 +6,11 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/02 22:35:42 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/04/18 21:56:06 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/04/19 00:15:55 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <sys/stat.h>
 #include "ft_minishell_execution.h"
 
 int	find_cmd_path(t_context *ctx, char *path, char *cmd)
@@ -37,9 +38,11 @@ int	find_cmd_path(t_context *ctx, char *path, char *cmd)
 	ctx->exit_status = ES_CMD_NOT_FOUND;
 	return (0);
 }
-#include <sys/stat.h>
+
 static void	get_path(t_context *ctx, char *argv0, t_exec_args *args)
 {
+	struct stat state;
+
 	args->path = args->exec_args;
 	if (!ft_strncmp(argv0, "./", 2) || !ft_strncmp(argv0, "../", 3)
 		|| !ft_strncmp(argv0, "/", 1))
@@ -54,7 +57,6 @@ static void	get_path(t_context *ctx, char *argv0, t_exec_args *args)
 	}
 	else
 		args->args_length = find_cmd_path(ctx, args->path, argv0) + 1;
-	struct stat state;
 	stat(args->path, &state);
 	if (!ctx->exit_status && !ctx->status && (state.st_mode & S_IFMT) == S_IFDIR)
 	{

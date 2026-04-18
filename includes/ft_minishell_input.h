@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/03 18:09:40 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/04/17 21:57:08 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/04/18 23:15:47 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,9 +57,9 @@ typedef struct s_automaton_data
 }	t_automaton_data;
 
 // heredoc
-void	read_here_docs(t_context *ctx);
+void	read_heredocs(t_context *ctx);
 void	expand_heredoc(t_context *ctx);
-int		spread_here_docs(
+int		spread_heredocs(
 	t_command_tree *node, t_dyn_ptr *hd, t_dyn_ptr *eof, int n);
 // get_input
 int		read_input(t_context *ctx);

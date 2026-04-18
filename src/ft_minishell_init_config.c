@@ -6,17 +6,17 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/18 16:04:35 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/04/18 22:58:54 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/04/18 23:28:26 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_minishell_builtins.h"
 #include "ft_minishell_execution.h"
 
-static void	read_from_file(t_context *ctx, int argc, char **argv)
+static void	read_from_file(t_context *ctx, char **argv)
 {
 	int	fd;
-(void)argc;
+
 	fd = open(argv[1], O_RDONLY);
 	if (fd < 0)
 	{
@@ -39,7 +39,7 @@ void	check_interactive(t_context *ctx, int argc, char **argv)
 		return ;
 	if (!valid_flag(argv[1], 'c'))
 	{
-		read_from_file(ctx, argc, argv);
+		read_from_file(ctx, argv);
 		return ;
 	}
 	if (argc < 3)
