@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/29 20:14:14 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/04/03 19:06:47 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/04/19 00:53:48 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ int	check_parenthesis(t_context *ctx)
 			ctx->status = MS_E_SYNTAX;
 			return (1);
 		}
-		i++;
+		i += advance_quotes(ctx->user_input + i);
 	}
 	if (parenthesis_checker != 0)
 		return (1);

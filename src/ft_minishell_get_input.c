@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/18 20:24:41 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/04/18 23:26:44 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/04/19 02:42:18 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ static char	*read_input_line(t_context *ctx)
 	struct sigaction new_act;
 	struct sigaction old_act;
 
-	new_act.sa_flags = 0;
+	ft_bzero(&new_act, sizeof(struct sigaction));
 	new_act.sa_handler = rl_handler_sigint;
 	sigaction(SIGINT, &new_act, &old_act);
 	if (ctx->no_tty)

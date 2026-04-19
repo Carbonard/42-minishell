@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/03 15:47:56 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/04/19 00:13:33 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/04/19 02:37:57 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ static int	check_entry(char* ent_name, char *pattern, char**match)
 		if (ft_strncmp(match[0], ent_name, ft_strlen(match[0])))
 			return (0);
 		i++;
-		ent_name += ft_strlen(match[i]);
+		ent_name += ft_strlen(match[0]);
 	}
 	while (match[i])
 	{
@@ -90,6 +90,8 @@ static int	save_coincidences(t_dyn_ptr *entries, char *pattern)
 	return (entries->length);
 }
 
+void	remove_quotes(char *cmd);
+
 static char	*expand_wc_wrapper(char *cmd, char *start, char *end)
 {
 	char		*word;
@@ -99,6 +101,7 @@ static char	*expand_wc_wrapper(char *cmd, char *start, char *end)
 		word = ft_substr(start, 0, end - start);
 	else
 		word = ft_strdup(start);
+	remove_quotes(word);
 	init_dyn_ptr(&entries, 0);
 	if (ft_strchr(word, '*'))
 	{
@@ -110,27 +113,63 @@ static char	*expand_wc_wrapper(char *cmd, char *start, char *end)
 	return (cmd);
 }
 
+int	reduce_index(char *input, int i);
+
 char	*expand_wildcards(char *cmd)
 {
 	char		*start;
+	char		*prev_start;
 	char		*end;
-	int			index;
 
+	prev_start = NULL;
 	start = cmd;
-	index = 0;
 	while (start && *start)
 	{
-		end = ft_strchr(start + 1, ' ');
-		cmd = expand_wc_wrapper(cmd, start, end);
-		if (end)
-		{
-			index += (end - start);
-			start = cmd + index;
-			while (*start == ' ')
-				start++;
-		}
-		else
-			start = NULL;
+		if (prev_start == start)
+			break;
+		prev_start = start;
+		while (*start && *start != '*')
+			start += advance_quotes(start);
+		if (!*start)
+			break ;
+		end = start;
+		while (start > cmd && *start != ' ')
+			start = cmd + reduce_index(cmd, start - cmd);
+		if (start > cmd)
+			start++;
+		while (*end && *end != ' ')
+			end += advance_quotes(end);
+		if (*(start + 1) != '\'' && *(end - 1) != '\'')
+			cmd = expand_wc_wrapper(cmd, start, end);
+		start = cmd;
 	}
 	return (cmd);
 }
+
+// char	*expand_wildcards(char *cmd)
+// {
+// 	char		*start;
+// 	char		*end;
+// 	int			index;
+
+// 	start = cmd;
+// 	index = 0;
+// 	while (start && *start)
+// 	{
+// 		end = start;
+// 		while (*end && *end != ' ')
+// 			end += advance_quotes(end);
+// printf("end: ->%s<-\n", end);
+// 		cmd = expand_wc_wrapper(cmd, start, end);
+// 		if (end)
+// 		{
+// 			index += (end - start);
+// 			start = cmd + index;
+// 			while (*start == ' ')
+// 				start += advance_quotes(start);
+// 		}
+// 		else
+// 			start = NULL;
+// 	}
+// 	return (cmd);
+// }

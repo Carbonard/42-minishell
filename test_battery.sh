@@ -1,3 +1,5 @@
+
+
 echo $?
 
 echo hola
@@ -156,7 +158,7 @@ echo tes*
 
 echo *.sh
 
-cd test1
+cd test_directory
 
 echo *
 
@@ -182,6 +184,8 @@ cd src && cd .. && pwd
 
 ((cd src && (cd ..) && cd .. && cat < Makefile) && ls sdf || echo ag) | cat -e > testfile1
 
+echo $?
+
 cat testfile1
 
 cd src && cd .. cat < Makefile || cd ..
@@ -201,3 +205,8 @@ rm testfile4
 touch "':('"
 echo '*' '*l'
 rm "':('"
+
+touch abcdefghijklmnopqrstuvwxyz
+echo abcd*hij*no*st*xyz
+echo abcd'efg'h*ij'klmn'opq*tu*yz
+rm abcdefghijklmnopqrstuvwxyz

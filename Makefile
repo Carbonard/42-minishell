@@ -14,7 +14,7 @@ DYNARRAYS = dynamic_arrays/libft_dynarray.a
 
 BUILTINS = builtins builtins_others builtins_env exit clears
 INPUT = get_input heredocs check_syntax check_input
-EXECUTION = argv parser split_cmd execute_tree execute_node execute_leaf execute_command tree_utils
+EXECUTION = argv tree split_cmd execute_tree execute_node execute_leaf execute_command tree_utils
 OTHER = main environment debug error_messages wildcards wildcards_sort utils signals history init_config
 
 SRC_DIR = src
@@ -39,13 +39,13 @@ $(OBJ_DIR):
 	@mkdir -p $@
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c $(INCLUDE_DIR)/ft_minishell.h | $(OBJ_DIR)
-	@$(CC) $(CFLAGS) $< -c -o $@
+	$(CC) $(CFLAGS) $< -c -o $@
 
 $(NAME): $(LIBFT) $(DYNARRAYS) $(OBJ)
-	@$(CC) $(CFLAGS) $(OBJ) $(CLIBS) -o $@
+	$(CC) $(CFLAGS) $(OBJ) $(CLIBS) -o $@
 
 bash: $(NAME)
-	@mv $(NAME) bash
+	cp $(NAME) bash
 
 test: bash
 	@echo "Use the following command:"

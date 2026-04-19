@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/03 18:09:40 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/04/18 23:15:47 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/04/19 00:53:19 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,3 +69,5 @@ int		check_syntax(t_context *ctx);
 int		check_quotes(t_context *ctx);
 int		check_parenthesis(t_context *ctx);
 int		check_operator(t_context *ctx);
+
+int		advance_quotes(char *str);

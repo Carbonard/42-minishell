@@ -6,13 +6,13 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/16 16:54:26 by nyxssa            #+#    #+#             */
-/*   Updated: 2026/04/19 00:26:35 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/04/19 01:37:35 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_minishell_execution.h"
 
-static int	reduce_index(char *input, int i)
+int	reduce_index(char *input, int i)
 {
 	if (input[i] == ')')
 		i = find_open_par(input, i);

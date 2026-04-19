@@ -6,13 +6,13 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/17 17:03:15 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/04/19 00:33:21 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/04/19 01:51:35 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_minishell_execution.h"
 
-static void	remove_quotes(char *cmd)
+void	remove_quotes(char *cmd)
 {
 	char		quote;
 	int			shift;
