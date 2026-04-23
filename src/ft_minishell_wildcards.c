@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_minishell_wildcards.c                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: elangari <elangari@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/03 15:47:56 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/04/19 02:37:57 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/04/19 19:26:02 by elangari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ static char	*expand_wc(char *cmd, char *start, t_dyn_ptr *entries)
 	return (new_cmd);
 }
 
-static int	check_entry(char* ent_name, char *pattern, char**match)
+static int	check_entry(char *ent_name, char *pattern, char**match)
 {
 	int	i;
 
@@ -62,9 +62,9 @@ static int	check_entry(char* ent_name, char *pattern, char**match)
 		i++;
 	}
 	if (!(pattern[ft_strlen(pattern) - 1] != '*' && ft_strncmp(
-		ent_name + ft_strlen(ent_name) - ft_strlen(match[i - 1]), match[i - 1],
-		ft_strlen(match[i - 1]))))
-			return (1);
+				ent_name + ft_strlen(ent_name) - ft_strlen(match[i - 1]),
+				match[i - 1], ft_strlen(match[i - 1]))))
+		return (1);
 	return (0);
 }
 
@@ -113,7 +113,7 @@ static char	*expand_wc_wrapper(char *cmd, char *start, char *end)
 	return (cmd);
 }
 
-int	reduce_index(char *input, int i);
+int		reduce_index(char *input, int i);
 
 char	*expand_wildcards(char *cmd)
 {
@@ -126,7 +126,7 @@ char	*expand_wildcards(char *cmd)
 	while (start && *start)
 	{
 		if (prev_start == start)
-			break;
+			break ;
 		prev_start = start;
 		while (*start && *start != '*')
 			start += advance_quotes(start);

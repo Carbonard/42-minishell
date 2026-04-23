@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_minishell_exit.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: elangari <elangari@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/20 00:02:17 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/04/03 18:55:58 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/04/19 19:27:51 by elangari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,9 @@
 void	silent_exit(t_context *ctx, long status)
 {
 	free_all(ctx);
-	// printf("Exit with status: %d\n", (int)(status % 256));
 	exit(status % 256);
 }
+// printf("Exit with status: %d\n", (int)(status % 256));
 
 void	ft_exit(t_context *ctx, long status)
 {

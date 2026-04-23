@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_minishell_execute_command.c                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: elangari <elangari@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/02 22:35:42 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/04/19 00:15:55 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/04/19 19:40:14 by elangari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ int	find_cmd_path(t_context *ctx, char *path, char *cmd)
 
 static void	get_path(t_context *ctx, char *argv0, t_exec_args *args)
 {
-	struct stat state;
+	struct stat	state;
 
 	args->path = args->exec_args;
 	if (!ft_strncmp(argv0, "./", 2) || !ft_strncmp(argv0, "../", 3)
@@ -58,7 +58,8 @@ static void	get_path(t_context *ctx, char *argv0, t_exec_args *args)
 	else
 		args->args_length = find_cmd_path(ctx, args->path, argv0) + 1;
 	stat(args->path, &state);
-	if (!ctx->exit_status && !ctx->status && (state.st_mode & S_IFMT) == S_IFDIR)
+	if (!ctx->exit_status && !ctx->status
+		&& (state.st_mode & S_IFMT) == S_IFDIR)
 	{
 		ctx->exit_status = ES_CMD_NOT_EXEC;
 		ctx->status = MS_CMD_IS_DIR;
@@ -85,7 +86,8 @@ static void	save_argv(t_context *ctx, char **argv, t_exec_args *args)
 	args->static_argv[argv_i] = NULL;
 	if (args->args_length >= ARG_MAX || argv_i >= ARG_MAX - 1)
 	{
-		printf("last argv: %i: %s\n", argv_i-1, args->static_argv[argv_i-1]);
+		printf("last argv: %i: %s\n", argv_i - 1,
+			args->static_argv[argv_i - 1]);
 		ctx->status = MS_LONG_ARGS;
 		ctx->exit_status = ES_CMD_NOT_EXEC;
 	}
@@ -132,7 +134,6 @@ void	execute_command(t_context *ctx, char **argv)
 			args.args_length);
 	execve_tried = 0;
 	if (!ctx->status && !ctx->exit_status)
-
 	{
 		execve_tried = 1;
 		free_all(ctx);

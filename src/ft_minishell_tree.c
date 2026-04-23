@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_minishell_tree.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: elangari <elangari@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/16 16:54:26 by nyxssa            #+#    #+#             */
-/*   Updated: 2026/04/19 01:37:35 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/04/19 19:46:49 by elangari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ static int	divide_by_logic_op(
 	{
 		i = reduce_index(input->cmd, i);
 		if (i < 0)
-			break;
+			break ;
 		if ((input->cmd[i] == '&' && input->cmd[i - 1] == '&')
 			|| (input->cmd[i] == '|' && input->cmd[i - 1] == '|'))
 		{
@@ -60,7 +60,7 @@ static int	divide_by_pipes(
 	{
 		i = reduce_index(input->cmd, i);
 		if (i < 0)
-			break;
+			break ;
 		if (input->cmd[i] == '|')
 		{
 			input->sep = PIPE;

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_minishell_check_syntax.c                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: elangari <elangari@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/29 18:58:57 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/04/18 23:19:59 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/04/19 19:47:47 by elangari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,11 +133,10 @@ int	check_syntax(t_context *ctx)
 	{
 		ft_putstr_fd(ctx->shell_name, 2);
 		ft_putstr_fd(": syntax error near unexpected token `", 2);
-		ft_putchar_fd(ctx->user_input[i-1], 2);
+		ft_putchar_fd(ctx->user_input[i - 1], 2);
 		ft_putendl_fd("'", 2);
 		ctx->status = MS_E_SYNTAX;
 		ctx->exit_status = 2;
 	}
 	return (ctx->status);
 }
- 

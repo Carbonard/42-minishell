@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_minishell_heredocs.c                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: elangari <elangari@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/29 17:22:13 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/04/18 23:38:20 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/04/19 19:19:23 by elangari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,13 +84,13 @@ void	read_heredocs(t_context *ctx)
 void	expand_heredoc(t_context *ctx)
 {
 	size_t	hd_i;
-	// int		str_i;
 
 	hd_i = 0;
 	while (hd_i < ctx->here_docs.length)
 	{
 		if (ctx->here_docs.arr[hd_i])
-			ctx->here_docs.arr[hd_i] = expand_input(ctx, ctx->here_docs.arr[hd_i]);
+			ctx->here_docs.arr[hd_i]
+				= expand_input(ctx, ctx->here_docs.arr[hd_i]);
 		hd_i++;
 	}
 }
@@ -108,9 +108,11 @@ int	spread_heredocs(t_command_tree *node, t_dyn_ptr *hd, t_dyn_ptr *eofs, int n)
 			if (node->cmd[i] == '<' && node->cmd[i + 1] == '<')
 			{
 				last_line = ft_strrchr(hd->arr[n], '\n');
-				if (!last_line && !ft_strncmp(hd->arr[n], eofs->arr[n], ft_strlen(eofs->arr[n])))
+				if (!last_line && !ft_strncmp(hd->arr[n],
+						eofs->arr[n], ft_strlen(eofs->arr[n])))
 					hd->arr[n][0] = 0;
-				else if (last_line && (!ft_strncmp(last_line + 1, eofs->arr[n], ft_strlen(eofs->arr[n]) + 1)))
+				else if (last_line && (!ft_strncmp(last_line + 1, eofs->arr[n],
+							ft_strlen(eofs->arr[n]) + 1)))
 					*(last_line + 1) = 0;
 				node->here_doc = hd->arr[n];
 				n++;

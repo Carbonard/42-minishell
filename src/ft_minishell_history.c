@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_minishell_history.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: elangari <elangari@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/18 16:02:40 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/04/18 16:55:08 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/04/19 19:49:22 by elangari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 static void	remove_newlines(char *input)
 {
-	int 	i;
+	int		i;
 	char	quote;
 
 	if (!input || !input[0])
@@ -33,8 +33,8 @@ static void	remove_newlines(char *input)
 			input[i] = ' ';
 		i++;
 	}
-	if (input[i-1] == '\n')
-		input[i-1] = 0;
+	if (input[i - 1] == '\n')
+		input[i - 1] = 0;
 }
 
 void	add_input_history(t_context *ctx)
@@ -55,7 +55,7 @@ void	add_input_history(t_context *ctx)
 		history_entry = aux;
 		i++;
 	}
-	if (history_entry && history_entry[0] && history_entry[0]!= ' ')
+	if (history_entry && history_entry[0] && history_entry[0] != ' ')
 		add_history(history_entry);
 	free(history_entry);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_minishell_error_messages.c                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: elangari <elangari@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/31 16:59:44 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/04/18 21:50:21 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/04/19 19:28:30 by elangari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ void	shell_perror(t_context *ctx, char *s)
 		ft_putstr_fd(": ", 2);
 	}
 	if (ctx->status == MS_TOO_MANY_ARGS)
-		ft_putendl_fd("too many arguments",2 );
+		ft_putendl_fd("too many arguments", 2);
 	else if (ctx->status == MS_OLDPWD_NOT_SET)
 		ft_putendl_fd("OLDPWD not set", 2);
 	else if (ctx->status == MS_SE_EOF)

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_minishell_split_cmd.c                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: elangari <elangari@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/17 17:03:15 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/04/19 01:51:35 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/04/19 19:45:56 by elangari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ static int	get_redirection(char *token, int i, t_redirection *redir)
 			remove_quotes(redir->file_in.arr[redir->file_in.length - 1]);
 		}
 		else
-			add_ptr(&(redir->file_in), ft_calloc(1,1));
+			add_ptr(&(redir->file_in), ft_calloc(1, 1));
 	}
 	else if (token[original_i] == '>')
 	{
@@ -91,7 +91,7 @@ int	advance_quotes(char *str)
 	return (1);
 }
 
-char *get_token(char *cmd)
+char	*get_token(char *cmd)
 {
 	int		i;
 
@@ -119,7 +119,7 @@ char	**split_cmd(char *cmd, t_redirection *redir)
 		while (cmd[i] == ' ' || cmd[i] == '\n')
 			i++;
 		if (!cmd[i])
-			break;
+			break ;
 		token = get_token(cmd + i);
 		i += ft_strlen(token);
 		if (is_redirection(token))

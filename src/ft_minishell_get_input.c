@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_minishell_get_input.c                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: elangari <elangari@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/18 20:24:41 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/04/19 02:42:18 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/04/19 19:56:27 by elangari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,10 +32,10 @@ static void	get_prompt(t_context *ctx, char *prompt)
 
 static char	*read_input_line(t_context *ctx)
 {
-	char			prompt[MAX_PROMPT];
-	char			*read_line;
-	struct sigaction new_act;
-	struct sigaction old_act;
+	char				prompt[MAX_PROMPT];
+	char				*read_line;
+	struct sigaction	new_act;
+	struct sigaction	old_act;
 
 	ft_bzero(&new_act, sizeof(struct sigaction));
 	new_act.sa_handler = rl_handler_sigint;
@@ -60,6 +60,7 @@ static char	*read_input_line(t_context *ctx)
 static void	check_and_extend_input(t_context *ctx)
 {
 	char	*input_extension;
+	char	*aux;
 
 	ft_putstr_fd("> ", 1);
 	input_extension = get_next_line(0);
@@ -76,7 +77,7 @@ static void	check_and_extend_input(t_context *ctx)
 	}
 	if (!g_last_signal)
 	{
-		char *aux = ft_strjoin_char(ctx->user_input, input_extension, '\n');
+		aux = ft_strjoin_char(ctx->user_input, input_extension, '\n');
 		free(ctx->user_input);
 		free(input_extension);
 		ctx->user_input = aux;

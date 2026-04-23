@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_minishell_parser.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: elangari <elangari@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/16 16:54:26 by nyxssa            #+#    #+#             */
-/*   Updated: 2026/04/19 00:25:06 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/04/19 19:12:59 by elangari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,8 @@ static int	reduce_index(char *input, int i)
 	return (i - 1);
 }
 
-static int	divide_by_logic_op(t_command_tree *input, t_command_tree **first, t_command_tree **second)
+static int	divide_by_logic_op(t_command_tree *input,
+	t_command_tree **first, t_command_tree **second)
 {
 	int	i;
 
@@ -30,7 +31,7 @@ static int	divide_by_logic_op(t_command_tree *input, t_command_tree **first, t_c
 	{
 		i = reduce_index(input->cmd, i);
 		if (i < 0)
-			break;
+			break ;
 		if ((input->cmd[i] == '&' && input->cmd[i - 1] == '&')
 			|| (input->cmd[i] == '|' && input->cmd[i - 1] == '|'))
 		{
@@ -49,7 +50,8 @@ static int	divide_by_logic_op(t_command_tree *input, t_command_tree **first, t_c
 	return (0);
 }
 
-static int	divide_by_pipes(t_command_tree *input, t_command_tree **first, t_command_tree **second)
+static int	divide_by_pipes(t_command_tree *input,
+	t_command_tree **first, t_command_tree **second)
 {
 	int	i;
 
@@ -58,7 +60,7 @@ static int	divide_by_pipes(t_command_tree *input, t_command_tree **first, t_comm
 	{
 		i = reduce_index(input->cmd, i);
 		if (i < 0)
-			break;
+			break ;
 		if (input->cmd[i] == '|')
 		{
 			input->sep = PIPE;

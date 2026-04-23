@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_minishell_wildcards_sort.c                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: elangari <elangari@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/03 15:51:23 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/04/18 00:41:45 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/04/19 19:43:19 by elangari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ static int	lowalnumcmp(char *s1, char *s2)
 
 	i1 = 0;
 	i2 = 0;
-	while(s1[i1] && s2[i2])
+	while (s1[i1] && s2[i2])
 	{
 		while (!ft_isalnum(s1[i1]) && s1[i1])
 			i1++;
@@ -39,12 +39,12 @@ static int	lowalnumcmp(char *s1, char *s2)
 
 static int	alphacmp(char *s1, char *s2)
 {
-	int i1;
+	int	i1;
 	int	i2;
 
 	i1 = 0;
 	i2 = 0;
-	while(s1[i1] && s2[i2])
+	while (s1[i1] && s2[i2])
 	{
 		while (!ft_isalpha(s1[i1]) && s1[i1])
 			i1++;
@@ -62,7 +62,7 @@ static int	alphacmp(char *s1, char *s2)
 	return (0);
 }
 
-static int direntry_cmp(char *s1, char *s2)
+static int	direntry_cmp(char *s1, char *s2)
 {
 	int	cmp;
 
@@ -84,7 +84,7 @@ void	sort_entries(char **arr)
 	main_i = 0;
 	while (arr[main_i])
 	{
-		secondary_i = main_i + 1;	
+		secondary_i = main_i + 1;
 		while (arr[secondary_i])
 		{
 // printf("main: %s\nsecond: %s\n", arr[main_i], arr[secondary_i]);

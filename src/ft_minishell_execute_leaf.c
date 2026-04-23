@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_minishell_execute_leaf.c                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: elangari <elangari@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/29 03:50:34 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/04/18 21:31:29 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/04/19 19:33:57 by elangari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,8 @@ int	manage_redirection(t_context *ctx, t_redirection *redir, char *here_doc)
 	i = 0;
 	while (i < redir->type_in.length)
 	{
-		if (manage_redirection_in(ctx, redir->type_in.arr[i], redir->file_in.arr[i], here_doc))
+		if (manage_redirection_in(ctx, redir->type_in.arr[i],
+				redir->file_in.arr[i], here_doc))
 		{
 			ctx->status = MS_BADFILE;
 			return (0);
@@ -87,7 +88,8 @@ int	manage_redirection(t_context *ctx, t_redirection *redir, char *here_doc)
 	i = 0;
 	while (i < redir->type_out.length)
 	{
-		if (manage_redirection_out(ctx, redir->type_out.arr[i], redir->file_out.arr[i]))
+		if (manage_redirection_out(ctx, redir->type_out.arr[i],
+				redir->file_out.arr[i]))
 		{
 			ctx->status = MS_BADFILE;
 			return (0);
