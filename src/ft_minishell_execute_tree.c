@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/18 19:24:30 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/04/03 18:57:46 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/04/26 12:10:49 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,7 @@ int	get_status(t_context *ctx, int wstatus)
 	else if (WIFSIGNALED(wstatus))
 		ctx->exit_status = WTERMSIG(wstatus) + 128;
 	else
-		ctx->exit_status = 142;
-	//no se yo
+		ctx->exit_status = -1;
 	return (ctx->exit_status);
 }
 

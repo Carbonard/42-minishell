@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/16 14:59:51 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/04/18 23:15:47 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/04/26 12:49:45 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,19 @@ void	manage_multiple_input(t_context *ctx)
 	close(original_in);
 }
 
+static void	manage_single_input(t_context *ctx)
+{
+	read_heredocs(ctx);
+	add_input_history(ctx);
+	if (g_last_signal)
+		return ;
+	expand_heredoc(ctx);
+	ctx->cmd_tree.cmd = ctx->user_input;
+	create_tree(&ctx->cmd_tree);
+	spread_heredocs(&ctx->cmd_tree, &ctx->here_docs, &ctx->eofs, 0);
+	execute_input(ctx);
+}
+
 static void	io_while(t_context *ctx)
 {
 	while (ctx->status != MS_EXIT)
@@ -47,20 +60,7 @@ static void	io_while(t_context *ctx)
 			if (ft_strchr(ctx->user_input, '\n'))
 				manage_multiple_input(ctx);
 			else
-			{
-				read_heredocs(ctx);
-				add_input_history(ctx);
-				if (g_last_signal)
-				{
-					clear_input(ctx);
-					continue ;
-				}
-				expand_heredoc(ctx);
-				ctx->cmd_tree.cmd = ctx->user_input;
-				create_tree(&ctx->cmd_tree);
-				spread_heredocs(&ctx->cmd_tree, &ctx->here_docs, &ctx->eofs, 0);
-				execute_input(ctx);
-			}
+				manage_single_input(ctx);
 		}
 		else if (ctx->status == MS_EXIT)
 			break ;

@@ -6,13 +6,12 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/27 17:06:30 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/04/17 00:21:23 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/04/26 12:47:55 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_dynarray.h"
 
-#include <stdio.h>
 int	init_dyn_ptr(t_dyn_ptr *d_array, size_t size)
 {
 	d_array->size = size;
@@ -43,7 +42,7 @@ int	add_ptr(t_dyn_ptr *d_array, char *str)
 	if (d_array->length + 1 >= d_array->size)
 	{
 		if (ft_realloc2((void ***)&(d_array->arr),
-			d_array->size, d_array->size * 2))
+				d_array->size, d_array->size * 2))
 			d_array->size *= 2;
 		else
 			return (0);

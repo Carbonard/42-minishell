@@ -13,7 +13,7 @@ LIBFT = libft/libft.a
 DYNARRAYS = dynamic_arrays/libft_dynarray.a
 
 BUILTINS = builtins builtins_others builtins_env exit clears
-INPUT = get_input heredocs check_syntax check_input
+INPUT = get_input read_heredocs heredocs check_syntax check_input
 EXECUTION = argv tree split_cmd execute_tree execute_node execute_leaf execute_command tree_utils
 OTHER = main environment debug error_messages wildcards wildcards_sort utils signals history init_config
 
@@ -24,19 +24,14 @@ SRC = $(FILES:%=$(SRC_DIR)/ft_minishell_%.c)
 OBJ_DIR = obj
 OBJ = $(SRC:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
 
-print:
-	@echo $(SRC)
-	@echo '---------------------------------'
-	@echo $(OBJ)
-
 $(LIBFT): force
-	@make -C libft
+	make -C libft
 
 $(DYNARRAYS): force
-	@make -C dynamic_arrays
+	make -C dynamic_arrays
 
 $(OBJ_DIR):
-	@mkdir -p $@
+	mkdir -p $@
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c $(INCLUDE_DIR)/ft_minishell.h | $(OBJ_DIR)
 	$(CC) $(CFLAGS) $< -c -o $@
@@ -52,9 +47,13 @@ test: bash
 	@echo 'source ./tester.sh'
 
 clean:
-	@rm -rf $(OBJ_DIR)
+	make clean -C libft
+	make clean -C dynamic_arrays
+	rm -rf $(OBJ_DIR)
 
 fclean: clean
-	@rm -f $(NAME)
+	make fclean -C libft
+	make fclean -C dynamic_arrays
+	rm -f $(NAME)
 
 re: fclean all

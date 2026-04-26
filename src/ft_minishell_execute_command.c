@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_minishell_execute_command.c                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: elangari <elangari@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/02 22:35:42 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/04/19 19:40:14 by elangari         ###   ########.fr       */
+/*   Updated: 2026/04/26 12:39:02 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,7 +98,7 @@ static size_t
 {
 	t_str_list	*env;
 	int			env_i;
-// printf("ARG_MAX:%u KB\nstack used: %ld KB\n", ARG_MAX/1024, ((char*)ctx - (char*)&env_i)/1024);
+
 	if (ctx->status || ctx->exit_status)
 		return (0);
 	env = ctx->env;
@@ -124,26 +124,20 @@ static size_t
 void	execute_command(t_context *ctx, char **argv)
 {
 	t_exec_args	args;
-	int			execve_tried;
 
-	if (!argv || !argv[0])
-		return ;
+	ctx->exit_status = 0;
 	get_path(ctx, argv[0], &args);
 	save_argv(ctx, argv, &args);
 	args.args_length = list_to_strarray(ctx, args.exec_args, args.env,
 			args.args_length);
-	execve_tried = 0;
+	free_split(argv);
 	if (!ctx->status && !ctx->exit_status)
 	{
-		execve_tried = 1;
 		free_all(ctx);
-		free_split(argv);
 		execve(args.path, args.static_argv, args.env);
 	}
 	if (ctx->exit_status == ES_CMD_NOT_FOUND)
 		custom_error(args.path, "command not found");
 	else
 		shell_perror(ctx, args.path);
-	if (!execve_tried)
-		free_split(argv);
 }

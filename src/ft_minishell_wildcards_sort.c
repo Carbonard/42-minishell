@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_minishell_wildcards_sort.c                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: elangari <elangari@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/03 15:51:23 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/04/19 19:43:19 by elangari         ###   ########.fr       */
+/*   Updated: 2026/04/26 12:07:25 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,6 @@ void	sort_entries(char **arr)
 		secondary_i = main_i + 1;
 		while (arr[secondary_i])
 		{
-// printf("main: %s\nsecond: %s\n", arr[main_i], arr[secondary_i]);
 			if (direntry_cmp(arr[main_i], arr[secondary_i]) > 0)
 			{
 				tmp = arr[main_i];

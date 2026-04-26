@@ -3,44 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   ft_minishell_split_cmd.c                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: elangari <elangari@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/17 17:03:15 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/04/19 19:45:56 by elangari         ###   ########.fr       */
+/*   Updated: 2026/04/26 12:04:27 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_minishell_execution.h"
 
-void	remove_quotes(char *cmd)
+static int	get_redir_type(char *token, int i, t_redirection *redir)
 {
-	char		quote;
-	int			shift;
-
-	shift = 0;
-	quote = 0;
-	while (*cmd)
-	{
-		if (!quote && (*cmd == '\'' || *cmd == '"'))
-		{
-			quote = *cmd;
-			shift++;
-		}
-		else if (quote && *cmd == quote)
-			shift++;
-		else
-			*(cmd - shift) = *cmd;
-		cmd++;
-	}
-	*(cmd - shift) = 0;
-}
-
-static int	get_redirection(char *token, int i, t_redirection *redir)
-{
-	int	original_i;
-	int	start;
-
-	original_i = i;
 	if (token[i] == '<' && token [i + 1] == '<')
 		add_int(&(redir->type_in), HERE_DOC);
 	else if (token[i] == '>' && token [i + 1] == '>')
@@ -51,6 +24,16 @@ static int	get_redirection(char *token, int i, t_redirection *redir)
 		add_int(&(redir->type_out), REDIRECTION_OUT);
 	while (token[i] == '<' || token[i] == '>' || token[i] == ' ')
 		i++;
+	return (i);
+}
+
+static int	get_redirection(char *token, int i, t_redirection *redir)
+{
+	int	original_i;
+	int	start;
+
+	original_i = i;
+	i = get_redir_type(token, i, redir);
 	start = i;
 	while (token[i] && !is_metachar(token[i]))
 		i++;
@@ -70,25 +53,6 @@ static int	get_redirection(char *token, int i, t_redirection *redir)
 		remove_quotes(redir->file_out.arr[redir->file_out.length - 1]);
 	}
 	return (i);
-}
-
-int	advance_quotes(char *str)
-{
-	char	quote;
-	int		i;
-
-	i = 0;
-	if (str[i] == '\'' || str[i] == '"')
-	{
-		quote = str[i];
-		i++;
-		while (str[i] && str[i] != quote)
-		{
-			i++;
-		}
-		return (i + 1);
-	}
-	return (1);
 }
 
 char	*get_token(char *cmd)

@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/03 19:05:58 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/04/19 00:21:59 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/04/26 12:04:39 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,4 +27,46 @@ int	is_redirection(char *str)
 	if (str[0] == '<' || str[0] == '>')
 		return (1);
 	return (0);
+}
+
+void	remove_quotes(char *cmd)
+{
+	char		quote;
+	int			shift;
+
+	shift = 0;
+	quote = 0;
+	while (*cmd)
+	{
+		if (!quote && (*cmd == '\'' || *cmd == '"'))
+		{
+			quote = *cmd;
+			shift++;
+		}
+		else if (quote && *cmd == quote)
+			shift++;
+		else
+			*(cmd - shift) = *cmd;
+		cmd++;
+	}
+	*(cmd - shift) = 0;
+}
+
+int	advance_quotes(char *str)
+{
+	char	quote;
+	int		i;
+
+	i = 0;
+	if (str[i] == '\'' || str[i] == '"')
+	{
+		quote = str[i];
+		i++;
+		while (str[i] && str[i] != quote)
+		{
+			i++;
+		}
+		return (i + 1);
+	}
+	return (1);
 }

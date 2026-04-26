@@ -209,4 +209,6 @@ rm "':('"
 touch abcdefghijklmnopqrstuvwxyz
 echo abcd*hij*no*st*xyz
 echo abcd'efg'h*ij'klmn'opq*tu*yz
+echo *efghijklmnop*qrstuvw*
+echo a*b**hij*rs*
 rm abcdefghijklmnopqrstuvwxyz

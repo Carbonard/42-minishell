@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_minishell_execute_leaf.c                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: elangari <elangari@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/29 03:50:34 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/04/19 19:33:57 by elangari         ###   ########.fr       */
+/*   Updated: 2026/04/26 12:38:49 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,6 @@ static int
 {
 	int	fd;
 
-	// printf("Redirectinos in\n");
 	if (type == REDIRECTION_IN)
 	{
 		fd = open(file, O_RDONLY);
@@ -31,7 +30,6 @@ static int
 	}
 	else if (type == HERE_DOC)
 	{
-		// printf("WTF\n");
 		pipe(ctx->pipe_fds);
 		ft_putstr_fd(here_doc, ctx->pipe_fds[1]);
 		close(ctx->pipe_fds[1]);
@@ -105,10 +103,8 @@ int	execute_leaf(t_context *ctx, t_command_tree *node)
 	char	**cmd_argv;
 
 	cmd_argv = get_argv_and_redir(ctx, node->cmd, &(node->redir));
-// printf("node.cmd=%s\nredir:%i\n", node->cmd, node->redir.type_in.arr[0]);
-	if (cmd_argv[0] == NULL)
+	if (!cmd_argv)
 	{
-		free_split(cmd_argv);
 		ctx->read_exit_status = 1;
 		return (0);
 	}
@@ -121,10 +117,7 @@ int	execute_leaf(t_context *ctx, t_command_tree *node)
 		if (node->redir.type_in.length || node->redir.type_out.length)
 			manage_redirection(ctx, &(node->redir), node->here_doc);
 		if (ctx->status == MS_SUCCESS)
-		{
-			ctx->exit_status = 0;
 			execute_command(ctx, cmd_argv);
-		}
 		else
 			free_split(cmd_argv);
 		silent_exit(ctx, ctx->exit_status);

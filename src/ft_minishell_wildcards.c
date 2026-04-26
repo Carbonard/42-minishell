@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_minishell_wildcards.c                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: elangari <elangari@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/03 15:47:56 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/04/19 19:26:02 by elangari         ###   ########.fr       */
+/*   Updated: 2026/04/26 12:25:10 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,8 +90,6 @@ static int	save_coincidences(t_dyn_ptr *entries, char *pattern)
 	return (entries->length);
 }
 
-void	remove_quotes(char *cmd);
-
 static char	*expand_wc_wrapper(char *cmd, char *start, char *end)
 {
 	char		*word;
@@ -113,8 +111,6 @@ static char	*expand_wc_wrapper(char *cmd, char *start, char *end)
 	return (cmd);
 }
 
-int		reduce_index(char *input, int i);
-
 char	*expand_wildcards(char *cmd)
 {
 	char		*start;
@@ -123,10 +119,8 @@ char	*expand_wildcards(char *cmd)
 
 	prev_start = NULL;
 	start = cmd;
-	while (start && *start)
+	while (prev_start != start && *start)
 	{
-		if (prev_start == start)
-			break ;
 		prev_start = start;
 		while (*start && *start != '*')
 			start += advance_quotes(start);
@@ -145,31 +139,3 @@ char	*expand_wildcards(char *cmd)
 	}
 	return (cmd);
 }
-
-// char	*expand_wildcards(char *cmd)
-// {
-// 	char		*start;
-// 	char		*end;
-// 	int			index;
-
-// 	start = cmd;
-// 	index = 0;
-// 	while (start && *start)
-// 	{
-// 		end = start;
-// 		while (*end && *end != ' ')
-// 			end += advance_quotes(end);
-// printf("end: ->%s<-\n", end);
-// 		cmd = expand_wc_wrapper(cmd, start, end);
-// 		if (end)
-// 		{
-// 			index += (end - start);
-// 			start = cmd + index;
-// 			while (*start == ' ')
-// 				start += advance_quotes(start);
-// 		}
-// 		else
-// 			start = NULL;
-// 	}
-// 	return (cmd);
-// }

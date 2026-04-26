@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/30 17:01:31 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/03/25 15:48:42 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/04/26 12:45:12 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ static char	**save_words(char const *s, char c, char **spl)
 				length++;
 			spl[words] = malloc((length + 1) * sizeof(char));
 			if (!spl[words])
-				return(free_split(spl));
+				return (free_split(spl));
 			ft_strlcpy(spl[words], s, length + 1);
 			words++;
 			s += length;
@@ -80,6 +80,6 @@ char	**ft_split(char const *s, char c)
 	spl = malloc(count_words(s, c) * sizeof(char *));
 	if (!spl)
 		return (NULL);
-	spl = save_words(s,c, spl);
+	spl = save_words(s, c, spl);
 	return (spl);
 }

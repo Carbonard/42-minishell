@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/03 23:34:37 by rselva-2          #+#    #+#             */
-/*   Updated: 2025/12/04 21:37:08 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/04/26 12:46:22 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,9 +39,9 @@ static int	add_text(char **line, int fd, int *read_bytes)
 char	*get_next_line(int fd)
 {
 	static char	saved[1024][BUFFER_SIZE];
-	char	*line;
-	char	*endl;
-	int		read_bytes;
+	char		*line;
+	char		*endl;
+	int			read_bytes;
 
 	if (fd < 0 || BUFFER_SIZE < 1)
 		return (NULL);
@@ -62,5 +62,5 @@ char	*get_next_line(int fd)
 	{
 		saved[fd][0] = 0;
 	}
-	return (line);	
+	return (line);
 }
