@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/29 03:50:34 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/04/26 12:38:49 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/04/30 20:04:12 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ static int
 		dup2(fd, STDIN_FILENO);
 		close(fd);
 	}
-	else if (type == HERE_DOC)
+	else if (type == HERE_DOC && here_doc)
 	{
 		pipe(ctx->pipe_fds);
 		ft_putstr_fd(here_doc, ctx->pipe_fds[1]);

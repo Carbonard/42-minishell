@@ -212,3 +212,24 @@ echo abcd'efg'h*ij'klmn'opq*tu*yz
 echo *efghijklmnop*qrstuvw*
 echo a*b**hij*rs*
 rm abcdefghijklmnopqrstuvwxyz
+
+
+echo hola
+
+cat << eof1 && cat << eof2 && cat << eof3
+test1
+eof1
+test2
+eof2
+test3
+eof3
+
+
+cat << eof1 << eof2 && cat << eof3
+-test1
+eof1
+-test2
+eof2
+-test3
+eof3
+

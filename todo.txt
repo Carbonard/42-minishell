@@ -30,6 +30,15 @@ exit 8	999999999999999999
 
 wildcards
 
+error cd / cd ~ sin HOME
+
+cd .. en carpeta borrada hace cosas con OLDPWD
+
+mini dentro de mini + ^C
+
+cat algo | > file no genera file
+
+env -i espacios
 
 remove debug
 

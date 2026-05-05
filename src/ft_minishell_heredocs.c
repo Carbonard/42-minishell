@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/26 11:46:47 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/04/26 11:57:48 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/05/05 10:32:36 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,13 +38,16 @@ static int	assign_heredoc(
 	{
 		if (node->cmd[i] == '<' && node->cmd[i + 1] == '<')
 		{
-			last_line = ft_strrchr(hd->arr[n], '\n');
-			if (!last_line && !ft_strncmp(hd->arr[n],
-					eofs->arr[n], ft_strlen(eofs->arr[n])))
-				hd->arr[n][0] = 0;
-			else if (last_line && (!ft_strncmp(last_line + 1, eofs->arr[n],
-						ft_strlen(eofs->arr[n]) + 1)))
-				*(last_line + 1) = 0;
+			if (hd->arr[n])
+			{
+				last_line = ft_strrchr(hd->arr[n], '\n');
+				if (!last_line && !ft_strncmp(hd->arr[n],
+						eofs->arr[n], ft_strlen(eofs->arr[n])))
+					hd->arr[n][0] = 0;
+				else if (last_line && (!ft_strncmp(last_line + 1, eofs->arr[n],
+							ft_strlen(eofs->arr[n]) + 1)))
+					*(last_line + 1) = 0;
+			}
 			node->here_doc = hd->arr[n];
 			n++;
 		}

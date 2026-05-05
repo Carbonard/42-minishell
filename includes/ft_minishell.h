@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/16 14:57:20 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/04/26 12:52:58 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/04/30 21:45:44 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,8 @@ enum e_status
 	MS_LONG_ARGS,
 	MS_NOT_VALID_ID,
 	MS_BADFILE,
-	MS_CMD_IS_DIR
+	MS_CMD_IS_DIR,
+	MS_HOME_NOT_SET
 };
 
 enum e_exit_status

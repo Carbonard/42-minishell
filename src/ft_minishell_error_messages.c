@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_minishell_error_messages.c                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: elangari <elangari@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/31 16:59:44 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/04/19 19:28:30 by elangari         ###   ########.fr       */
+/*   Updated: 2026/04/30 21:37:54 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,8 @@ void	shell_perror(t_context *ctx, char *s)
 		ft_putendl_fd("too many arguments", 2);
 	else if (ctx->status == MS_OLDPWD_NOT_SET)
 		ft_putendl_fd("OLDPWD not set", 2);
+	else if (ctx->status == MS_HOME_NOT_SET)
+		ft_putendl_fd("HOME not set", 2);
 	else if (ctx->status == MS_SE_EOF)
 		ft_putendl_fd("syntax error: unexpected end of file", 2);
 	else if (ctx->status == MS_SE_QUOTES)
@@ -77,7 +79,8 @@ void	builtins_errors(t_context *ctx, char **argv)
 	}
 	if ((!ft_strncmp(argv[0], "cd", 3) || !ft_strncmp(argv[0], "exit", 5)
 			|| !ft_strncmp(argv[0], "export", 7))
-		&& ctx->status != MS_TOO_MANY_ARGS && ctx->status != MS_OLDPWD_NOT_SET)
+		&& ctx->status != MS_TOO_MANY_ARGS && ctx->status != MS_OLDPWD_NOT_SET
+		&& ctx->status != MS_HOME_NOT_SET)
 		shell_arg_error(ctx, argv);
 	else
 		shell_perror(ctx, argv[0]);

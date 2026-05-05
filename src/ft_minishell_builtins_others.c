@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/16 16:52:14 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/04/18 20:10:37 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/04/30 21:33:04 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,6 +73,8 @@ int	cd(t_context *ctx, char **argv)
 		argv[1] = ft_strdup(find_env_value(ctx, "HOME"));
 	else if (argv[2] != NULL)
 		return (MS_TOO_MANY_ARGS);
+	if (!argv[1])
+		return (MS_HOME_NOT_SET);
 	if (!ft_strncmp(argv[1], "-", 2))
 	{
 		free(argv[1]);
@@ -86,5 +88,7 @@ int	cd(t_context *ctx, char **argv)
 	if (chdir(argv[1]))
 		return (MS_E_PATH_NFOUND);
 	export(ctx, old_dir);
+	free (argv[1]);
+	argv[1] = NULL;
 	return (MS_SUCCESS);
 }

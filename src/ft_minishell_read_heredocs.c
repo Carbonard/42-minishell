@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/29 17:22:13 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/04/26 12:39:26 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/05/05 10:38:22 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,10 @@ static void	read_hd(t_context *ctx, char *eof)
 		new_line = get_next_line(0);
 	}
 	here_doc = read_hd_aux(ctx, here_doc, new_line, eof);
-	add_ptr(&ctx->here_docs, here_doc);
+	if (here_doc)
+		add_ptr(&ctx->here_docs, here_doc);
+	else
+		add_ptr(&ctx->here_docs, ft_calloc(1, 1));
 	add_ptr(&ctx->eofs, eof);
 }
 

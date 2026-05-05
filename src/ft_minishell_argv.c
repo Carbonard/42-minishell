@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/30 23:34:26 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/04/26 12:38:17 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/04/30 20:01:26 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,5 +109,6 @@ char	**get_argv_and_redir(t_context *ctx, char *cmd, t_redirection *redir)
 	if (argv && argv[0])
 		return (argv);
 	free(argv);
+	manage_redirection(ctx, redir, NULL);
 	return (NULL);
 }
