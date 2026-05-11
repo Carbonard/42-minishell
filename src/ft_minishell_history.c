@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_minishell_history.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: elangari <elangari@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/18 16:02:40 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/04/19 19:49:22 by elangari         ###   ########.fr       */
+/*   Updated: 2026/05/11 23:17:11 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ void	add_input_history(t_context *ctx)
 	char	*aux;
 	size_t	i;
 
-	if (ctx->no_tty)
+	if (ctx->no_tty == 1)
 		return ;
 	remove_newlines(ctx->user_input);
 	history_entry = ft_strdup(ctx->user_input);

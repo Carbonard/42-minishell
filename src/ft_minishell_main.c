@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/16 14:59:51 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/05/11 23:09:29 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/05/11 23:17:17 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ void	manage_multiple_input(t_context *ctx)
 	close(pipe_fds[1]);
 	clear_input(ctx);
 	original_tty = ctx->no_tty;
-	ctx->no_tty = 1;
+	ctx->no_tty = 2;
 	io_while(ctx);
 	ctx->no_tty = original_tty;
 	dup2(original_in, STDIN_FILENO);
