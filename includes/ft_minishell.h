@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/16 14:57:20 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/04/30 21:45:44 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/05/11 19:48:26 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,9 +126,12 @@ typedef struct s_context
 // init_config
 void	check_interactive(t_context *ctx, int argc, char **argv);
 void	set_shell(t_context *ctx, char *shell_name);
+int		set_pwd(t_context *ctx);
+void	increment_shlvl(t_context *ctx);
 // signals
 void	rl_handler_sigint(int sig);
 void	generic_handler_sigint(int sig);
+void	set_default_signals(void);
 // history
 void	add_input_history(t_context *ctx);
 // environment

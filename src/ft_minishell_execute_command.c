@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/02 22:35:42 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/04/26 12:39:02 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/05/11 19:45:23 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ int	find_cmd_path(t_context *ctx, char *path, char *cmd)
 		i++;
 	}
 	free_split(env_paths);
-	strlcpy(path, cmd, ARG_MAX);
+	ft_strlcpy(path, cmd, ARG_MAX);
 	ctx->exit_status = ES_CMD_NOT_FOUND;
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/29 03:50:34 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/04/30 20:04:12 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/05/11 19:54:49 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,6 +122,7 @@ int	execute_leaf(t_context *ctx, t_command_tree *node)
 			free_split(cmd_argv);
 		silent_exit(ctx, ctx->exit_status);
 	}
+	signal(SIGINT, SIG_IGN);
 	free_split(cmd_argv);
 	return (pid);
 }

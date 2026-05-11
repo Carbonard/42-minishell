@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/16 14:59:51 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/04/26 12:49:45 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/05/11 19:49:33 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,7 @@ static void	io_while(t_context *ctx)
 {
 	while (ctx->status != MS_EXIT)
 	{
+		set_default_signals();
 		ctx->status = MS_SUCCESS;
 		init_dyn_ptr(&ctx->here_docs, 0);
 		init_dyn_ptr(&ctx->eofs, 0);
@@ -69,23 +70,24 @@ static void	io_while(t_context *ctx)
 	ctx->status = MS_SUCCESS;
 }
 
+void	initial_configurations(t_context *ctx, int argc, char **argv, char **env)
+{
+	save_env(ctx, env);
+	set_shell(ctx, argv[0]);
+	set_pwd(ctx);
+	increment_shlvl(ctx);
+	check_interactive(ctx, argc, argv);
+}
+
 int	main(int argc, char **argv, char **env)
 {
 	t_context			ctx;
-	struct sigaction	act;
-	struct sigaction	actt;
 
 	g_last_signal = 0;
+	set_default_signals();
 	ctx = (t_context){.cmd_tree.cmd1 = NULL, .cmd_tree.cmd2 = NULL,
 		.status = MS_SUCCESS, .exit_status = 0, .user_input = NULL};
-	actt = (struct sigaction){.sa_handler = generic_handler_sigint};
-	act = (struct sigaction){.sa_handler = SIG_IGN};
-	sigaction(SIGINT, &actt, NULL);
-	act.sa_handler = SIG_IGN;
-	sigaction(SIGQUIT, &act, NULL);
-	save_env(&ctx, env);
-	set_shell(&ctx, argv[0]);
-	check_interactive(&ctx, argc, argv);
+	initial_configurations(&ctx, argc, argv, env);
 	io_while(&ctx);
 	free_all(&ctx);
 	return (ctx.exit_status);

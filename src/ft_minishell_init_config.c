@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/18 16:04:35 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/04/18 23:28:26 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/05/11 12:32:52 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,4 +84,17 @@ void	set_shell(t_context *ctx, char *shell_name)
 		ft_strlcat(shell_var, ctx->shell_name, PATH_MAX);
 	}
 	export(ctx, shell_var);
+}
+
+int	set_pwd(t_context *ctx)
+{
+	char	pwd[PATH_MAX];
+
+	ctx->status = MS_SUCCESS;
+	ft_strlcpy(pwd, "PWD=", PATH_MAX);
+	if (getcwd(pwd + 4, PATH_MAX - 4))
+		export(ctx, pwd);
+	else
+		ctx->status = MS_E_PWD_NFOUND;
+	return (ctx->status);
 }

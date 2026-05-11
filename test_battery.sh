@@ -233,3 +233,12 @@ eof2
 -test3
 eof3
 
+mkdir -p test_dir_a/test_dir_b/test_dir_c
+cd test_dir_a/test_dir_b/test_dir_c
+rm -rf ../../../test_dir_a
+echo $PWD
+// prompt: .../test_dir_a/test_dir_b/test_dir_c$ 
+unset PWD
+// prompt .$ 
+cd ..
+// prompt .../test_dir_a/test_dir_b/test_dir_c/..

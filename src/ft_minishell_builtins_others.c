@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/16 16:52:14 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/04/30 21:33:04 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/05/11 12:42:02 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,10 +65,34 @@ int	pwd(void)
 	return (MS_SUCCESS);
 }
 
+void	set_new_vars(t_context *ctx, char *new_dir)
+{
+	char	old_pwd_var[PATH_MAX];
+	char	new_pwd_var[PATH_MAX];
+	char	*old_pwd;
+
+	old_pwd = find_env_value(ctx, "PWD");
+	ft_strlcpy(old_pwd_var, "OLDPWD=", 8);
+	if (old_pwd)
+		ft_strlcat(old_pwd_var, old_pwd, PATH_MAX);
+	export(ctx, old_pwd_var);
+	ft_strlcpy(new_pwd_var, "PWD=", PATH_MAX);
+	if (!getcwd(new_pwd_var + 4, PATH_MAX - 4))
+	{
+		if (old_pwd)
+		{
+			ft_strlcat(new_pwd_var, old_pwd, PATH_MAX);
+			ft_strlcat(new_pwd_var, "/", PATH_MAX);
+			ft_strlcat(new_pwd_var, new_dir, PATH_MAX);
+		}
+		else
+			return ;
+	}
+	export(ctx, new_pwd_var);
+}
+
 int	cd(t_context *ctx, char **argv)
 {
-	char	old_dir[PATH_MAX + 20];
-
 	if (argv[1] == NULL)
 		argv[1] = ft_strdup(find_env_value(ctx, "HOME"));
 	else if (argv[2] != NULL)
@@ -83,11 +107,10 @@ int	cd(t_context *ctx, char **argv)
 			return (MS_OLDPWD_NOT_SET);
 		ft_putendl_fd(argv[1], 1);
 	}
-	ft_strlcpy(old_dir, "OLDPWD=", 8);
-	getcwd(old_dir + 7, PATH_MAX);
 	if (chdir(argv[1]))
 		return (MS_E_PATH_NFOUND);
-	export(ctx, old_dir);
+	// export(ctx, old_dir);
+	set_new_vars(ctx, argv[1]);
 	free (argv[1]);
 	argv[1] = NULL;
 	return (MS_SUCCESS);

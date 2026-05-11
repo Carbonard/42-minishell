@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_minishell_get_input.c                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: elangari <elangari@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/18 20:24:41 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/04/19 19:56:27 by elangari         ###   ########.fr       */
+/*   Updated: 2026/05/11 19:44:31 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,9 +16,14 @@ static void	get_prompt(t_context *ctx, char *prompt)
 {
 	char	home[PATH_MAX];
 	char	pwd[PATH_MAX];
+	char	*saved_pwd;
 
 	ft_strlcpy(home, find_env_value(ctx, "HOME"), 100);
-	getcwd(pwd, PATH_MAX);
+	saved_pwd = find_env_value(ctx, "PWD");
+	if (saved_pwd)
+		ft_strlcpy(pwd, saved_pwd, PATH_MAX);
+	else if (!getcwd(pwd, PATH_MAX))
+			ft_strlcpy(pwd, ".", PATH_MAX);
 	ft_strlcpy(prompt, "\001\e[94m\002", MAX_PROMPT);
 	if (home[0] && !ft_strncmp(home, pwd, ft_strlen(home)))
 	{

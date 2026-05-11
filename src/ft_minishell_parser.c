@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   ft_minishell_parser.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: elangari <elangari@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/16 16:54:26 by nyxssa            #+#    #+#             */
-/*   Updated: 2026/04/19 19:12:59 by elangari         ###   ########.fr       */
+/*   Updated: 2026/05/08 17:01:16 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_minishell_execution.h"
 
-static int	reduce_index(char *input, int i)
+int	reduce_index(char *input, int i)
 {
 	if (input[i] == ')')
 		i = find_open_par(input, i);
