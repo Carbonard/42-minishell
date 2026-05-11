@@ -22,8 +22,6 @@ expand ~
 
 just one heredoc (?)
 
-expansion in HD
-
 print syntax error from io_while instead of check_syntax
 
 exit 8	999999999999999999
@@ -31,8 +29,6 @@ exit 8	999999999999999999
 wildcards
 
 error cd / cd ~ sin HOME
-
-mini dentro de mini + ^C
 
 env -i espacios
 

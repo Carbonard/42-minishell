@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/18 20:24:41 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/05/11 19:44:31 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/05/11 23:07:30 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,6 +85,8 @@ static void	check_and_extend_input(t_context *ctx)
 		aux = ft_strjoin_char(ctx->user_input, input_extension, '\n');
 		free(ctx->user_input);
 		free(input_extension);
+		if (aux[ft_strlen(aux) - 1] == '\n')
+			aux[ft_strlen(aux) - 1] = 0;
 		ctx->user_input = aux;
 	}
 }
@@ -98,12 +100,14 @@ int	read_input(t_context *ctx)
 		ctx->status = MS_EXIT;
 		return (0);
 	}
+	ctx->input_lines = 1;
 	if (check_syntax(ctx))
 		return (0);
 	while (!g_last_signal && ctx->status == MS_SUCCESS && ctx->user_input
 		&& (check_quotes(ctx) || check_parenthesis(ctx) || check_operator(ctx)))
 	{
 		check_and_extend_input(ctx);
+		ctx->input_lines++;
 		check_syntax(ctx);
 	}
 	if (g_last_signal)

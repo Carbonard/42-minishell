@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/16 14:57:20 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/05/11 19:48:26 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/05/11 22:33:03 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,6 +121,7 @@ typedef struct s_context
 	int				pipe_fds[2];
 	t_dyn_ptr		here_docs;
 	t_dyn_ptr		eofs;
+	int				input_lines;
 }	t_context;
 
 // init_config

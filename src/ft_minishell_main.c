@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/16 14:59:51 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/05/11 19:49:33 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/05/11 23:09:29 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@ void	manage_multiple_input(t_context *ctx)
 {
 	int	pipe_fds[2];
 	int	original_in;
+	int	original_tty;
 
 	original_in = dup(STDIN_FILENO);
 	pipe(pipe_fds);
@@ -28,9 +29,10 @@ void	manage_multiple_input(t_context *ctx)
 	close(pipe_fds[0]);
 	close(pipe_fds[1]);
 	clear_input(ctx);
+	original_tty = ctx->no_tty;
 	ctx->no_tty = 1;
 	io_while(ctx);
-	ctx->no_tty = 0;
+	ctx->no_tty = original_tty;
 	dup2(original_in, STDIN_FILENO);
 	close(original_in);
 }
@@ -48,6 +50,20 @@ static void	manage_single_input(t_context *ctx)
 	execute_input(ctx);
 }
 
+int	count_lines(char *str)
+{
+	int	cnt;
+
+	cnt = 1;
+	while (*str)
+	{
+		if (*str == '\n' && *(str + 1))
+			cnt++;
+		str++;
+	}
+	return (cnt);
+}
+
 static void	io_while(t_context *ctx)
 {
 	while (ctx->status != MS_EXIT)
@@ -58,7 +74,8 @@ static void	io_while(t_context *ctx)
 		init_dyn_ptr(&ctx->eofs, 0);
 		if (read_input(ctx))
 		{
-			if (ft_strchr(ctx->user_input, '\n'))
+			if (ft_strchr(ctx->user_input, '\n')
+				&& ctx->input_lines < count_lines(ctx->user_input))
 				manage_multiple_input(ctx);
 			else
 				manage_single_input(ctx);
