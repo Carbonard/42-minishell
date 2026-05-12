@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/03 19:05:58 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/04/26 12:04:39 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/05/12 20:33:50 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,10 @@ int	advance_quotes(char *str)
 		{
 			i++;
 		}
-		return (i + 1);
+		if (str[i])
+			return (i + 1);
+		else
+			return (i);
 	}
 	return (1);
 }

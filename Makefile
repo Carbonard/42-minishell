@@ -39,10 +39,7 @@ $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c $(INCLUDE_DIR)/ft_minishell.h | $(OBJ_DIR)
 $(NAME): $(LIBFT) $(DYNARRAYS) $(OBJ)
 	$(CC) $(CFLAGS) $(OBJ) $(CLIBS) -o $@
 
-bash: $(NAME)
-	cp $(NAME) bash
-
-test: bash
+test: $(NAME)
 	@echo "Use the following command:"
 	@echo 'source ./tester.sh'
 

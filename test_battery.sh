@@ -156,25 +156,21 @@ echo *l
 
 echo tes*
 
+sleep 5
+
 echo *.sh
 
-cd test_directory
-
+mkdir test_dir_ast
+cd test_dir_ast
+touch '$HOME' _1 1 1_a 1a 1_b 1b 2a 2b a_a aa aA a_ab aab aAb _AAB A_AB 'a b' %abc '\-abc' a_bc ab_c abc aBc %Abc '\-Abc' Abc ' c' con %dAbc %DAbc ' f' f 'f ' f_ 'f 1' 'f\\1' 'f\1' f_1 'f|1' f1 'f 2' 'f\\2' 'f\2' f_2 'f|2' f2 'f\\3' 'f\3' f_3 'f|3' f3 '"filename"' "'filename'" __g _g __h _h ho__la ho_la hola 'hola"nop' __ij _ij __ik _ik %zAbc %ZAbc
 echo *
-
-echo *a*
-
+mkdir -p cosa/ls cosa/zzz/a cosa/zzz/b cosa/zzz/c
 cd cosa
-
 pwd
-
 ls
-
 *
-
-cd -
-
-cd ..
+cd ../..
+rm -r test_dir_ast
 
 ls
 
@@ -237,8 +233,36 @@ mkdir -p test_dir_a/test_dir_b/test_dir_c
 cd test_dir_a/test_dir_b/test_dir_c
 rm -rf ../../../test_dir_a
 echo $PWD
-// prompt: .../test_dir_a/test_dir_b/test_dir_c$ 
-unset PWD
-// prompt .$ 
 cd ..
-// prompt .../test_dir_a/test_dir_b/test_dir_c/..
+echo $PWD
+cd .
+echo $PWD
+cd -
+cd ../..
+echo $PWD
+
+echo ..................
+
+ls
+
+rm testfile1 testfile2
+
+touch t3st_f1l3
+cd t3st_f1l3
+chmod 000 t3st_f1l3
+cd t3st_f1l3
+chmod 777 t3st_f1l3
+rm t3st_f1l3
+
+mkdir 7357_d1r
+chmod 000 7357_d1r
+cd 7357_d1r
+chmod 777 7357_d1r
+rmdir 7357_d1r
+
+cp minishell badshell
+chmod 000 badshell
+cd badshell
+./badshell
+chmod 777 badshell
+rm badshell

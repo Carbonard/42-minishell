@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/16 16:52:14 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/05/11 12:42:02 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/05/12 22:15:36 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,6 +79,8 @@ void	set_new_vars(t_context *ctx, char *new_dir)
 	ft_strlcpy(new_pwd_var, "PWD=", PATH_MAX);
 	if (!getcwd(new_pwd_var + 4, PATH_MAX - 4))
 	{
+		write(2, "cd: error retrieving current directory: ", 40);
+		perror("getcwd: cannot access parent directories");
 		if (old_pwd)
 		{
 			ft_strlcat(new_pwd_var, old_pwd, PATH_MAX);
@@ -93,6 +95,9 @@ void	set_new_vars(t_context *ctx, char *new_dir)
 
 int	cd(t_context *ctx, char **argv)
 {
+	int	print_path;
+
+	print_path = 0;
 	if (argv[1] == NULL)
 		argv[1] = ft_strdup(find_env_value(ctx, "HOME"));
 	else if (argv[2] != NULL)
@@ -105,11 +110,12 @@ int	cd(t_context *ctx, char **argv)
 		argv[1] = ft_strdup(find_env_value(ctx, "OLDPWD"));
 		if (!argv[1])
 			return (MS_OLDPWD_NOT_SET);
-		ft_putendl_fd(argv[1], 1);
+		print_path = 1;
 	}
 	if (chdir(argv[1]))
 		return (MS_E_PATH_NFOUND);
-	// export(ctx, old_dir);
+	if (print_path)
+		ft_putendl_fd(argv[1], 1);
 	set_new_vars(ctx, argv[1]);
 	free (argv[1]);
 	argv[1] = NULL;
