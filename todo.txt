@@ -28,8 +28,6 @@ exit 8	999999999999999999
 
 wildcards
 
-error cd / cd ~ sin HOME
-
 env -i espacios
 
 remove debug

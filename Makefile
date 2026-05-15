@@ -13,7 +13,7 @@ LIBFT = libft/libft.a
 DYNARRAYS = dynamic_arrays/libft_dynarray.a
 
 BUILTINS = builtins builtins_others builtins_env exit clears
-INPUT = get_input read_heredocs heredocs check_syntax check_input
+INPUT = get_input read_heredocs heredocs check_syntax check_input prompt
 EXECUTION = argv tree split_cmd execute_tree execute_node execute_leaf execute_command tree_utils
 OTHER = main environment debug error_messages wildcards wildcards_sort utils signals history init_config init_config2
 

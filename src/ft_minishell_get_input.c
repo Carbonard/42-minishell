@@ -6,34 +6,34 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/18 20:24:41 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/05/11 23:07:30 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/05/15 21:35:40 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_minishell_input.h"
 
-static void	get_prompt(t_context *ctx, char *prompt)
-{
-	char	home[PATH_MAX];
-	char	pwd[PATH_MAX];
-	char	*saved_pwd;
+// static void	get_prompt(t_context *ctx, char *prompt)
+// {
+// 	char	home[PATH_MAX];
+// 	char	pwd[PATH_MAX];
+// 	char	*saved_pwd;
 
-	ft_strlcpy(home, find_env_value(ctx, "HOME"), 100);
-	saved_pwd = find_env_value(ctx, "PWD");
-	if (saved_pwd)
-		ft_strlcpy(pwd, saved_pwd, PATH_MAX);
-	else if (!getcwd(pwd, PATH_MAX))
-			ft_strlcpy(pwd, ".", PATH_MAX);
-	ft_strlcpy(prompt, "\001\e[94m\002", MAX_PROMPT);
-	if (home[0] && !ft_strncmp(home, pwd, ft_strlen(home)))
-	{
-		ft_strlcat(prompt, "~", MAX_PROMPT);
-		ft_strlcat(prompt, pwd + ft_strlen(home), MAX_PROMPT);
-	}
-	else
-		ft_strlcat(prompt, pwd, MAX_PROMPT);
-	ft_strlcat(prompt, "$ \001\e[0m\002", MAX_PROMPT);
-}
+// 	ft_strlcpy(home, find_env_value(ctx, "HOME"), 100);
+// 	saved_pwd = find_env_value(ctx, "PWD");
+// 	if (saved_pwd)
+// 		ft_strlcpy(pwd, saved_pwd, PATH_MAX);
+// 	else if (!getcwd(pwd, PATH_MAX))
+// 			ft_strlcpy(pwd, ".", PATH_MAX);
+// 	ft_strlcpy(prompt, "\001\e[94m\002", MAX_PROMPT);
+// 	if (home[0] && !ft_strncmp(home, pwd, ft_strlen(home)))
+// 	{
+// 		ft_strlcat(prompt, "~", MAX_PROMPT);
+// 		ft_strlcat(prompt, pwd + ft_strlen(home), MAX_PROMPT);
+// 	}
+// 	else
+// 		ft_strlcat(prompt, pwd, MAX_PROMPT);
+// 	ft_strlcat(prompt, "$ \001\e[0m\002", MAX_PROMPT);
+// }
 
 static char	*read_input_line(t_context *ctx)
 {
