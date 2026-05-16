@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/03 18:09:40 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/05/15 21:36:07 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/05/16 17:47:15 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,8 @@ void	expand_heredoc(t_context *ctx);
 int		spread_heredocs(
 			t_command_tree *node, t_dyn_ptr *hd, t_dyn_ptr *eof, int n);
 // get_input
+void	str_replace(char *str, char *find, char *subst);
+void	escape_text(char *str);
 void	get_prompt(t_context *ctx, char *prompt);
 int		read_input(t_context *ctx);
 // check_syntax

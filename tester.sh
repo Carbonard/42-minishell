@@ -43,7 +43,7 @@ fi
 # cat test_battery.sh | valgrind --leak-check=full --show-leak-kinds=all --track-fds=yes --trace-children=no --child-silent-after-fork=no --suppressions=readline.supp ./bash >/dev/null 2>&1
 echo -e "\e[93mMemory leaks:\e[0m"
 # cat test_battery.sh | valgrind --leak-check=full --show-leak-kinds=all --track-fds=yes --trace-children=no --child-silent-after-fork=no --suppressions=readline.supp ./bash |& grep -B5 -A5 -E 'are definitely|are still'
-cat test_battery.sh | valgrind --leak-check=full --show-leak-kinds=all --track-fds=yes --trace-children=no --child-silent-after-fork=no --suppressions=readline.supp ./bash |& grep -v ' 0 bytes' | grep -B2 -A20 'in use at exit' | cat > valgrind.log
+cat test_battery.sh | valgrind --leak-check=full --show-leak-kinds=all --track-fds=yes --trace-children=no --child-silent-after-fork=no --suppressions=readline.supp ./bash |& grep -v ' 0 bytes' | grep -B2 -A500 'in use at exit' | cat > valgrind.log
 if [ "$(cat valgrind.log)" = "" ]
 then
 	echo -e "\e[34mOK\e[0m"

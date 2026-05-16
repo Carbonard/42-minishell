@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/15 20:06:16 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/05/15 22:58:49 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/05/16 17:48:09 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,78 +59,29 @@ static int	add_char(char *str, char c)
 	return (1);
 }
 
-static int	escape_chars(char *ps1, char *prompt)
-{
-	if (!ft_strncmp(ps1, "\\e", 2))
-	{
-		ft_strlcat(prompt, "\033", MAX_PROMPT);
-		return (2);
-	}
-	else if (!ft_strncmp(ps1, "\\[", 2))
-	{
-		ft_strlcat(prompt, "\001", MAX_PROMPT);
-		return (2);
-	}
-	else if (!ft_strncmp(ps1, "\\]", 2))
-	{
-		ft_strlcat(prompt, "\002", MAX_PROMPT);
-		return (2);
-	}
-	else if (!ft_strncmp(ps1, "\\033", 4))
-	{
-		ft_strlcat(prompt, "\033", MAX_PROMPT);
-		return (4);
-	}
-	else if (!ft_strncmp(ps1, "\\001", 4))
-	{
-		ft_strlcat(prompt, "\001", MAX_PROMPT);
-		return (4);
-	}
-	else if (!ft_strncmp(ps1, "\\002", 4))
-	{
-		ft_strlcat(prompt, "\002", MAX_PROMPT);
-		return (4);
-	}
-	else if (!ft_strncmp(ps1, "\\a", 2))
-	{
-		ft_strlcat(prompt, "\a", MAX_PROMPT);
-		return (2);
-	}
-	else if (!ft_strncmp(ps1, "\\n", 2))
-	{
-		ft_strlcat(prompt, "\n", MAX_PROMPT);
-		return (2);
-	}
-	return (0);
-}
-
 void	get_prompt(t_context *ctx, char *prompt)
 {
 	char	*ps1;
 	int		i;
-	int		escaped_chars;
+	char	*expanded;
 
-	prompt[0] = 0;
 	ps1 = find_env_value(ctx, "PS1");
 	if (!ps1)
 	{
 		get_default_prompt(ctx, prompt);
 		return ;
 	}
+	expanded = expand_input(ctx, ft_strdup(ps1));
+	prompt[0] = 0;
 	i = 0;
-	while (ps1[i])
+	while (expanded[i])
 	{
-		escaped_chars = 0;
-		if (ps1[i] == '\\')
-			escaped_chars = escape_chars(ps1 + i, prompt);
-		if (escaped_chars)
-			i += escaped_chars;
-		else if (!ft_strncmp(ps1 + i, "\\w", 2))
+		if (!ft_strncmp(expanded + i, "\\w", 2))
 			i += add_pwd(ctx, prompt);
 		else
-			i += add_char(prompt, ps1[i]);
+			i += add_char(prompt, expanded[i]);
 	}
-	char *expanded = expand_input(ctx, ft_strdup(prompt));
-	ft_strlcpy(prompt, expanded, MAX_PROMPT);
+	str_replace(prompt, "\\$", "$");
 	free(expanded);
+	escape_text(prompt);
 }

@@ -3,7 +3,7 @@
 INCLUDE_DIR = ./includes
 
 CC = cc
-CFLAGS = -Wall -Werror -Wextra -I $(INCLUDE_DIR) -I ./libft -g3 #-fsanitize=undefined
+CFLAGS = -Wall -Werror -Wextra -I $(INCLUDE_DIR) -I ./libft -g3 -fsanitize=address
 CLIBS = -L./libft -L./dynamic_arrays -lft -lft_dynarray -lreadline
 
 NAME = minishell
@@ -12,8 +12,8 @@ all: $(NAME)
 LIBFT = libft/libft.a
 DYNARRAYS = dynamic_arrays/libft_dynarray.a
 
-BUILTINS = builtins builtins_others builtins_env exit clears
-INPUT = get_input read_heredocs heredocs check_syntax check_input prompt
+BUILTINS = builtins builtins_others builtins_env exit clears builtins_echo
+INPUT = get_input read_heredocs heredocs check_syntax check_input prompt escape
 EXECUTION = argv tree split_cmd execute_tree execute_node execute_leaf execute_command tree_utils
 OTHER = main environment debug error_messages wildcards wildcards_sort utils signals history init_config init_config2
 

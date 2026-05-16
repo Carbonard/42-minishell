@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/16 14:59:51 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/05/12 17:10:31 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/05/16 22:30:01 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@ static void	io_while(t_context *ctx)
 		init_dyn_ptr(&ctx->eofs, 0);
 		if (read_input(ctx))
 		{
-			if (ft_strchr(ctx->user_input, '\n')
+			if (ctx->user_input[0] == 0 && ft_strchr(ctx->user_input, '\n')
 				&& ctx->input_lines < count_lines(ctx->user_input))
 				manage_multiple_input(ctx);
 			else

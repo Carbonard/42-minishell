@@ -266,3 +266,19 @@ cd badshell
 ./badshell
 chmod 777 badshell
 rm badshell
+
+echo -n "testing -n flag"
+echo -nn "testing -n flag"
+echo testing -n flag
+
+echo -e "testing -e flag\ntested"
+echo -eee "testing -e flag\ttested"
+echo testing -e flag
+
+echo -ne "testing -ne flag"
+echo -en "testing -en flag"
+echo -ene "testing -ene flag"
+echo -ne "testing -ne flag"
+echo -ne -en "testing -ne -en flag"
+echo -e
+kkkkk -e "hola\n\tque tal\abien\\, \', \"\""

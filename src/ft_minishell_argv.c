@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/30 23:34:26 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/04/30 20:01:26 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/05/16 23:06:00 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,14 +14,24 @@
 
 static int	need_to_expand(char *str, int i)
 {
+	int	inside_double_quotes;
+
+	inside_double_quotes = 0;
+	for (int j = 0; j < i; j++)
+	{
+		if (str[j] == '"')
+			inside_double_quotes = !inside_double_quotes;
+	}
 	while (str[i])
 	{
-		if (str[i] == '\'')
+		if (!inside_double_quotes && str[i] == '\'')
 		{
 			i++;
 			while (str[i] != '\'')
 				i++;
 		}
+		else if (str[i] == '"')
+			inside_double_quotes = !inside_double_quotes;
 		else if (str[i] == '$'
 			&& (ft_isalpha(str[i + 1])
 				|| str[i + 1] == '_'
