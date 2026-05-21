@@ -28,18 +28,6 @@ else
 	diff --color=auto minishell_error.log bash_error.log
 fi
 
-# echo 'Executing with valgrind...'
-
-# cat test_battery.sh | valgrind --leak-check=full --show-leak-kinds=all --track-fds=yes --trace-children=no --child-silent-after-fork=no --suppressions=readline.supp --log-file=valgrind.log ./bash >/dev/null 2>&1
-# echo -e "\e[93mMemory leaks:\e[0m"
-# cat valgrind.log | grep -B5 -A5 -E 'are definitely|are still'
-# echo -e "\e[93mOpen file descriptors:\e[0m"
-# cat valgrind.log | grep -B1 -A1 'Open file descriptor' | grep -v 'valgrind.log'
-# echo -e "\e[93mValgrind issues:\e[0m"
-# cat valgrind.log | grep -B5 -A5 ft
-
-# echo 'Executing with valgrind...'
-
 # cat test_battery.sh | valgrind --leak-check=full --show-leak-kinds=all --track-fds=yes --trace-children=no --child-silent-after-fork=no --suppressions=readline.supp ./bash >/dev/null 2>&1
 echo -e "\e[93mMemory leaks:\e[0m"
 # cat test_battery.sh | valgrind --leak-check=full --show-leak-kinds=all --track-fds=yes --trace-children=no --child-silent-after-fork=no --suppressions=readline.supp ./bash |& grep -B5 -A5 -E 'are definitely|are still'

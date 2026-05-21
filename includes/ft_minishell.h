@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/16 14:57:20 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/05/11 22:33:03 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/05/21 01:25:19 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,7 @@ enum e_status
 	MS_BUILT_IN_EXECUTED,
 	MS_BUILT_IN_NFOUND,
 	MS_E_PWD_NFOUND,
+	MS_E_MALLOC,
 	MS_E_ENV_MALLOC,
 	MS_E_ENV_NFOUND,
 	MS_E_VAR_NFOUND,
@@ -116,6 +117,7 @@ typedef struct s_context
 	int				read_exit_status;
 	t_str_list		*env;
 	char			*user_input;
+	t_str_list*		input_tokens;
 	int				no_tty;
 	t_command_tree	cmd_tree;
 	int				pipe_fds[2];

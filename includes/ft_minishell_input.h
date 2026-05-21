@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/03 18:09:40 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/05/16 17:47:15 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/05/21 01:24:05 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,19 +16,12 @@
 
 enum e_automaton_events
 {
-	E_SPACE,
-	E_SINGLE_QUOTE,
-	E_DOUBLE_QUOTE,
-	E_AND,
-	E_OR,
-	E_PIPE,
-	E_REDIR_R,
-	E_REDIR_L,
-	E_DOUBLE_REDIR_R,
-	E_DOUBLE_REDIR_L,
+	E_OPERATOR,
+	E_REDIR,
 	E_OPEN_PAR,
 	E_CLOSING_PAR,
 	E_OTHER,
+	E_INVALID,
 	E_TOTAL
 };
 
@@ -36,14 +29,11 @@ enum e_automaton_states
 {
 	S_INITIAL,
 	S_COMMAND,
-	S_SING_QUOT,
-	S_DOUB_QUOT,
-	S_OPEN_PAR,
+	// S_OPEN_PAR,
 	S_CLOS_PAR,
 	S_REDIR,
-	S_READ_REDIR,
+	S_REDIR_PAR,
 	S_ERROR,
-	S_LAST,
 	S_TOTAL
 };
 
@@ -66,11 +56,13 @@ void	str_replace(char *str, char *find, char *subst);
 void	escape_text(char *str);
 void	get_prompt(t_context *ctx, char *prompt);
 int		read_input(t_context *ctx);
+// tokens
+int		get_tokens(t_context *ctx);
 // check_syntax
 int		check_syntax(t_context *ctx);
 // check_input
 int		check_quotes(t_context *ctx);
 int		check_parenthesis(t_context *ctx);
 int		check_operator(t_context *ctx);
-
+void	remove_quotes(char *cmd);
 int		advance_quotes(char *str);

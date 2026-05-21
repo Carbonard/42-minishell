@@ -156,8 +156,6 @@ echo *l
 
 echo tes*
 
-sleep 5
-
 echo *.sh
 
 mkdir test_dir_ast
@@ -281,4 +279,6 @@ echo -ene "testing -ene flag"
 echo -ne "testing -ne flag"
 echo -ne -en "testing -ne -en flag"
 echo -e
-kkkkk -e "hola\n\tque tal\abien\\, \', \"\""
+# kkkkk -e "hola\n\tque tal\abien\\, \', \"\""
+
+echo testing" "quotes    and " things"
