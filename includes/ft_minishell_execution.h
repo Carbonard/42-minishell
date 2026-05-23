@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/03 18:11:57 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/04/26 12:09:21 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/05/21 19:50:29 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,10 +30,12 @@ void	execute_input(t_context *ctx);
 // execute_node
 int		execute_node(t_context *ctx, t_command_tree *node);
 // manage_leaf
-int		manage_redirection(t_context *ctx, t_redirection *redir, char *heredoc);
+int		manage_redirection(t_context *ctx, t_str_list *token, char *heredoc);
 int		execute_leaf(t_context *ctx, t_command_tree *node);
 // argv
-char	**get_argv_and_redir(t_context *ctx, char *cmd, t_redirection *redir);
+char	**get_argv_and_redir(t_context *ctx, char *cmd);
+void	restore_redirections(t_context *ctx);
+void	close_redirections(t_context *ctx);
 char	*expand_input(t_context *ctx, char *input);
 // split_cmd
 int		advance_quotes(char *str);
@@ -42,8 +44,7 @@ char	**split_cmd(char *cmd, t_redirection *redir);
 char	*expand_wildcards(char *cmd);
 void	sort_entries(char **arr);
 // builtins
-int		try_builtins(t_context *ctx, char **argv, t_redirection *redir,
-			char *heredoc);
+int		try_builtins(t_context *ctx, char **argv);
 // execute_command
 int		find_cmd_path(t_context *ctx, char *path, char *cmd);
 void	execute_command(t_context *ctx, char **argv);
@@ -53,4 +54,4 @@ int		find_open_par(char *str, int i);
 int		find_open_quote(char *str, int i);
 int		remove_parenthesis(char *str, char **redirections);
 // utils
-void	remove_quotes(char *cmd);
+char	*remove_quotes(char *cmd);

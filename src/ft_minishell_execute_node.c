@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/31 16:26:36 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/04/17 00:42:39 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/05/21 18:51:26 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,8 +23,8 @@ static int	execute_subshell(t_context *ctx, t_command_tree *node)
 	pid = fork();
 	if (pid == 0)
 	{
-		if (node->redir.type_in.length || node->redir.type_out.length)
-			manage_redirection(ctx, &node->redir, node->here_doc);
+		// if (node->redir.type_in.length || node->redir.type_out.length)
+		// 	manage_redirection(ctx, &node->redir, node->here_doc);
 		node->subshell = 0;
 		pid = execute_node(ctx, node);
 		waitpid(pid, &status, 0);

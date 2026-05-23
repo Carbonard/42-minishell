@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/19 12:27:38 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/05/08 17:14:34 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/05/21 19:07:17 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,20 +66,21 @@ void	ft_str_delitem(t_str_list **lst, t_str_list *item)
 	free(item);
 }
 
-void	ft_str_lstclear(t_str_list **lst)
+void	*ft_str_lstclear(t_str_list **lst, void (*free_func)(void *))
 {
 	t_str_list	*item;
 	t_str_list	*tmp_item;
 
 	if (lst == NULL || *lst == NULL)
-		return ;
+		return (NULL);
 	item = *lst;
 	while (item)
 	{
 		tmp_item = item;
 		item = item->next;
-		free(tmp_item->content);
+		free_func(tmp_item->content);
 		free(tmp_item);
 	}
 	*lst = NULL;
+	return (NULL);
 }

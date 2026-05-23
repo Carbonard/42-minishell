@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/16 14:59:51 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/05/16 22:30:01 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/05/22 00:28:42 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,6 +95,8 @@ void	initial_configurations(t_context *ctx, int argc, char **argv, char **env)
 	set_pwd(ctx);
 	increment_shlvl(ctx);
 	check_interactive(ctx, argc, argv);
+	ctx->original_in = -1;
+	ctx->original_out = -1;
 }
 
 int	main(int argc, char **argv, char **env)

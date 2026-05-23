@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/29 18:58:57 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/05/21 01:24:11 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/05/22 00:36:04 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,20 +14,24 @@
 
 static int	change_state(int current_state, int event)
 {
-						// E_OPERATOR,	E_REDIR,	E_OPEN_PAR,	 E_CLOS_PAR, E_OTHER,	E_INVALID
+						//E_NEW_LINE	E_OPERATOR,		E_REDIR,	E_OPEN_PAR,	 E_CLOS_PAR, E_OTHER,	E_INVALID
 	static int const	conversor[S_TOTAL][E_TOTAL] = {
-		[S_INITIAL] =	 {S_ERROR,		S_REDIR,	S_INITIAL,	S_ERROR,	S_COMMAND,	S_ERROR},
-		[S_COMMAND] =	 {S_INITIAL,	S_REDIR,	S_ERROR,	S_CLOS_PAR,	S_COMMAND,	S_ERROR},
-		[S_CLOS_PAR] =	 {S_INITIAL,	S_REDIR_PAR,S_ERROR,	S_CLOS_PAR,	S_ERROR,	S_ERROR},
-		[S_REDIR] =		 {S_ERROR,		S_ERROR,	S_ERROR,	S_ERROR,	S_COMMAND,	S_ERROR},
-		[S_REDIR_PAR] =	 {S_ERROR,		S_ERROR,	S_ERROR,	S_ERROR,	S_CLOS_PAR,	S_ERROR},
+		[S_INITIAL] =	 {S_INITIAL,	S_ERROR,		S_REDIR,	S_INITIAL,	S_ERROR,	S_COMMAND,	S_ERROR},
+		[S_COMMAND] =	 {S_COMMAND,	S_INITIAL,		S_REDIR,	S_ERROR,	S_CLOS_PAR,	S_COMMAND,	S_ERROR},
+		[S_CLOS_PAR] =	 {S_CLOS_PAR,	S_INITIAL,		S_REDIR_PAR,S_ERROR,	S_CLOS_PAR,	S_ERROR,	S_ERROR},
+		[S_REDIR] =		 {S_REDIR,		S_ERROR,		S_ERROR,	S_ERROR,	S_ERROR,	S_COMMAND,	S_ERROR},
+		[S_REDIR_PAR] =	 {S_REDIR_PAR,	S_ERROR,		S_ERROR,	S_ERROR,	S_ERROR,	S_CLOS_PAR,	S_ERROR},
 	};
 	return (conversor[current_state][event]);
 }
 
 static int	get_event(char *token)
 {
-	if ((token[0] == '&' && token[1] == '&')
+	if (!token)
+		return (E_INVALID);
+	else if (token[0] == '\n')
+		return (E_NEW_LINE);
+	else if ((token[0] == '&' && token[1] == '&')
 			|| (token[0] == '|' && token[1] == '|')
 			|| (token[0] == '|' && token[1] != '|'))
 		return (E_OPERATOR);
@@ -62,24 +66,25 @@ int	check_syntax(t_context *ctx)
 	int			event;
 	int			parenthesis;
 
-	if (get_tokens(ctx))
+	ctx->input_tokens = get_tokens(ctx->user_input);
+	if (!ctx->input_tokens)
 		return (1);
 	token = ctx->input_tokens;
-	state = S_INITIAL;
-	parenthesis = 0;
-	while (state != S_ERROR)
+	state = change_state(S_INITIAL, get_event(token->content));
+	parenthesis = (get_event(token->content) == E_OPEN_PAR)
+		- ((get_event(token->content) == E_CLOSING_PAR));
+	while (token && token->next && state != S_ERROR && parenthesis >= 0)
 	{
+		token = token->next;
 		event = get_event(token->content);
 		if (event == E_OPEN_PAR)
 			parenthesis++;
 		else if (event == E_CLOSING_PAR)
 			parenthesis--;
 		state = change_state(state, event);
-		if (!(token->next) || state == S_ERROR || parenthesis < 0)
-			break ;
-		token = token->next;
 	}
-	if (state == S_ERROR || state == S_REDIR || parenthesis < 0)
+	if (state == S_ERROR || parenthesis < 0
+		|| state == S_REDIR || state == S_REDIR_PAR)
 		print_syntax_error(ctx, token->content);
 	return (ctx->status);
 }

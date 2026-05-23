@@ -1,6 +1,6 @@
 #!/bin/bash
 
-make
+make || return
 
 cp minishell bash
 

@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/03 15:47:56 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/05/12 20:35:19 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/05/22 12:34:01 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,9 +113,9 @@ static char	*expand_wc_wrapper(char *cmd, char *start, char *end)
 
 char	*expand_wildcards(char *cmd)
 {
-	char		*start;
-	char		*prev_start;
-	char		*end;
+	char	*start;
+	char	*prev_start;
+	char	*end;
 
 	prev_start = NULL;
 	start = cmd;

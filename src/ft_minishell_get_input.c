@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/18 20:24:41 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/05/21 01:48:46 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/05/22 00:29:04 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,10 @@ int	read_input(t_context *ctx)
 	ctx->user_input = read_input_line(ctx);
 	g_last_signal = 0;
 	if (!ctx->user_input)
+	{
 		ctx->status = MS_EXIT;
+		return (0);
+	}
 	ctx->input_lines = 1;
 	if (check_syntax(ctx))
 		return (0);
@@ -84,15 +87,14 @@ int	read_input(t_context *ctx)
 	{
 		check_and_extend_input(ctx);
 		ctx->input_lines++;
-		ft_str_lstclear(&ctx->input_tokens);
+		ft_str_lstclear(&ctx->input_tokens, free);
+		ctx->status = MS_SUCCESS;
 		check_syntax(ctx);
 	}
-	if (g_last_signal)
+	if (ctx->status || g_last_signal)
 	{
 		g_last_signal = 0;
 		return (0);
 	}
-	if (ctx->status)
-		return (0);
 	return (1);
 }

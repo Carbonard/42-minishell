@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/03 19:05:58 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/05/12 20:33:50 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/05/21 19:53:37 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,11 +29,13 @@ int	is_redirection(char *str)
 	return (0);
 }
 
-void	remove_quotes(char *cmd)
+char	*remove_quotes(char *cmd)
 {
+	char		*original_cmd;
 	char		quote;
 	int			shift;
 
+	original_cmd = cmd;
 	shift = 0;
 	quote = 0;
 	while (*cmd)
@@ -50,6 +52,7 @@ void	remove_quotes(char *cmd)
 		cmd++;
 	}
 	*(cmd - shift) = 0;
+	return (original_cmd);
 }
 
 int	advance_quotes(char *str)

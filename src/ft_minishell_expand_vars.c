@@ -1,16 +1,17 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_minishell_argv.c                                :+:      :+:    :+:   */
+/*   ft_minishell_expand_vars.c                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/30 23:34:26 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/05/16 23:06:00 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/05/21 16:13:49 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_minishell_execution.h"
+#include "ft_minishell_input.h"
 
 static int	need_to_expand(char *str, int i)
 {
@@ -107,18 +108,18 @@ char	*expand_input(t_context *ctx, char *input)
 	return (input);
 }
 
-char	**get_argv_and_redir(t_context *ctx, char *cmd, t_redirection *redir)
-{
-	char	*command;
-	char	**argv;
+// char	**get_argv_and_redir(t_context *ctx, char *cmd, t_redirection *redir)
+// {
+// 	char	*command;
+// 	char	**argv;
 
-	command = expand_input(ctx, ft_strdup(cmd));
-	command = expand_wildcards(command);
-	argv = split_cmd(command, redir);
-	free(command);
-	if (argv && argv[0])
-		return (argv);
-	free(argv);
-	manage_redirection(ctx, redir, NULL);
-	return (NULL);
-}
+// 	command = expand_input(ctx, ft_strdup(cmd));
+// 	command = expand_wildcards(command);
+// 	argv = split_cmd(command, redir);
+// 	free(command);
+// 	if (argv && argv[0])
+// 		return (argv);
+// 	free(argv);
+// 	manage_redirection(ctx, redir, NULL);
+// 	return (NULL);
+// }
