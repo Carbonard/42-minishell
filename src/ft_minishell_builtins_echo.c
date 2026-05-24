@@ -6,20 +6,12 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/16 17:57:25 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/05/16 18:55:38 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/05/23 15:43:58 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_minishell_builtins.h"
 #include "ft_minishell_input.h"
-
-#define ECHO_FLAGS "ne"
-
-typedef struct s_echo_flags
-{
-	int	no_new_line;
-	int	format;
-}	t_echo_flags;
 
 static int	is_valid_echo_flag(char *flag)
 {

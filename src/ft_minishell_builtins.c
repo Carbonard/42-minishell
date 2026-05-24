@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/17 21:35:56 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/05/21 19:40:57 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/05/23 15:45:20 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,6 @@ int	try_builtins(t_context *ctx, char **argv)
 		&& ft_strncmp(argv[0], "cd", 3))
 		return (0);
 	execute_builtins(ctx, argv);
-	restore_redirections(ctx);
 	ctx->read_exit_status = 1;
 	return (1);
 }

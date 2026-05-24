@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/21 01:06:04 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/05/21 19:09:53 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/05/23 15:14:35 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ static int	add_token(t_str_list **tokens, char *input, int start, int *end)
 			return (-1);
 		start = *end;
 	}
-	return (start);;
+	return (start);
 }
 
 t_str_list	*get_tokens(char *input)

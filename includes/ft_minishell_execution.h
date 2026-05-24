@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/03 18:11:57 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/05/21 19:50:29 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/05/23 15:50:02 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,9 +39,9 @@ void	close_redirections(t_context *ctx);
 char	*expand_input(t_context *ctx, char *input);
 // split_cmd
 int		advance_quotes(char *str);
-char	**split_cmd(char *cmd, t_redirection *redir);
+// char	**split_cmd(char *cmd, t_redirection *redir);
 // wildcards
-char	*expand_wildcards(char *cmd);
+int		expand_wildcards(char *token, t_dyn_ptr *argv);
 void	sort_entries(char **arr);
 // builtins
 int		try_builtins(t_context *ctx, char **argv);
@@ -52,6 +52,6 @@ void	execute_command(t_context *ctx, char **argv);
 int		find_closing_par(char *str);
 int		find_open_par(char *str, int i);
 int		find_open_quote(char *str, int i);
-int		remove_parenthesis(char *str, char **redirections);
+int		remove_parenthesis(char *str);
 // utils
 char	*remove_quotes(char *cmd);

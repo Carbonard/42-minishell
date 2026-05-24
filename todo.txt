@@ -32,6 +32,7 @@ env -i espacios
 
 remove debug
 
+redirection after subshell
 
 
 static int	change_state(int current_state, int event)

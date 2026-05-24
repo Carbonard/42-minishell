@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/19 00:21:41 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/04/19 00:25:26 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/05/23 15:50:59 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,7 @@ static int	skip_redirections(char *str, int i)
 	return (i);
 }
 
-int	remove_parenthesis(char *str, char **redirections)
+int	remove_parenthesis(char *str)
 {
 	int		parenthesis_checker_i;
 	int		final;
@@ -101,11 +101,11 @@ int	remove_parenthesis(char *str, char **redirections)
 			str[0] = ' ';
 			str[parenthesis_checker_i] = 0;
 			removed = 1;
-			if (ft_strchr(str + parenthesis_checker_i + 1, '<')
-				|| ft_strchr(str + parenthesis_checker_i + 1, '>'))
-				*redirections = ft_strdup(str + parenthesis_checker_i + 1);
-			else
-				*redirections = NULL;
+			// if (ft_strchr(str + parenthesis_checker_i + 1, '<')
+			// 	|| ft_strchr(str + parenthesis_checker_i + 1, '>'))
+			// 	*redirections = ft_strdup(str + parenthesis_checker_i + 1);
+			// else
+			// 	*redirections = NULL;
 		}
 	}
 	return (removed);

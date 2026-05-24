@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/16 14:57:20 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/05/21 18:22:03 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/05/23 15:47:45 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,15 +86,15 @@ enum e_operators
 	HERE_DOC
 };
 
-typedef struct s_redirection
-{
-	t_dyn_int	type_in;
-	t_dyn_ptr	file_in;
-	t_dyn_int	type_out;
-	t_dyn_ptr	file_out;
-	int			original_in;
-	int			original_out;
-}	t_redirection;
+// typedef struct s_redirection
+// {
+// 	t_dyn_int	type_in;
+// 	t_dyn_ptr	file_in;
+// 	t_dyn_int	type_out;
+// 	t_dyn_ptr	file_out;
+// 	int			original_in;
+// 	int			original_out;
+// }	t_redirection;
 
 typedef struct s_command_tree
 {
@@ -105,8 +105,8 @@ typedef struct s_command_tree
 	int						subshell;
 	char					*here_doc;
 	char					*eof;
-	char					*redirections;
-	t_redirection			redir;
+	// char					*redirections;
+	// t_redirection			redir;
 }	t_command_tree;
 
 typedef struct s_context
@@ -117,7 +117,7 @@ typedef struct s_context
 	int				read_exit_status;
 	t_str_list		*env;
 	char			*user_input;
-	t_str_list*		input_tokens;
+	t_str_list		*input_tokens;
 	int				no_tty;
 	t_command_tree	cmd_tree;
 	int				pipe_fds[2];

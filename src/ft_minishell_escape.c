@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/16 16:59:48 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/05/16 21:24:25 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/05/23 15:52:25 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,8 @@ static void	escape_base(char *str, char *base)
 
 void	escape_text(char *str)
 {
+	size_t	i;
+
 	str_replace(str, "\\a", "\a");
 	str_replace(str, "\\n", "\n");
 	str_replace(str, "\\t", "\t");
@@ -70,7 +72,6 @@ void	escape_text(char *str)
 	str_replace(str, "\\\\", "\\");
 	str_replace(str, "\\'", "'");
 	str_replace(str, "\\\"", "\"");
-	size_t	i;
 	i = 0;
 	while (str[i])
 	{

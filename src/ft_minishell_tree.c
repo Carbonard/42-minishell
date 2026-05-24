@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_minishell_tree.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: elangari <elangari@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/16 16:54:26 by nyxssa            #+#    #+#             */
-/*   Updated: 2026/04/19 19:46:49 by elangari         ###   ########.fr       */
+/*   Updated: 2026/05/23 15:50:23 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,15 +80,15 @@ void	create_tree(t_command_tree *input)
 	t_command_tree	*first;
 	t_command_tree	*second;
 
-	init_dyn_int(&(input->redir.type_in), 0);
-	init_dyn_int(&(input->redir.type_out), 0);
-	init_dyn_ptr(&(input->redir.file_in), 0);
-	init_dyn_ptr(&(input->redir.file_out), 0);
+	// init_dyn_int(&(input->redir.type_in), 0);
+	// init_dyn_int(&(input->redir.type_out), 0);
+	// init_dyn_ptr(&(input->redir.file_in), 0);
+	// init_dyn_ptr(&(input->redir.file_out), 0);
 	first = NULL;
 	second = NULL;
 	input->sep = NONE;
-	input->redirections = NULL;
-	input->subshell = remove_parenthesis(input->cmd, &(input->redirections));
+	// input->redirections = NULL;
+	input->subshell = remove_parenthesis(input->cmd);
 	if (!divide_by_logic_op(input, &first, &second))
 		divide_by_pipes(input, &first, &second);
 	input->cmd1 = first;

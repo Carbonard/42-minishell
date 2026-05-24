@@ -6,25 +6,52 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/31 16:26:36 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/05/21 18:51:26 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/05/23 20:34:18 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_minishell_execution.h"
+#include "ft_minishell_input.h"
+
+int	subshell_redirection(t_context *ctx, t_command_tree *node)
+{
+	t_str_list	*tokens;
+	t_str_list	*token;
+
+	tokens = get_tokens(node->cmd);
+	token = tokens;
+	while (token && token->content[0] != '<' && token->content[0] != '>')
+	{
+		if (token->content[0] == '(')
+			while (token && token->content[0] != ')')
+				token = token->next;
+		if (token)
+			token = token->next;
+	}
+	while (token && token->next)
+	{
+		if (!manage_redirection(ctx, token, node->here_doc))
+		{
+			ft_str_lstclear(&tokens, free);
+			return (1);
+		}
+		token = token->next->next;
+	}
+	ft_str_lstclear(&tokens, free);
+	return (0);
+}
 
 static int	execute_subshell(t_context *ctx, t_command_tree *node)
 {
 	int				pid;
 	int				status;
 
-	free(split_cmd(node->redirections, &(node->redir)));
-	free(node->redirections);
 	ctx->read_exit_status = 0;
 	pid = fork();
 	if (pid == 0)
 	{
-		// if (node->redir.type_in.length || node->redir.type_out.length)
-		// 	manage_redirection(ctx, &node->redir, node->here_doc);
+		if (subshell_redirection(ctx, node))
+			silent_exit(ctx, ctx->exit_status);
 		node->subshell = 0;
 		pid = execute_node(ctx, node);
 		waitpid(pid, &status, 0);

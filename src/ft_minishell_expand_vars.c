@@ -6,23 +6,34 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/30 23:34:26 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/05/21 16:13:49 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/05/23 15:18:26 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_minishell_execution.h"
 #include "ft_minishell_input.h"
 
+static int	inside_dq(char *str, int i)
+{
+	int	inside_double_quotes;
+	int	j;
+
+	inside_double_quotes = 0;
+	j = 0;
+	while (j < i)
+	{
+		if (str[j] == '"')
+			inside_double_quotes = !inside_double_quotes;
+		j++;
+	}
+	return (inside_double_quotes);
+}
+
 static int	need_to_expand(char *str, int i)
 {
 	int	inside_double_quotes;
 
-	inside_double_quotes = 0;
-	for (int j = 0; j < i; j++)
-	{
-		if (str[j] == '"')
-			inside_double_quotes = !inside_double_quotes;
-	}
+	inside_double_quotes = inside_dq(str, i);
 	while (str[i])
 	{
 		if (!inside_double_quotes && str[i] == '\'')
@@ -107,19 +118,3 @@ char	*expand_input(t_context *ctx, char *input)
 	}
 	return (input);
 }
-
-// char	**get_argv_and_redir(t_context *ctx, char *cmd, t_redirection *redir)
-// {
-// 	char	*command;
-// 	char	**argv;
-
-// 	command = expand_input(ctx, ft_strdup(cmd));
-// 	command = expand_wildcards(command);
-// 	argv = split_cmd(command, redir);
-// 	free(command);
-// 	if (argv && argv[0])
-// 		return (argv);
-// 	free(argv);
-// 	manage_redirection(ctx, redir, NULL);
-// 	return (NULL);
-// }

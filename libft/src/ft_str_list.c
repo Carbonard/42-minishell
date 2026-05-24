@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/19 12:27:38 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/05/21 19:07:17 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/05/24 18:36:34 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@ t_str_list	*ft_str_lstnew(char *content)
 		return (NULL);
 	item->content = content;
 	item->next = NULL;
+	item->prev = NULL;
 	return (item);
 }
 
@@ -41,6 +42,7 @@ void	ft_str_lstadd_back(t_str_list **lst, t_str_list *new)
 		item = item->next;
 	}
 	item->next = new;
+	new->prev = item;
 }
 
 void	ft_str_delitem(t_str_list **lst, t_str_list *item)
@@ -62,6 +64,8 @@ void	ft_str_delitem(t_str_list **lst, t_str_list *item)
 	if (!lst_aux->next)
 		return ;
 	lst_aux->next = item->next;
+	if (item->next)
+		item->next->prev = lst_aux;
 	free(item->content);
 	free(item);
 }
@@ -83,4 +87,15 @@ void	*ft_str_lstclear(t_str_list **lst, void (*free_func)(void *))
 	}
 	*lst = NULL;
 	return (NULL);
+}
+
+void	ft_str_lstinstert(t_str_list *lst, t_str_list *new)
+{
+	if (!lst || !new)
+		return ;
+	new->next = lst->next;
+	lst->next = new;
+	if (new->next)
+		new->next->prev = new;
+	new->prev = lst;
 }

@@ -6,136 +6,109 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/03 15:47:56 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/05/22 12:34:01 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/05/23 15:29:14 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_minishell_execution.h"
 
-static char	*expand_wc(char *cmd, char *start, t_dyn_ptr *entries)
+char	**find_pattern(char *token)
 {
-	int		length;
-	size_t	i;
-	char	*new_cmd;
+	int			start;
+	int			end;
+	t_dyn_ptr	matches;
 
-	sort_entries(entries->arr);
-	length = ft_strlen(cmd) + 1;
-	i = 0;
-	while (i < entries->length)
+	start = 0;
+	end = 0;
+	init_dyn_ptr(&matches, 1);
+	while (token[end])
 	{
-		length += ft_strlen(entries->arr[i]) + 1;
-		i++;
+		while (token[end] && token[end] != '*')
+			end += advance_quotes(token + end);
+		if (end == start)
+		{
+			add_ptr(&matches, ft_calloc(1, 1));
+			end++;
+		}
+		else
+			add_ptr(&matches,
+				remove_quotes(ft_substr(token, start, end - start)));
+		start = end;
 	}
-	new_cmd = malloc(length);
-	ft_strlcpy(new_cmd, cmd, start - cmd + 1);
-	i = 0;
-	while (i < entries->length)
-	{
-		ft_strlcat(new_cmd, entries->arr[i], length);
-		if (i < entries->length - 1)
-			ft_strlcat(new_cmd, " ", length);
-		i++;
-	}
-	ft_strlcat(new_cmd, ft_strchr(start, ' '), length);
-	free(cmd);
-	return (new_cmd);
+	return (matches.arr);
 }
 
-static int	check_entry(char *ent_name, char *pattern, char**match)
+int	pattern_matches(char **pattern, char *name)
 {
-	int	i;
+	int		i;
 
 	i = 0;
-	if (pattern[0] != '*')
+	if (name != ft_strnstr(name, pattern[0], ft_strlen(name)))
+		return (0);
+	while (pattern[i])
 	{
-		if (ft_strncmp(match[0], ent_name, ft_strlen(match[0])))
+		name = ft_strnstr(name, pattern[i], ft_strlen(name));
+		if (!name)
 			return (0);
-		i++;
-		ent_name += ft_strlen(match[0]);
-	}
-	while (match[i])
-	{
-		if (!ft_strnstr(ent_name, match[i], ft_strlen(ent_name)))
-			return (0);
-		ent_name = ft_strnstr(ent_name, match[i], ft_strlen(ent_name));
-		ent_name += ft_strlen(match[i]);
+		name += ft_strlen(pattern[i]);
 		i++;
 	}
-	if (!(pattern[ft_strlen(pattern) - 1] != '*' && ft_strncmp(
-				ent_name + ft_strlen(ent_name) - ft_strlen(match[i - 1]),
-				match[i - 1], ft_strlen(match[i - 1]))))
-		return (1);
-	return (0);
+	if (i && !pattern[i] && *name && pattern[i - 1][0])
+	{
+		name -= ft_strlen(pattern[i - 1]);
+		if (ft_strncmp(name + ft_strlen(name) - ft_strlen(pattern[i - 1]),
+				pattern[i - 1], ft_strlen(pattern[i - 1])))
+			return (0);
+	}
+	return (1);
 }
 
-static int	save_coincidences(t_dyn_ptr *entries, char *pattern)
+char	**find_matches(char *token)
 {
 	char			wd[PATH_MAX];
 	DIR				*dir;
 	struct dirent	*entry;
-	char			**match;
+	t_dyn_ptr		matches;
+	char			**pattern;
 
-	dir = opendir(getcwd(wd, PATH_MAX));
+	pattern = find_pattern(token);
+	if (!getcwd(wd, PATH_MAX))
+	{
+		free_split(pattern);
+		return (NULL);
+	}
+	dir = opendir(wd);
 	entry = readdir(dir);
-	match = ft_split(pattern, '*');
+	init_dyn_ptr(&matches, 1);
 	while (entry)
 	{
-		if (entry->d_name[0] != '.'
-			&& check_entry(entry->d_name, pattern, match))
-			add_ptr(entries, ft_strdup(entry->d_name));
+		if (entry->d_name[0] != '.' && pattern_matches(pattern, entry->d_name))
+			add_ptr(&matches, ft_strdup(entry->d_name));
 		entry = readdir(dir);
 	}
-	free_split(match);
 	closedir(dir);
-	return (entries->length);
+	free_split(pattern);
+	return (matches.arr);
 }
 
-static char	*expand_wc_wrapper(char *cmd, char *start, char *end)
+int	expand_wildcards(char *token, t_dyn_ptr *argv)
 {
-	char		*word;
-	t_dyn_ptr	entries;
+	char		**matches;
+	int			i_match;
+	int			ret;
 
-	if (end)
-		word = ft_substr(start, 0, end - start);
-	else
-		word = ft_strdup(start);
-	remove_quotes(word);
-	init_dyn_ptr(&entries, 0);
-	if (ft_strchr(word, '*'))
+	ret = 0;
+	matches = find_matches(token);
+	if (!matches)
+		return (0);
+	sort_entries(matches);
+	i_match = 0;
+	while (matches[i_match])
 	{
-		if (save_coincidences(&entries, word))
-			cmd = expand_wc(cmd, start, &entries);
+		add_ptr(argv, matches[i_match]);
+		i_match++;
+		ret = 1;
 	}
-	free(word);
-	free_dyn_ptr(&entries);
-	return (cmd);
-}
-
-char	*expand_wildcards(char *cmd)
-{
-	char	*start;
-	char	*prev_start;
-	char	*end;
-
-	prev_start = NULL;
-	start = cmd;
-	while (prev_start != start && *start)
-	{
-		prev_start = start;
-		while (*start && *start != '*')
-			start += advance_quotes(start);
-		if (!*start)
-			break ;
-		end = start;
-		while (start > cmd && *start != ' ')
-			start = cmd + reduce_index(cmd, start - cmd);
-		if (start > cmd)
-			start++;
-		while (*end && *end != ' ')
-			end += advance_quotes(end);
-		if (*(start + 1) != '\'' && *(end - 1) != '\'')
-			cmd = expand_wc_wrapper(cmd, start, end);
-		start = cmd;
-	}
-	return (cmd);
+	free(matches);
+	return (ret);
 }

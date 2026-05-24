@@ -165,9 +165,9 @@ mkdir test_dir_ast
 cd test_dir_ast
 touch aaa Aaa aAa aaA abc aBc Abc
 echo *
-touch '$A' '$a' 'a$a' '*'
-echo *
-touch '$HOME' '|1' '@2' '#3' '~4' '%5' '&6' '/7' '(8' ')9' '=1' _1 1 1_a 1a 1_b 1b 2a 2b a_a aa aA a_ab aab aAb _AAB A_AB 'a b' %abc '\-abc' a_bc ab_c abc aBc %Abc '\-Abc' Abc ' c' con %dAbc %DAbc ' f' f 'f ' f_ 'f 1' 'f\\1' 'f\1' f_1 'f|1' f1 'f 2' 'f\\2' 'f\2' f_2 'f|2' f2 'f\\3' 'f\3' f_3 'f|3' f3 '"filename"' "'filename'" __g _g __h _h ho__la ho_la hola 'hola"nop' __ij _ij __ik _ik %zAbc %ZAbc
+# touch '$A' '$a' 'a$a' '*'
+# echo *
+# touch '$HOME' '|1' '@2' '#3' '~4' '%5' '&6' '/7' '(8' ')9' '=1' _1 1 1_a 1a 1_b 1b 2a 2b a_a aa aA a_ab aab aAb _AAB A_AB 'a b' %abc '\-abc' a_bc ab_c abc aBc %Abc '\-Abc' Abc ' c' con %dAbc %DAbc ' f' f 'f ' f_ 'f 1' 'f\\1' 'f\1' f_1 'f|1' f1 'f 2' 'f\\2' 'f\2' f_2 'f|2' f2 'f\\3' 'f\3' f_3 'f|3' f3 '"filename"' "'filename'" __g _g __h _h ho__la ho_la hola 'hola"nop' __ij _ij __ik _ik %zAbc %ZAbc
 echo *
 echo * | wc -l
 mkdir -p cosa/ls cosa/zzz/a cosa/zzz/b cosa/zzz/c

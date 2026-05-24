@@ -6,11 +6,19 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/03 18:16:41 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/04/18 22:25:56 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/05/23 15:44:03 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_minishell.h"
+
+#define ECHO_FLAGS "ne"
+
+typedef struct s_echo_flags
+{
+	int	no_new_line;
+	int	format;
+}	t_echo_flags;
 
 // environment
 int			save_env(t_context *ctx, char **original_env);

@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/15 20:06:16 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/05/16 17:48:09 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/05/23 15:35:54 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ static int	add_pwd(t_context *ctx, char *prompt)
 	if (saved_pwd)
 		ft_strlcpy(pwd, saved_pwd, PATH_MAX);
 	else if (!getcwd(pwd, PATH_MAX))
-			ft_strlcpy(pwd, ".", PATH_MAX);
+		ft_strlcpy(pwd, ".", PATH_MAX);
 	if (home[0] && !ft_strncmp(home, pwd, ft_strlen(home)))
 	{
 		ft_strlcat(prompt, "~", MAX_PROMPT);
@@ -37,7 +37,7 @@ static int	add_pwd(t_context *ctx, char *prompt)
 
 static void	get_default_prompt(t_context *ctx, char *prompt)
 {
-	ft_strlcat(prompt, "\e[34m", MAX_PROMPT);
+	ft_strlcpy(prompt, "\e[34m", MAX_PROMPT);
 	add_pwd(ctx, prompt);
 	ft_strlcat(prompt, "$ ", MAX_PROMPT);
 	ft_strlcat(prompt, "\e[0m", MAX_PROMPT);

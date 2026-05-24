@@ -6,21 +6,24 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/31 16:59:44 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/04/30 21:37:54 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/05/23 15:45:53 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_minishell.h"
+
+static void	print_aux(char *s)
+{
+	ft_putstr_fd(s, 2);
+	ft_putstr_fd(": ", 2);
+}
 
 void	shell_perror(t_context *ctx, char *s)
 {
 	ft_putstr_fd(ctx->shell_name, 2);
 	ft_putstr_fd(": ", 2);
 	if (s && s[0])
-	{
-		ft_putstr_fd(s, 2);
-		ft_putstr_fd(": ", 2);
-	}
+		print_aux(s);
 	if (ctx->status == MS_TOO_MANY_ARGS)
 		ft_putendl_fd("too many arguments", 2);
 	else if (ctx->status == MS_OLDPWD_NOT_SET)
