@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/17 21:35:56 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/05/23 15:45:20 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/05/25 21:01:48 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,7 @@ static void	execute_builtins(t_context *ctx, char **argv)
 	else if (!ft_strncmp(argv[0], "cd", 3))
 		ctx->status = cd(ctx, argv);
 	builtins_errors(ctx, argv);
+	// A
 	free_split(argv);
 }
 

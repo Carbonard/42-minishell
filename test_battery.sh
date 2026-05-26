@@ -84,7 +84,7 @@ echo "jaja que     bueno" > testfile1
 
 cat testfile1
 
-< test_battery.sh cat -e | grep a | grep e > testfile2
+< test_battery.sh cat -e | grep o | grep e > testfile2
 
 cat -e testfile2
 

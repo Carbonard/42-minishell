@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/16 14:57:20 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/05/23 15:47:45 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/05/25 12:42:54 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,12 +100,12 @@ typedef struct s_command_tree
 {
 	struct s_command_tree	*cmd1;
 	struct s_command_tree	*cmd2;
-	char					*cmd;
+	t_str_list				*cmd_tokens;
 	int						sep;
 	int						subshell;
 	char					*here_doc;
 	char					*eof;
-	// char					*redirections;
+	t_str_list				*subshell_redirections;
 	// t_redirection			redir;
 }	t_command_tree;
 

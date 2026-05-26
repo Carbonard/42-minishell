@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/23 19:59:01 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/05/23 20:11:58 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/05/25 20:08:54 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ static void	manage_single_input(t_context *ctx)
 	if (g_last_signal)
 		return ;
 	expand_heredoc(ctx);
-	ctx->cmd_tree.cmd = ctx->user_input;
+	ctx->cmd_tree.cmd_tokens = ctx->input_tokens;
 	create_tree(&ctx->cmd_tree);
 	spread_heredocs(&ctx->cmd_tree, &ctx->here_docs, &ctx->eofs, 0);
 	// printf("\e[93mexecuting '%s'\e[0m\n", ctx->user_input);

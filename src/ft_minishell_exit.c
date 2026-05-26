@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_minishell_exit.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: elangari <elangari@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/20 00:02:17 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/04/19 19:27:51 by elangari         ###   ########.fr       */
+/*   Updated: 2026/05/25 21:02:08 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,7 @@ void	builtin_exit(t_context *ctx, char **argv)
 		if (ctx->status == MS_NON_NUMERIC_ARG)
 			builtins_errors(ctx, argv);
 	}
+	// A
 	free_split(argv);
 	silent_exit(ctx, ctx->exit_status);
 }

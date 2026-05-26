@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/03 15:47:56 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/05/23 15:29:14 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/05/26 02:47:37 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,6 +98,8 @@ int	expand_wildcards(char *token, t_dyn_ptr *argv)
 	int			ret;
 
 	ret = 0;
+	if (!ft_strchr(token, '*'))
+		return (0);
 	matches = find_matches(token);
 	if (!matches)
 		return (0);

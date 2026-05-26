@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/19 12:27:38 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/05/24 18:36:34 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/05/26 02:09:57 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,7 @@ void	ft_str_delitem(t_str_list **lst, t_str_list *item)
 		*lst = item->next;
 		free(item->content);
 		free(item);
+		(*lst)->prev = NULL;
 		return ;
 	}
 	while (lst_aux->next && lst_aux->next != item)
@@ -69,7 +70,7 @@ void	ft_str_delitem(t_str_list **lst, t_str_list *item)
 	free(item->content);
 	free(item);
 }
-
+#include <stdio.h>
 void	*ft_str_lstclear(t_str_list **lst, void (*free_func)(void *))
 {
 	t_str_list	*item;
@@ -81,21 +82,23 @@ void	*ft_str_lstclear(t_str_list **lst, void (*free_func)(void *))
 	while (item)
 	{
 		tmp_item = item;
+		// printf("liberating '%s'\n", tmp_item->content);
 		item = item->next;
 		free_func(tmp_item->content);
+		tmp_item->content = NULL;
 		free(tmp_item);
 	}
 	*lst = NULL;
 	return (NULL);
 }
 
-void	ft_str_lstinstert(t_str_list *lst, t_str_list *new)
+void	ft_str_lst_preinstert(t_str_list *lst, t_str_list *new)
 {
 	if (!lst || !new)
 		return ;
-	new->next = lst->next;
-	lst->next = new;
-	if (new->next)
-		new->next->prev = new;
-	new->prev = lst;
+	new->next = lst;
+	new->prev = lst->prev;
+	if (lst->prev)
+		lst->prev->next = new;
+	lst->prev = new;
 }

@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/26 11:46:47 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/05/05 10:32:36 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/05/25 20:08:03 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,13 +30,13 @@ void	expand_heredoc(t_context *ctx)
 static int	assign_heredoc(
 	t_command_tree *node, t_dyn_ptr *hd, t_dyn_ptr *eofs, int n)
 {
-	int		i;
-	char	*last_line;
+	t_str_list	*token;
+	char		*last_line;
 
-	i = 0;
-	while (node->cmd[i])
+	token = node->cmd_tokens;
+	while (token)
 	{
-		if (node->cmd[i] == '<' && node->cmd[i + 1] == '<')
+		if (token->content[0] == '<' && token->content[1] == '<')
 		{
 			if (hd->arr[n])
 			{
@@ -51,7 +51,7 @@ static int	assign_heredoc(
 			node->here_doc = hd->arr[n];
 			n++;
 		}
-		i++;
+		token = token->next;
 	}
 	return (n);
 }
