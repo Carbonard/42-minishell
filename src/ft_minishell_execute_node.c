@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/31 16:26:36 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/05/26 01:20:30 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/05/28 19:05:23 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,15 +51,14 @@ static int	execute_subshell(t_context *ctx, t_command_tree *node)
 	pid = fork();
 	if (pid == 0)
 	{
+		ctx->subshell = 1;
 		redirections = node->subshell_redirections;
 		while (redirections && redirections->next)
 		{
-			fprintf(stderr, "redirecting to '%s'\n", redirections->next->content);
 			if (!manage_redirection(ctx, redirections, node->here_doc))
 				silent_exit(ctx, ctx->exit_status);
 			redirections = redirections->next->next;
 		}
-		// fprintf(stderr, "redirected\n");
 		pid = execute_node(ctx, node->cmd1);
 		waitpid(pid, &status, 0);
 		ctx->exit_status = get_status(ctx, status);
@@ -94,6 +93,7 @@ static void
 	int	pid;
 	int	status;
 
+	ctx->subshell = 1;
 	if (fileno == STDIN_FILENO)
 		pipe_extrem = 0;
 	else

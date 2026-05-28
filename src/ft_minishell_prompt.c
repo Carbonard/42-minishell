@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/15 20:06:16 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/05/23 15:35:54 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/05/28 19:34:47 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,14 +35,6 @@ static int	add_pwd(t_context *ctx, char *prompt)
 	return (2);
 }
 
-static void	get_default_prompt(t_context *ctx, char *prompt)
-{
-	ft_strlcpy(prompt, "\e[34m", MAX_PROMPT);
-	add_pwd(ctx, prompt);
-	ft_strlcat(prompt, "$ ", MAX_PROMPT);
-	ft_strlcat(prompt, "\e[0m", MAX_PROMPT);
-}
-
 static int	add_char(char *str, char c)
 {
 	int	i;
@@ -68,7 +60,7 @@ void	get_prompt(t_context *ctx, char *prompt)
 	ps1 = find_env_value(ctx, "PS1");
 	if (!ps1)
 	{
-		get_default_prompt(ctx, prompt);
+		prompt[0] = 0;
 		return ;
 	}
 	expanded = expand_input(ctx, ft_strdup(ps1));

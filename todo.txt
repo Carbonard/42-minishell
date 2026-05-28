@@ -49,3 +49,28 @@ static int	change_state(int current_state, int event)
 	};
 	return (conversor[current_state][event]);
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+static int	change_state(int current_state, int event)
+{
+						//E_NEW_LINE	E_OPERATOR,		E_REDIR,	E_OPEN_PAR,	 E_CLOS_PAR, E_OTHER,	E_INVALID
+	static int const	conversor[S_TOTAL][E_TOTAL] = {
+		[S_INITIAL] =	 {S_INITIAL,	S_ERROR,		S_REDIR,	S_INITIAL,	S_ERROR,	S_COMMAND,	S_ERROR},
+		[S_COMMAND] =	 {S_COMMAND,	S_INITIAL,		S_REDIR,	S_ERROR,	S_CLOS_PAR,	S_COMMAND,	S_ERROR},
+		[S_CLOS_PAR] =	 {S_CLOS_PAR,	S_INITIAL,		S_REDIR_PAR,S_ERROR,	S_CLOS_PAR,	S_ERROR,	S_ERROR},
+		[S_REDIR] =		 {S_REDIR,		S_ERROR,		S_ERROR,	S_ERROR,	S_ERROR,	S_COMMAND,	S_ERROR},
+		[S_REDIR_PAR] =	 {S_REDIR_PAR,	S_ERROR,		S_ERROR,	S_ERROR,	S_ERROR,	S_CLOS_PAR,	S_ERROR},
+	};
+	return (conversor[current_state][event]);
+}

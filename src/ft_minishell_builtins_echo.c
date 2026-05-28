@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/16 17:57:25 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/05/26 01:05:08 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/05/28 18:45:43 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ int	echo(char **argv)
 {
 	int				arg_i;
 	t_echo_flags	flags;
-// fprintf(stderr, "echoing '%s'\n", argv[1]);
+
 	arg_i = read_flags(argv, &flags);
 	while (argv[arg_i])
 	{

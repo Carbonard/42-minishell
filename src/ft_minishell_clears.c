@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/29 20:33:14 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/05/26 00:23:43 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/05/28 18:45:15 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,10 +21,6 @@ static void	clear_tree(t_command_tree *tree)
 	if (tree->cmd2)
 		clear_tree(tree->cmd2);
 	ft_str_lstclear(&(tree->cmd_tokens), free);
-	// free_dyn_ptr(&(tree->redir.file_in));
-	// free_dyn_ptr(&(tree->redir.file_out));
-	// free_dyn_int(&(tree->redir.type_in));
-	// free_dyn_int(&(tree->redir.type_out));
 	free(tree);
 }
 
@@ -36,14 +32,9 @@ void	clear_input(t_context *ctx)
 	ctx->cmd_tree.cmd2 = NULL;
 	free(ctx->user_input);
 	ctx->user_input = NULL;
-	// free_dyn_ptr(&(ctx->cmd_tree.redir.file_in));
-	// free_dyn_ptr(&(ctx->cmd_tree.redir.file_out));
-	// free_dyn_int(&(ctx->cmd_tree.redir.type_in));
-	// free_dyn_int(&(ctx->cmd_tree.redir.type_out));
 	free_dyn_ptr(&ctx->here_docs);
 	free_dyn_ptr(&ctx->eofs);
 	ft_str_lstclear(&(ctx->cmd_tree.cmd_tokens), free);
-	// ft_str_lstclear(&ctx->input_tokens, free);
 	restore_redirections(ctx);
 }
 

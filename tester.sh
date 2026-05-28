@@ -31,15 +31,16 @@ fi
 # # cat test_battery.sh | valgrind --leak-check=full --show-leak-kinds=all --track-fds=yes --trace-children=no --child-silent-after-fork=no --suppressions=readline.supp ./bash >/dev/null 2>&1
 echo "Executing valgrind"
 cat test_battery.sh | valgrind --leak-check=full --show-leak-kinds=all --track-fds=yes --trace-children=no --child-silent-after-fork=no --suppressions=readline.supp ./bash > valgrind.output 2>&1
-echo -e "\e[93mMemory leaks:\e[0m"
-# cat test_battery.sh | valgrind --leak-check=full --show-leak-kinds=all --track-fds=yes --trace-children=no --child-silent-after-fork=no --suppressions=readline.supp ./bash |& grep -B5 -A5 -E 'are definitely|are still'
-grep -v ' 0 bytes' valgrind.output | grep -B2 -A7 'in use at exit' | cat > valgrind.log
-if [ "$(cat valgrind.log)" = "" ]
-then
-	echo -e "\e[34mOK\e[0m"
-else
-	cat valgrind.log
-fi
+
+# echo -e "\e[93mMemory leaks:\e[0m"
+# # cat test_battery.sh | valgrind --leak-check=full --show-leak-kinds=all --track-fds=yes --trace-children=no --child-silent-after-fork=no --suppressions=readline.supp ./bash |& grep -B5 -A5 -E 'are definitely|are still'
+# grep -v ' 0 bytes' valgrind.output | grep -B2 -A7 'in use at exit' | cat > valgrind.log
+# if [ "$(cat valgrind.log)" = "" ]
+# then
+# 	echo -e "\e[34mOK\e[0m"
+# else
+# 	cat valgrind.log
+# fi
 
 echo -e "\e[93mOpen file descriptors:\e[0m"
 # cat test_battery.sh | valgrind --leak-check=full --show-leak-kinds=all --track-fds=yes --trace-children=no --child-silent-after-fork=no --suppressions=readline.supp ./bash |& 

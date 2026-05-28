@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/16 14:57:20 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/05/25 12:42:54 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/05/28 19:34:12 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,6 +119,7 @@ typedef struct s_context
 	char			*user_input;
 	t_str_list		*input_tokens;
 	int				no_tty;
+	int				subshell;
 	t_command_tree	cmd_tree;
 	int				pipe_fds[2];
 	t_dyn_ptr		here_docs;

@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/02 22:35:42 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/05/25 21:01:56 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/05/26 20:52:58 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,7 +130,6 @@ void	execute_command(t_context *ctx, char **argv)
 	save_argv(ctx, argv, &args);
 	args.args_length = list_to_strarray(ctx, args.exec_args, args.env,
 			args.args_length);
-	// A
 	free_split(argv);
 	if (!ctx->status && !ctx->exit_status)
 	{

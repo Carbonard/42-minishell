@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/18 16:04:35 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/05/21 22:22:01 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/05/28 19:33:41 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,4 +97,28 @@ int	set_pwd(t_context *ctx)
 	else
 		ctx->status = MS_E_PWD_NFOUND;
 	return (ctx->status);
+}
+
+void	increment_shlvl(t_context *ctx)
+{
+	char	*inherited_var;
+	char	new_var[17];
+	int		old_shlvl;
+	char	*new_shlvl;
+
+	inherited_var = find_env_value(ctx, "SHLVL");
+	if (!inherited_var)
+	{
+		export(ctx, "SHLVL=1");
+		return ;
+	}
+	old_shlvl = ft_atoi(inherited_var);
+	new_shlvl = ft_itoa(old_shlvl + 1);
+	ft_strlcpy(new_var, "SHLVL=", 17);
+	if (new_shlvl)
+		ft_strlcat(new_var, new_shlvl, 17);
+	else
+		ft_strlcat(new_var, inherited_var, 17);
+	export(ctx, new_var);
+	free(new_shlvl);
 }

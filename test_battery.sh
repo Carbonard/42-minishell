@@ -84,7 +84,7 @@ echo "jaja que     bueno" > testfile1
 
 cat testfile1
 
-< test_battery.sh cat -e | grep o | grep e > testfile2
+< test_battery.sh cat -e | grep a | grep e > testfile2
 
 cat -e testfile2
 
@@ -127,6 +127,8 @@ echo $?
 
 ((echo pqwerty && ls psdfa) || echo gggg && echo hhh)
 
+echo $?
+
 echo -n aaa
 
 echo -nn bbb
@@ -165,8 +167,8 @@ mkdir test_dir_ast
 cd test_dir_ast
 touch aaa Aaa aAa aaA abc aBc Abc
 echo *
-# touch '$A' '$a' 'a$a' '*'
-# echo *
+touch '$A' '$a' 'a$a' '*' a A '$b' '$B'
+echo *
 # touch '$HOME' '|1' '@2' '#3' '~4' '%5' '&6' '/7' '(8' ')9' '=1' _1 1 1_a 1a 1_b 1b 2a 2b a_a aa aA a_ab aab aAb _AAB A_AB 'a b' %abc '\-abc' a_bc ab_c abc aBc %Abc '\-Abc' Abc ' c' con %dAbc %DAbc ' f' f 'f ' f_ 'f 1' 'f\\1' 'f\1' f_1 'f|1' f1 'f 2' 'f\\2' 'f\2' f_2 'f|2' f2 'f\\3' 'f\3' f_3 'f|3' f3 '"filename"' "'filename'" __g _g __h _h ho__la ho_la hola 'hola"nop' __ij _ij __ik _ik %zAbc %ZAbc
 echo *
 echo * | wc -l
@@ -281,7 +283,7 @@ echo -e "testing -e flag\ntested"
 echo -eee "testing -e flag\ttested"
 echo testing -e flag
 
-echo -ne "testing -ne flag"
+echo -ne "testing \n -ne flag"
 echo -en "testing -en flag"
 echo -ene "testing -ene flag"
 echo -ne "testing -ne flag"
@@ -292,3 +294,36 @@ echo -e
 echo testing" "quotes    and " things"
 
 echo "testing * with quotes" m"i"n*l
+
+echo $?
+
+(echo $A && echo 1 && export A=1 && echo 2 && echo $A && ls asdf && echo 3 || echo 4 && echo 5 && echo cd adsf) | cat && ls fsda
+echo $?
+(echo 1 || echo 5 && (echo 2 && (echo 3 && echo 4 && exit 3) || echo 6) || echo 7) && echo 8
+echo $?
+echo 1 && (echo 2 && cd asdfa || (echo 3 && (exit 4) && echo 5 || echo 6) && echo 7) || echo 8 && echo 9
+echo $?
+(echo 1  && echo 2) | (cat > fff | cat -e >> fff) | cat -e
+echo $?
+ls
+rm fff
+echo hola | exit 42
+echo $?
+echo hola | exit 42 | echo jajaja
+echo $?
+(exit -42)
+echo $?
+(exit 2 3)
+echo $?
+(exit a 4)
+echo $?
+(exit 5 a)
+echo $?
+(exit 666666666666)
+echo $?
+(ls fdadfa)
+echo $?
+ls sdfa | echo $? && echo $?
+echo $?
+ls sdfa && echo $? | echo $?
+echo $?

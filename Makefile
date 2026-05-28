@@ -1,4 +1,4 @@
-.PHONY: all clean fclean re force
+.PHONY: all clean fclean re force bonus
 
 INCLUDE_DIR = ./includes
 
@@ -14,8 +14,8 @@ DYNARRAYS = dynamic_arrays/libft_dynarray.a
 
 BUILTINS = builtins builtins_others builtins_env exit clears builtins_echo
 INPUT = get_input read_heredocs heredocs check_syntax check_input prompt escape tokens manage_input
-EXECUTION = redirections expand_vars tree execute_tree execute_node execute_leaf execute_command tree_utils
-OTHER = main environment debug error_messages wildcards wildcards_sort utils signals history init_config init_config2
+EXECUTION = redirections expand_vars tree execute_tree execute_node execute_leaf execute_command
+OTHER = main environment debug error_messages wildcards wildcards_sort utils signals history init_config
 
 SRC_DIR = src
 FILES = $(BUILTINS) $(INPUT) $(EXECUTION) $(OTHER)
@@ -38,6 +38,8 @@ $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c $(INCLUDE_DIR)/ft_minishell.h | $(OBJ_DIR)
 
 $(NAME): $(LIBFT) $(DYNARRAYS) $(OBJ)
 	$(CC) $(CFLAGS) $(OBJ) $(CLIBS) -o $@
+
+bonus: $(NAME)
 
 test: $(NAME)
 	@echo "Use the following command:"

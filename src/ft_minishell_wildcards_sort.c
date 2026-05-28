@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/03 15:51:23 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/05/23 14:34:50 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/05/26 21:20:07 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,9 +21,9 @@ static int	lowalnumcmp(char *s1, char *s2)
 	i2 = 0;
 	while (s1[i1] && s2[i2])
 	{
-		while (!ft_isalnum(s1[i1]) && s1[i1])
+		while (s1[i1] && !ft_isalnum(s1[i1]) && s1[i1] != '$')
 			i1++;
-		while (!ft_isalnum(s2[i2]) && s2[i2])
+		while (s2[i2] && !ft_isalnum(s2[i2]) && s2[i2] != '$')
 			i2++;
 		if ((ft_tolower(s2[i2]) - ft_tolower(s1[i1])) > 0)
 			return (-1);
@@ -34,7 +34,7 @@ static int	lowalnumcmp(char *s1, char *s2)
 		if (s2[i2])
 			i2++;
 	}
-	return (0);
+	return (s1[i1] - s2[i2]);
 }
 
 static int	alphacmp(char *s1, char *s2)
@@ -59,7 +59,7 @@ static int	alphacmp(char *s1, char *s2)
 		if (s2[i2])
 			i2++;
 	}
-	return (0);
+	return (s1[i1] - s2[i2]);
 }
 
 static int	direntry_cmp(char *s1, char *s2)

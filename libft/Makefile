@@ -17,7 +17,7 @@ ft_strjoin ft_strlcat ft_strlcpy ft_strlen ft_strmapi ft_strncmp\
 ft_strnstr ft_strrchr ft_strtrim ft_substr ft_tolower ft_toupper\
 ft_lstadd_back_bonus ft_lstadd_front_bonus ft_lstclear_bonus\
 ft_lstdelone_bonus ft_lstiter_bonus ft_lstlast_bonus ft_lstmap_bonus\
-ft_lstnew_bonus ft_lstsize_bonus ft_str_list\
+ft_lstnew_bonus ft_lstsize_bonus ft_str_list ft_str_list_2\
 ft_utoa_base ft_atoi_base ft_basic_math ft_str_malloc ft_strjoin_char\
 ft_printf ft_printf_flags ft_printf_numbers_1 ft_printf_numbers_2 ft_printf_texts\
 get_next_line
