@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/16 14:57:20 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/05/28 19:34:12 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/05/30 00:50:37 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,7 +103,7 @@ typedef struct s_command_tree
 	t_str_list				*cmd_tokens;
 	int						sep;
 	int						subshell;
-	char					*here_doc;
+	int						hd_fd;
 	char					*eof;
 	t_str_list				*subshell_redirections;
 	// t_redirection			redir;
@@ -122,7 +122,8 @@ typedef struct s_context
 	int				subshell;
 	t_command_tree	cmd_tree;
 	int				pipe_fds[2];
-	t_dyn_ptr		here_docs;
+	// t_dyn_ptr		here_docs;
+	t_dyn_int		heredocs_fds;
 	t_dyn_ptr		eofs;
 	int				input_lines;
 	int				original_in;
@@ -149,6 +150,7 @@ void	builtin_exit(t_context *ctx, char **argv);
 // clears
 void	clear_input(t_context *ctx);
 void	free_all(t_context *ctx);
+void	close_hd_fds(t_context *ctx);
 // error_messages
 void	shell_perror(t_context *ctx, char *s);
 void	custom_error(char *s, char *error_msg);

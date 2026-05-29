@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/29 03:50:34 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/05/28 19:19:59 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/05/30 01:47:41 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ char	**manage_argv_and_redirections(t_context *ctx, t_command_tree *node)
 		if ((token->content[0] == '<' || token->content[0] == '>')
 			&& token->next)
 		{
-			if (!manage_redirection(ctx, token, node->here_doc))
+			if (!manage_redirection(ctx, token, node->hd_fd))
 			{
 				free_split(argv.arr);
 				return (NULL);
@@ -94,9 +94,9 @@ int	execute_leaf(t_context *ctx, t_command_tree *node)
 
 	cmd_argv = manage_argv_and_redirections(ctx, node);
 	ctx->read_exit_status = 1;
-	if (!cmd_argv || try_builtins(ctx, cmd_argv))
+	if (!cmd_argv || !cmd_argv[0] || try_builtins(ctx, cmd_argv))
 	{
-		restore_redirections(ctx);
+		free_split(cmd_argv);
 		return (0);
 	}
 	ctx->read_exit_status = 0;
@@ -104,13 +104,13 @@ int	execute_leaf(t_context *ctx, t_command_tree *node)
 	if (pid == 0)
 	{
 		close_redirections(ctx);
+		close_hd_fds(ctx);
 		if (ctx->status == MS_SUCCESS)
 			execute_command(ctx, cmd_argv);
 		else
 			free_split(cmd_argv);
 		silent_exit(ctx, ctx->exit_status);
 	}
-	restore_redirections(ctx);
 	signal(SIGINT, SIG_IGN);
 	free_split(cmd_argv);
 	return (pid);

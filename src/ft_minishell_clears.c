@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/29 20:33:14 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/05/28 18:45:15 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/05/30 00:56:40 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,18 @@ static void	clear_tree(t_command_tree *tree)
 	free(tree);
 }
 
+void	close_hd_fds(t_context *ctx)
+{
+	size_t	i;
+
+	i = 0;
+	while (i < ctx->heredocs_fds.length)
+	{
+		close(ctx->heredocs_fds.arr[i]);
+		i++;
+	}
+}
+
 void	clear_input(t_context *ctx)
 {
 	clear_tree(ctx->cmd_tree.cmd1);
@@ -32,7 +44,11 @@ void	clear_input(t_context *ctx)
 	ctx->cmd_tree.cmd2 = NULL;
 	free(ctx->user_input);
 	ctx->user_input = NULL;
-	free_dyn_ptr(&ctx->here_docs);
+	if (ctx->heredocs_fds.size)
+	{
+		close_hd_fds(ctx);
+		free_dyn_int(&ctx->heredocs_fds);
+	}
 	free_dyn_ptr(&ctx->eofs);
 	ft_str_lstclear(&(ctx->cmd_tree.cmd_tokens), free);
 	restore_redirections(ctx);

@@ -62,4 +62,4 @@ else
 	cat valgrind.log
 fi
 
-rm minishell_output.log bash_output.log minishell_error.log bash_error.log bash valgrind.log valgrind.output
+# rm minishell_output.log bash_output.log minishell_error.log bash_error.log bash valgrind.log valgrind.output

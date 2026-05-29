@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/03 23:34:37 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/04/26 12:46:22 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/05/28 23:14:19 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,8 @@ static int	add_text(char **line, int fd, int *read_bytes)
 	char	*tmp;
 
 	*read_bytes = read(fd, buffer, BUFFER_SIZE);
+	// printf("<Acabamos de leer en GNL con %i>", *read_bytes);
+	// fflush(stdout);
 	if (*read_bytes == 0)
 		return (0);
 	if (*read_bytes < 0)
@@ -31,7 +33,7 @@ static int	add_text(char **line, int fd, int *read_bytes)
 	tmp = ft_strjoin(*line, buffer);
 	free(*line);
 	*line = tmp;
-	if (!tmp)
+	if (!tmp || *read_bytes < BUFFER_SIZE)
 		return (0);
 	return (1);
 }
@@ -53,14 +55,13 @@ char	*get_next_line(int fd)
 	endl = ft_strchr(line, '\n');
 	while (!endl && add_text(&line, fd, &read_bytes))
 		endl = ft_strchr(line, '\n');
+	endl = ft_strchr(line, '\n');
 	if (endl)
 	{
 		ft_strlcpy(saved[fd], endl + 1, BUFFER_SIZE);
 		endl[1] = 0;
 	}
 	else if (line)
-	{
 		saved[fd][0] = 0;
-	}
 	return (line);
 }

@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/31 16:26:36 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/05/28 19:05:23 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/05/29 21:04:00 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ static int	execute_subshell(t_context *ctx, t_command_tree *node)
 		redirections = node->subshell_redirections;
 		while (redirections && redirections->next)
 		{
-			if (!manage_redirection(ctx, redirections, node->here_doc))
+			if (!manage_redirection(ctx, redirections, node->hd_fd))
 				silent_exit(ctx, ctx->exit_status);
 			redirections = redirections->next->next;
 		}
@@ -136,7 +136,10 @@ int	execute_node(t_context *ctx, t_command_tree *node)
 	if (node->subshell)
 		pid = execute_subshell(ctx, node);
 	else if (node->sep == NONE)
+	{
 		pid = execute_leaf(ctx, node);
+		restore_redirections(ctx);
+	}
 	else if (node->sep == AND || node->sep == OR)
 		pid = execute_logic(ctx, node);
 	else if (node->sep == PIPE)

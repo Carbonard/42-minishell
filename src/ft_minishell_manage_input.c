@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/23 19:59:01 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/05/28 19:24:07 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/05/30 01:13:19 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,15 +36,14 @@ static void	manage_multiple_input(t_context *ctx)
 
 static void	manage_single_input(t_context *ctx)
 {
-	read_heredocs(ctx);
-	add_input_history(ctx);
 	if (g_last_signal)
 		return ;
-	expand_heredoc(ctx);
+	add_history(ctx->user_input);
 	ctx->cmd_tree.cmd_tokens = ctx->input_tokens;
 	create_tree(&ctx->cmd_tree);
-	spread_heredocs(&ctx->cmd_tree, &ctx->here_docs, &ctx->eofs, 0);
-	execute_input(ctx);
+	read_heredocs(ctx);
+	if (g_last_signal != SIGINT)
+		execute_input(ctx);
 }
 
 static int	count_lines(char *str)
@@ -67,7 +66,6 @@ void	io_while(t_context *ctx)
 	{
 		set_default_signals();
 		ctx->status = MS_SUCCESS;
-		init_dyn_ptr(&ctx->here_docs, 0);
 		init_dyn_ptr(&ctx->eofs, 0);
 		if (read_input(ctx))
 		{

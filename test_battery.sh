@@ -327,3 +327,17 @@ ls sdfa | echo $? && echo $?
 echo $?
 ls sdfa && echo $? | echo $?
 echo $?
+
+ls
+<< eof
+asdf
+qwer
+eof
+ls
+< asdf
+echo $?
+ls
+>asdf
+echo $?
+ls
+rm asdf

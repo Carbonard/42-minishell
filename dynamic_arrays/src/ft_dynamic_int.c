@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/27 17:06:30 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/04/26 12:47:14 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/05/30 00:55:31 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,7 @@ int	add_int(t_dyn_int *d_array, int number)
 void	free_dyn_int(t_dyn_int *d_array)
 {
 	d_array->size = 0;
+	d_array->length = 0;
 	free(d_array->arr);
 	d_array->arr = NULL;
 }
