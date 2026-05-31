@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/27 17:06:30 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/05/30 00:55:31 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/05/30 22:20:34 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,13 @@ int	init_dyn_int(t_dyn_int *d_array, size_t size)
 {
 	d_array->size = size;
 	d_array->length = 0;
-	d_array->arr = malloc(d_array->size * sizeof(int));
+	if (size)
+		d_array->arr = malloc(d_array->size * sizeof(int));
+	else
+	{
+		d_array->arr = NULL;
+		return (1);
+	}
 	if (!(d_array->arr))
 	{
 		d_array->size = 0;

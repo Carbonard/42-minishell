@@ -341,3 +341,5 @@ ls
 echo $?
 ls
 rm asdf
+
+echo end

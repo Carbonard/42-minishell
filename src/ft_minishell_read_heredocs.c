@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/29 17:22:13 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/05/30 01:49:03 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/05/30 23:40:19 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,54 +129,51 @@ static char	*read_line(t_context *ctx)
 {
 	char	*line;
 
-	if (ctx->no_tty)
-	{
-		line = get_next_line(0);
-		if (line[ft_strlen(line) - 1] == '\n')
-			line[ft_strlen(line) - 1] = 0;
-	}
-	else
-		line = readline("> ");
+	if (!ctx->no_tty)
+		ft_putstr_fd("> ", 1);
+	line = get_next_line(0);
+	if (line && line [0] && line[ft_strlen(line) - 1] == '\n')
+		line[ft_strlen(line) - 1] = 0;
 	return (line);
 }
 
-void	read_hd(t_context *ctx, t_command_tree *node, char *eof)
+static void	read_hd(t_context *ctx, t_command_tree *node, char *eof)
 {
 	char	*new_line;
-	int		pid;
 	int		pipe_fds[2];
 
 	pipe(pipe_fds);
 	add_int(&ctx->heredocs_fds, pipe_fds[0]);
 	node->hd_fd = pipe_fds[0];
-	pid = fork();
-	if (pid == 0)
+	new_line = read_line(ctx);
+	while (new_line && ft_strncmp(new_line, eof, ft_strlen(eof) + 1))
 	{
-		signal(SIGINT, NULL);
-		new_line = read_line(ctx);
-		while (new_line && ft_strncmp(new_line, eof, ft_strlen(eof) + 1))
-		{
-			new_line = expand_input(ctx, new_line);
-			ft_putendl_fd(new_line, pipe_fds[1]);
-			free(new_line);
-			new_line = read_line(ctx);
-		}
+		new_line = expand_input(ctx, new_line);
+		ft_putendl_fd(new_line, pipe_fds[1]);
 		free(new_line);
-		close(pipe_fds[1]);
-		silent_exit(ctx, 0);
+		new_line = read_line(ctx);
 	}
+	if (!new_line && !g_last_signal)
+	{
+		ft_putchar_fd('\n', 2);
+		ft_putstr_fd(ctx->shell_name, 2);
+		ft_putstr_fd(
+			": warning: here-document delimited by end-of-file (wanted `", 2);
+		ft_putstr_fd(eof, 2);
+		ft_putstr_fd("')\n", 2);
+	}
+	free(new_line);
 	close(pipe_fds[1]);
-	waitpid(pid, NULL, 0);
 }
 
-void	read_node_heredoc(t_context *ctx, t_command_tree *node)
+void	read_heredocs(t_context *ctx, t_command_tree *node)
 {
 	t_str_list	*token;
 
 	if (node->sep != NONE)
 	{
-		read_node_heredoc(ctx, node->cmd1);
-		read_node_heredoc(ctx, node->cmd2);
+		read_heredocs(ctx, node->cmd1);
+		read_heredocs(ctx, node->cmd2);
 	}
 	if (node->subshell)
 		token = node->subshell_redirections;
@@ -188,10 +185,4 @@ void	read_node_heredoc(t_context *ctx, t_command_tree *node)
 			read_hd(ctx, node, token->next->content);
 		token = token->next;
 	}
-}
-
-void	read_heredocs(t_context *ctx)
-{
-	init_dyn_int(&ctx->heredocs_fds, 1);
-	read_node_heredoc(ctx, &ctx->cmd_tree);
 }
