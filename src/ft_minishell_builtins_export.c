@@ -3,21 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   ft_minishell_builtins_export.c                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: elangari <elangari@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/31 15:51:24 by elangari          #+#    #+#             */
-/*   Updated: 2026/05/31 17:49:14 by elangari         ###   ########.fr       */
+/*   Updated: 2026/06/02 15:10:48 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/ft_minishell_builtins.h"
 
-
-// create array
-// order array
-// print array
-
-static void order_export(t_dyn_ptr *exp)
+static void	order_export(t_dyn_ptr *exp)
 {
 	size_t	i;
 	size_t	si;
@@ -29,7 +24,8 @@ static void order_export(t_dyn_ptr *exp)
 	{
 		while ((si) < exp->length)
 		{
-			if (ft_strncmp(exp->arr[i], exp->arr[si], ft_strlen(exp->arr[i])) > 0)
+			if (ft_strncmp(
+					exp->arr[i], exp->arr[si], ft_strlen(exp->arr[i])) > 0)
 			{
 				tmp = exp->arr[i];
 				exp->arr[i] = exp->arr[si];
