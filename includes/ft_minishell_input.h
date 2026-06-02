@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/03 18:09:40 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/05/30 22:24:39 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/05/31 23:13:32 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ void		escape_text(char *str);
 void		get_prompt(t_context *ctx, char *prompt);
 int			read_input(t_context *ctx);
 // tokens
-t_str_list	*get_tokens(char *input);
+t_str_list	*get_tokens(char *input, char *delimiters);
 // check_syntax
 int			check_syntax(t_context *ctx);
 // check_input

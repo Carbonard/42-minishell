@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/29 18:58:57 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/05/28 19:16:43 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/05/31 23:16:55 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ static int	get_event(char *token)
 		return (E_OPEN_PAR);
 	else if (token[0] == ')')
 		return (E_CLOSING_PAR);
-	else if (is_metachar(token[0]))
+	else if (ft_strchr(METACHARACTERS, token[0]))
 		return (E_INVALID);
 	return (E_OTHER);
 }
@@ -71,7 +71,7 @@ int	check_syntax(t_context *ctx)
 	int			event;
 	int			parenthesis;
 
-	ctx->input_tokens = get_tokens(ctx->user_input);
+	ctx->input_tokens = get_tokens(ctx->user_input, METACHARACTERS);
 	if (!ctx->input_tokens)
 		return (1);
 	token = ctx->input_tokens;

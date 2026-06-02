@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/16 14:57:20 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/05/30 00:50:37 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/05/31 23:15:49 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,9 @@
 # endif
 
 # define INVALID_EXPORT_CHARS "*@#?+-$!"
+
+# define METACHARACTERS "<>|& \t\n();"
+# define SPACES " \t\n"
 
 extern int	g_last_signal;
 
@@ -155,8 +158,8 @@ void	close_hd_fds(t_context *ctx);
 void	shell_perror(t_context *ctx, char *s);
 void	custom_error(char *s, char *error_msg);
 // utils
-int		is_metachar(char c);
-int		is_redirection(char *str);
+// int		is_metachar(char c);
+// int		is_redirection(char *str);
 
 // Debug
 void	display_tree(t_command_tree *tree);

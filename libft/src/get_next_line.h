@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/03 23:37:03 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/05/30 00:38:11 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/06/02 11:43:48 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,5 +25,6 @@ typedef struct s_fdlist
 }	t_fdlist;
 
 char	*get_next_line(int fd);
+char	*get_next_line_force_nl(int fd);
 
 #endif

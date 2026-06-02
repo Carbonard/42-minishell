@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/29 20:14:14 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/05/21 03:32:29 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/06/02 10:18:28 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,31 +71,57 @@ static int	is_operator(char *str)
 	return (0);
 }
 
+int	is_redirection(char *str)
+{
+	if ((str[0] == '<' && str[1] == '<') || (str[0] == '>' && str[1] == '>'))
+		return (2);
+	if (str[0] == '<' || str[0] == '>')
+		return (1);
+	return (0);
+}
+
 int	check_operator(t_context *ctx)
 {
-	int	i;
+	t_str_list	*token;
 
-	i = 0;
+	token = ctx->input_tokens;
 	ctx->status = MS_SUCCESS;
-	while (ctx->status == MS_SUCCESS && ctx->user_input[i])
+	while (ctx->status == MS_SUCCESS && token)
 	{
-		if (is_operator(ctx->user_input + i))
-		{
-			i += is_operator(ctx->user_input + i);
-			while ((ctx->user_input[i] == ' ' || ctx->user_input[i] == '\n'))
-				i++;
-			if (ctx->user_input[i] == 0)
-				ctx->status = MS_E_SYNTAX;
-		}
-		else if (is_redirection(ctx->user_input + i))
-		{
-			i += is_redirection(ctx->user_input + i);
-			while ((ctx->user_input[i] == ' '))
-				i++;
-			if (ctx->user_input == 0)
-				ctx->status = MS_E_SYNTAX_EOF;
-		}
-		i++;
+		if (is_operator(token->content) && !token->next)
+			ctx->status = MS_E_SYNTAX;
+		else if (is_redirection(token->content) && !token->next)
+			ctx->status = MS_E_SYNTAX_EOF;
+		token = token->next;
 	}
 	return (ctx->status != MS_SUCCESS);
 }
+
+// int	check_operator(t_context *ctx)
+// {
+// 	int	i;
+
+// 	i = 0;
+// 	ctx->status = MS_SUCCESS;
+// 	while (ctx->status == MS_SUCCESS && ctx->user_input[i])
+// 	{
+// 		if (is_operator(ctx->user_input + i))
+// 		{
+// 			i += is_operator(ctx->user_input + i);
+// 			while ((ctx->user_input[i] == ' ' || ctx->user_input[i] == '\n'))
+// 				i++;
+// 			if (ctx->user_input[i] == 0)
+// 				ctx->status = MS_E_SYNTAX;
+// 		}
+// 		else if (is_redirection(ctx->user_input + i))
+// 		{
+// 			i += is_redirection(ctx->user_input + i);
+// 			while ((ctx->user_input[i] == ' '))
+// 				i++;
+// 			if (ctx->user_input == 0)
+// 				ctx->status = MS_E_SYNTAX_EOF;
+// 		}
+// 		i++;
+// 	}
+// 	return (ctx->status != MS_SUCCESS);
+// }

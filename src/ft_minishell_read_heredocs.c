@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/29 17:22:13 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/05/30 23:40:19 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/06/02 11:50:54 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,7 +131,7 @@ static char	*read_line(t_context *ctx)
 
 	if (!ctx->no_tty)
 		ft_putstr_fd("> ", 1);
-	line = get_next_line(0);
+	line = get_next_line_force_nl(0);
 	if (line && line [0] && line[ft_strlen(line) - 1] == '\n')
 		line[ft_strlen(line) - 1] = 0;
 	return (line);

@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/21 01:06:04 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/05/23 15:14:35 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/06/02 10:21:58 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ static int	save_token(t_str_list **tokens, char *input, int start, int end)
 		free(token);
 		return (0);
 	}
-	if (input[start] != ' ' && input[start] != '\t')
+	if (!ft_strchr(SPACES, input[start]))
 		ft_str_lstadd_back(tokens, ft_str_lstnew(token));
 	else
 		free(token);
@@ -50,7 +50,8 @@ static int	add_token(t_str_list **tokens, char *input, int start, int *end)
 	if (!input[start])
 		return (start);
 	(*end)++;
-	if (is_metachar(input[start]) && !is_metachar(input[*end]))
+	if (ft_strchr(METACHARACTERS, input[start])
+		&& !ft_strchr(METACHARACTERS, input[*end]))
 	{
 		if (save_token(tokens, input, start, *end))
 			return (-1);
@@ -59,7 +60,7 @@ static int	add_token(t_str_list **tokens, char *input, int start, int *end)
 	return (start);
 }
 
-t_str_list	*get_tokens(char *input)
+t_str_list	*get_tokens(char *input, char *delimiters)
 {
 	t_str_list	*tokens;
 	int			i;
@@ -78,7 +79,7 @@ t_str_list	*get_tokens(char *input)
 			quote = input[i];
 		else if (quote && input[i] == quote)
 			quote = 0;
-		if (!quote && is_metachar(input[i]))
+		if (!quote && ft_strchr(delimiters, input[i]))
 			start = add_token(&tokens, input, start, &i);
 		else
 			i++;

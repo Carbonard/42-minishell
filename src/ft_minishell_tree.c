@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/16 16:54:26 by nyxssa            #+#    #+#             */
-/*   Updated: 2026/05/29 22:06:11 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/06/02 14:44:34 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,8 +108,6 @@ void	create_subnodes(
 		if (input->cmd1)
 		{
 			input->cmd1->cmd_tokens = first;
-			// for (t_str_list *i = first; i; i = i->next)
-			// 	printf("1. token: '%s'\n", i->content);
 			create_tree(input->cmd1);
 		}
 	}
@@ -119,8 +117,6 @@ void	create_subnodes(
 		if (input->cmd2)
 		{
 			input->cmd2->cmd_tokens = second;
-			// for (t_str_list *i = second; i; i = i->next)
-			// 	printf("2. token: '%s'\n", i->content);
 			create_tree(input->cmd2);
 		}
 	}

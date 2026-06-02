@@ -342,4 +342,7 @@ echo $?
 ls
 rm asdf
 
+export A='1;2'
+echo $A "$A"
+
 echo end

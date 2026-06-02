@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/29 03:50:34 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/05/30 01:47:41 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/05/31 23:14:04 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ static void	expand_tokens(t_command_tree *node, t_str_list *token)
 	t_str_list	*new_token;
 	t_str_list	*saved_token;
 
-	new_token = get_tokens(token->content);
+	new_token = get_tokens(token->content, SPACES);
 	while (new_token)
 	{
 		saved_token = new_token->next;

@@ -6,28 +6,19 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/03 19:05:58 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/05/26 02:35:21 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/05/31 23:23:50 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_minishell.h"
 
-int	is_metachar(char c)
-{
-	if (c == '<' || c == '>' || c == '|' || c == '&' || c == ' ' || c == '\t'
-		|| c == '\n' || c == '(' || c == ')' || c == ';')
-		return (1);
-	return (0);
-}
-
-int	is_redirection(char *str)
-{
-	if ((str[0] == '<' && str[1] == '<') || (str[0] == '>' && str[1] == '>'))
-		return (2);
-	if (str[0] == '<' || str[0] == '>')
-		return (1);
-	return (0);
-}
+// int	is_metachar(char c)
+// {
+// 	if (c == '<' || c == '>' || c == '|' || c == '&' || c == ' ' || c == '\t'
+// 		|| c == '\n' || c == '(' || c == ')' || c == ';')
+// 		return (1);
+// 	return (0);
+// }
 
 char	*remove_quotes(char *cmd)
 {

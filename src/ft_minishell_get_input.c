@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/18 20:24:41 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/05/30 01:13:14 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/06/02 14:59:29 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,8 +46,9 @@ static void	check_and_extend_input(t_context *ctx)
 	char	*input_extension;
 	char	*aux;
 
-	ft_putstr_fd("> ", 1);
-	input_extension = get_next_line(0);
+	if (isatty(0))
+		ft_putstr_fd("> ", 1);
+	input_extension = get_next_line_force_nl(0);
 	if (g_last_signal)
 		return ;
 	if (!input_extension && check_quotes(ctx))
@@ -55,10 +56,9 @@ static void	check_and_extend_input(t_context *ctx)
 	else if (!input_extension)
 		ctx->status = MS_SE_EOF;
 	if (!input_extension)
-	{
 		shell_perror(ctx, NULL);
+	if (!input_extension)
 		ft_exit(ctx, 2);
-	}
 	if (!g_last_signal)
 	{
 		aux = ft_strjoin_char(ctx->user_input, input_extension, '\n');
