@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_minishell_builtins_env.c                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: elangari <elangari@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/16 18:55:11 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/04/18 23:03:55 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/05/31 17:43:59 by elangari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,8 @@ int	builtin_export(t_context *ctx, char **argv)
 	int	final_status;
 
 	final_status = MS_SUCCESS;
+	if (!argv[1])
+		print_export(ctx);
 	while (*argv)
 	{
 		status = export(ctx, *argv);

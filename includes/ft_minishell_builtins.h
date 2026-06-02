@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_minishell_builtins.h                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: elangari <elangari@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/03 18:16:41 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/05/23 15:44:03 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/05/31 17:26:11 by elangari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@ int			print_env(t_context *ctx);
 int			export(t_context *ctx, char *var);
 int			builtin_export(t_context *ctx, char **argv);
 int			unset(t_context *ctx, char **argv);
+void		print_export(t_context *ctx);
 // builtins_others
 int			valid_flag(const char *arg, char f);
 int			cd(t_context *ctx, char **argv);

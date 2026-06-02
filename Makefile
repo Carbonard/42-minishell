@@ -12,7 +12,7 @@ all: $(NAME)
 LIBFT = libft/libft.a
 DYNARRAYS = dynamic_arrays/libft_dynarray.a
 
-BUILTINS = builtins builtins_others builtins_env exit clears builtins_echo
+BUILTINS = builtins builtins_others builtins_env exit clears builtins_echo builtins_export
 INPUT = get_input read_heredocs check_syntax check_input prompt escape tokens manage_input
 EXECUTION = redirections expand_vars tree execute_tree execute_node execute_leaf execute_command
 OTHER = main environment error_messages wildcards wildcards_sort utils signals init_config
