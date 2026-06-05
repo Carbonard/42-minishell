@@ -35,6 +35,13 @@ remove debug
 redirection after subshell
 
 
+
+
+\t en automata
+
+
+
+
 static int	change_state(int current_state, int event)
 {
 						// E_SPACE,		 E_SINGLE_QUOTE,E_DOUBLE_QUOTE, E_AND,		E_OR,		 E_PIPE,	 E_REDIR_R,	 E_REDIR_L, E_DOUBLE_REDIR_R, E_DOUBLE_REDIR_L, E_OPEN_PAR,	 E_CLOSING_PAR, E_OTHER,
@@ -74,3 +81,5 @@ static int	change_state(int current_state, int event)
 	};
 	return (conversor[current_state][event]);
 }
+
+

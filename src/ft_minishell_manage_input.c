@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/23 19:59:01 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/06/02 11:33:52 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/06/04 19:04:54 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,7 @@ static void	manage_single_input(t_context *ctx)
 		return ;
 	add_history(ctx->user_input);
 	ctx->cmd_tree.cmd_tokens = ctx->input_tokens;
+	ctx->input_tokens = NULL;
 	create_tree(&ctx->cmd_tree);
 	read_heredocs(ctx, &ctx->cmd_tree);
 	if (g_last_signal != SIGINT)
@@ -66,7 +67,7 @@ void	io_while(t_context *ctx)
 	{
 		set_default_signals();
 		ctx->status = MS_SUCCESS;
-		init_dyn_ptr(&ctx->eofs, 0);
+		init_dyn_int(&ctx->heredocs_fds, 0);
 		if (read_input(ctx))
 		{
 			if (ctx->user_input[0] != 0 && ft_strchr(ctx->user_input, '\n')

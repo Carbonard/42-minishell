@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/16 14:57:20 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/05/31 23:15:49 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/06/04 18:22:55 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,7 +107,6 @@ typedef struct s_command_tree
 	int						sep;
 	int						subshell;
 	int						hd_fd;
-	char					*eof;
 	t_str_list				*subshell_redirections;
 	// t_redirection			redir;
 }	t_command_tree;
