@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/31 16:26:36 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/06/07 18:38:21 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/06/08 17:58:40 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ static int	execute_subshell(t_context *ctx, t_command_tree *node)
 	t_str_list		*redirections;
 
 	ctx->read_exit_status = 0;
-	pid = fork();
+	pid = custom_fork(ctx);
 	if (pid == 0)
 	{
 		ctx->subshell = 1;
@@ -32,11 +32,11 @@ static int	execute_subshell(t_context *ctx, t_command_tree *node)
 			redirections = redirections->next->next;
 		}
 		pid = execute_node(ctx, node->cmd1);
-		waitpid(pid, &status, 0);
+		custom_waitpid(pid, &status, 0);
 		ctx->exit_status = get_status(ctx, status);
 		silent_exit(ctx, ctx->exit_status);
 	}
-	waitpid(pid, &status, 0);
+	custom_waitpid(pid, &status, 0);
 	ctx->exit_status = get_status(ctx, status);
 	return (pid);
 }
@@ -49,7 +49,7 @@ static int	execute_logic(t_context *ctx, t_command_tree *node)
 	pid = execute_node(ctx, node->cmd1);
 	if (!ctx->read_exit_status)
 	{
-		waitpid(pid, &status, 0);
+		custom_waitpid(pid, &status, 0);
 		ctx->exit_status = get_status(ctx, status);
 	}
 	if ((ctx->exit_status == EXIT_SUCCESS && node->sep == AND)
@@ -74,7 +74,7 @@ static void
 	close(ctx->pipe_fds[1]);
 	close(ctx->pipe_fds[0]);
 	pid = execute_node(ctx, next_node);
-	waitpid(pid, &status, 0);
+	custom_waitpid(pid, &status, 0);
 	status = get_status(ctx, status);
 	silent_exit(ctx, status);
 }
@@ -87,16 +87,16 @@ static int	execute_pipe(t_context *ctx, t_command_tree *node)
 
 	pipe(ctx->pipe_fds);
 	ctx->read_exit_status = 0;
-	pid1 = fork();
+	pid1 = custom_fork(ctx);
 	if (pid1 == 0)
 		execute_pipe_child(ctx, STDOUT_FILENO, node->cmd1);
 	close(ctx->pipe_fds[1]);
-	pid2 = fork();
+	pid2 = custom_fork(ctx);
 	if (pid2 == 0)
 		execute_pipe_child(ctx, STDIN_FILENO, node->cmd2);
 	close(ctx->pipe_fds[0]);
-	waitpid(pid1, NULL, 0);
-	waitpid(pid2, &status, 0);
+	custom_waitpid(pid1, NULL, 0);
+	custom_waitpid(pid2, &status, 0);
 	ctx->exit_status = get_status(ctx, status);
 	return (pid2);
 }

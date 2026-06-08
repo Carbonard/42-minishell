@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/02 22:35:42 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/05/26 20:52:58 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/06/08 18:36:14 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,8 +86,6 @@ static void	save_argv(t_context *ctx, char **argv, t_exec_args *args)
 	args->static_argv[argv_i] = NULL;
 	if (args->args_length >= ARG_MAX || argv_i >= ARG_MAX - 1)
 	{
-		printf("last argv: %i: %s\n", argv_i - 1,
-			args->static_argv[argv_i - 1]);
 		ctx->status = MS_LONG_ARGS;
 		ctx->exit_status = ES_CMD_NOT_EXEC;
 	}
@@ -114,7 +112,6 @@ static size_t
 	new_env[env_i] = NULL;
 	if (length >= ARG_MAX || env_i >= ARG_MAX - 1)
 	{
-		printf("last env: %i: %s\n", env_i - 1, new_env[env_i - 1]);
 		ctx->status = MS_LONG_ARGS;
 		ctx->exit_status = ES_CMD_NOT_EXEC;
 	}

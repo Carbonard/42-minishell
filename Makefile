@@ -14,7 +14,7 @@ DYNARRAYS = dynamic_arrays/libft_dynarray.a
 
 BUILTINS = builtins builtins_env exit clears builtins_echo builtins_export builtins_cd
 INPUT = get_input read_heredocs check_syntax check_input prompt escape tokens manage_input
-EXECUTION = redirections expand_variables expand_variable tree execute_tree execute_node execute_leaf execute_command
+EXECUTION = redirections expand_variables expand_variable tree execute_tree execute_node execute_leaf execute_command children
 OTHER = main environment error_messages wildcards wildcards_sort quotes_utils signals init_config
 
 SRC_DIR = src

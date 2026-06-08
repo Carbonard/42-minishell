@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/29 03:50:34 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/06/07 18:41:27 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/06/08 17:41:55 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,7 +125,7 @@ int	execute_leaf(t_context *ctx, t_command_tree *node)
 		return (0);
 	}
 	ctx->read_exit_status = 0;
-	pid = fork();
+	pid = custom_fork(ctx);
 	if (pid == 0)
 	{
 		close_redirections(ctx);
