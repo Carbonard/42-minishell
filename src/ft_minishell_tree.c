@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/16 16:54:26 by nyxssa            #+#    #+#             */
-/*   Updated: 2026/06/02 14:44:34 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/06/06 19:54:12 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,11 +91,10 @@ static void	parse_subshell(
 			par_cnt--;
 		token = token->next;
 	}
-	if (token)
-	{
-		*second = token->next;
-		ft_str_lstbreak(token);
-	}
+	if (token->next)
+		token = token->prev;
+	*second = token->next;
+	ft_str_lstbreak(token);
 	input->subshell = 1;
 }
 

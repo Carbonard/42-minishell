@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/16 14:57:20 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/06/04 18:22:55 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/06/07 18:37:03 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,16 +89,6 @@ enum e_operators
 	HERE_DOC
 };
 
-// typedef struct s_redirection
-// {
-// 	t_dyn_int	type_in;
-// 	t_dyn_ptr	file_in;
-// 	t_dyn_int	type_out;
-// 	t_dyn_ptr	file_out;
-// 	int			original_in;
-// 	int			original_out;
-// }	t_redirection;
-
 typedef struct s_command_tree
 {
 	struct s_command_tree	*cmd1;
@@ -134,9 +124,9 @@ typedef struct s_context
 
 // init_config
 void	check_interactive(t_context *ctx, int argc, char **argv);
-void	set_shell(t_context *ctx, char *shell_name);
+int		set_shell(t_context *ctx, char *shell_name);
 int		set_pwd(t_context *ctx);
-void	increment_shlvl(t_context *ctx);
+int		increment_shlvl(t_context *ctx);
 // signals
 void	rl_handler_sigint(int sig);
 void	generic_handler_sigint(int sig);
@@ -148,6 +138,7 @@ char	*find_env_value(t_context *ctx, char *var);
 // exit
 void	ft_exit(t_context *ctx, long status);
 void	silent_exit(t_context *ctx, long status);
+void	malloc_exit(t_context *ctx);
 void	builtin_exit(t_context *ctx, char **argv);
 // clears
 void	clear_input(t_context *ctx);
@@ -156,11 +147,5 @@ void	close_hd_fds(t_context *ctx);
 // error_messages
 void	shell_perror(t_context *ctx, char *s);
 void	custom_error(char *s, char *error_msg);
-// utils
-// int		is_metachar(char c);
-// int		is_redirection(char *str);
-
-// Debug
-void	display_tree(t_command_tree *tree);
 
 #endif

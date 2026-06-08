@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/18 16:04:35 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/05/28 19:33:41 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/06/05 20:08:00 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ void	check_interactive(t_context *ctx, int argc, char **argv)
 	ctx->no_tty = 1;
 }
 
-void	set_shell(t_context *ctx, char *shell_name)
+int	set_shell(t_context *ctx, char *shell_name)
 {
 	char	shell_var[PATH_MAX + 5];
 	char	current_dir[PATH_MAX];
@@ -83,7 +83,7 @@ void	set_shell(t_context *ctx, char *shell_name)
 		ft_strlcat(shell_var, "/", PATH_MAX);
 		ft_strlcat(shell_var, ctx->shell_name, PATH_MAX);
 	}
-	export(ctx, shell_var);
+	return (add_env(ctx, shell_var));
 }
 
 int	set_pwd(t_context *ctx)
@@ -93,13 +93,16 @@ int	set_pwd(t_context *ctx)
 	ctx->status = MS_SUCCESS;
 	ft_strlcpy(pwd, "PWD=", PATH_MAX);
 	if (getcwd(pwd + 4, PATH_MAX - 4))
-		export(ctx, pwd);
+	{
+		if (add_env(ctx, pwd))
+			return (ctx->status);
+	}
 	else
 		ctx->status = MS_E_PWD_NFOUND;
 	return (ctx->status);
 }
 
-void	increment_shlvl(t_context *ctx)
+int	increment_shlvl(t_context *ctx)
 {
 	char	*inherited_var;
 	char	new_var[17];
@@ -109,8 +112,8 @@ void	increment_shlvl(t_context *ctx)
 	inherited_var = find_env_value(ctx, "SHLVL");
 	if (!inherited_var)
 	{
-		export(ctx, "SHLVL=1");
-		return ;
+		add_env(ctx, "SHLVL=1");
+		return (ctx->status);
 	}
 	old_shlvl = ft_atoi(inherited_var);
 	new_shlvl = ft_itoa(old_shlvl + 1);
@@ -121,4 +124,5 @@ void	increment_shlvl(t_context *ctx)
 		ft_strlcat(new_var, inherited_var, 17);
 	export(ctx, new_var);
 	free(new_shlvl);
+	return (ctx->status);
 }

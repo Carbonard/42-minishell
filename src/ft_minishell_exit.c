@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/20 00:02:17 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/05/28 19:23:27 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/06/06 22:37:27 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,15 @@ void	ft_exit(t_context *ctx, long status)
 {
 	printf("exit\n");
 	silent_exit(ctx, status);
+}
+
+void	malloc_exit(t_context *ctx)
+{
+	ft_putstr_fd(ctx->shell_name, 2);
+	ft_putstr_fd(": ", 2);
+	ft_putendl_fd("Cannot allocate memory", 2);
+	ft_putendl_fd("Shell aborted", 2);
+	silent_exit(ctx, 1);
 }
 
 void	builtin_exit(t_context *ctx, char **argv)

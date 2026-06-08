@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/03 18:11:57 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/05/29 21:03:16 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/06/06 20:46:54 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,8 @@ int		execute_leaf(t_context *ctx, t_command_tree *node);
 char	**get_argv_and_redir(t_context *ctx, char *cmd);
 void	restore_redirections(t_context *ctx);
 void	close_redirections(t_context *ctx);
-char	*expand_input(t_context *ctx, char *input);
+char	*expand_variables(t_context *ctx, char *input);
+char	*expand_variable(t_context *ctx, char *str, int *i);
 // split_cmd
 int		advance_quotes(char *str);
 // char	**split_cmd(char *cmd, t_redirection *redir);

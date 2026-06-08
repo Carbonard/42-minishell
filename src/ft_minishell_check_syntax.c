@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/29 18:58:57 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/06/05 18:43:04 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/06/07 16:46:13 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ int	check_syntax(t_context *ctx)
 	int			event;
 	int			parenthesis;
 
-	ctx->input_tokens = get_tokens(ctx->user_input, METACHARACTERS);
+	ctx->input_tokens = get_tokens(ctx, ctx->user_input, METACHARACTERS);
 	if (!ctx->input_tokens)
 		return (1);
 	token = ctx->input_tokens;

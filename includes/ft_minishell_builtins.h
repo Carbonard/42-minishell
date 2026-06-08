@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_minishell_builtins.h                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: elangari <elangari@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/03 18:16:41 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/05/31 17:26:11 by elangari         ###   ########.fr       */
+/*   Updated: 2026/06/07 21:05:07 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,10 +27,10 @@ t_str_list	*find_env_node(t_context *ctx, char *var);
 int			del_env(t_context *ctx, char *var_name);
 // builtins_env
 int			print_env(t_context *ctx);
+int			unset(t_context *ctx, char **argv);
+// builtins_export
 int			export(t_context *ctx, char *var);
 int			builtin_export(t_context *ctx, char **argv);
-int			unset(t_context *ctx, char **argv);
-void		print_export(t_context *ctx);
 // builtins_others
 int			valid_flag(const char *arg, char f);
 int			cd(t_context *ctx, char **argv);
@@ -38,3 +38,4 @@ int			echo(char **argv);
 int			pwd(void);
 // error_messages
 void		builtins_errors(t_context *ctx, char **argv);
+void		shell_arg_error(t_context *ctx, char **argv, int arg_i);

@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/19 12:27:38 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/06/05 18:43:21 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/06/05 19:23:57 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,8 @@ void	ft_str_delitem(t_str_list **lst, t_str_list *item)
 		*lst = item->next;
 		free(item->content);
 		free(item);
-		(*lst)->prev = NULL;
+		if (*lst)
+			(*lst)->prev = NULL;
 		return ;
 	}
 	while (lst_aux->next && lst_aux->next != item)

@@ -2,6 +2,25 @@
 
 make || return
 
+norminette > normi.log
+
+echo -e '\e[93mNorminette:\e[0m'
+
+globals=$(grep "Global" normi.log | wc -l)
+if [ $globals -gt 2 ]; then
+	echo -e "\e[31mToo much global variables: $globals\e[0m"
+fi
+
+normi_err=$(grep -vE "OK|Global" normi.log | wc -l)
+if [ $normi_err -ne 1 ]
+then
+	echo -e "\e[31m"
+	grep -vE "OK|Global|Setting locale to" normi.log
+	echo -e "\e[0m"
+else
+	echo -e "\e[34mOK\e[0m"
+fi
+
 cp minishell bash
 
 touch minishell_output.log minishell_error.log bash_output.log bash_error.log

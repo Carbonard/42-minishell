@@ -6,24 +6,26 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/31 16:59:44 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/05/23 15:45:53 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/06/07 21:13:37 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_minishell.h"
 
-static void	print_aux(char *s)
-{
-	ft_putstr_fd(s, 2);
-	ft_putstr_fd(": ", 2);
-}
-
-void	shell_perror(t_context *ctx, char *s)
+static void	print_aux(t_context *ctx, char *s)
 {
 	ft_putstr_fd(ctx->shell_name, 2);
 	ft_putstr_fd(": ", 2);
 	if (s && s[0])
-		print_aux(s);
+	{
+		ft_putstr_fd(s, 2);
+		ft_putstr_fd(": ", 2);
+	}
+}
+
+void	shell_perror(t_context *ctx, char *s)
+{
+	print_aux(ctx, s);
 	if (ctx->status == MS_TOO_MANY_ARGS)
 		ft_putendl_fd("too many arguments", 2);
 	else if (ctx->status == MS_OLDPWD_NOT_SET)
@@ -40,6 +42,8 @@ void	shell_perror(t_context *ctx, char *s)
 		ft_putendl_fd(strerror(ENAMETOOLONG), 2);
 	else if (ctx->status == MS_CMD_IS_DIR)
 		ft_putendl_fd("Is a directory", 2);
+	else if (ctx->status == MS_E_ENV_NFOUND)
+		ft_putendl_fd("Environment is empty", 2);
 	else
 		perror(NULL);
 	if (!ctx->exit_status)
@@ -53,7 +57,7 @@ void	custom_error(char *s, char *error_msg)
 	ft_putendl_fd(error_msg, 2);
 }
 
-void	shell_arg_error(t_context *ctx, char **argv)
+void	shell_arg_error(t_context *ctx, char **argv, int arg_i)
 {
 	ft_putstr_fd(ctx->shell_name, 2);
 	ft_putstr_fd(": ", 2);
@@ -61,7 +65,7 @@ void	shell_arg_error(t_context *ctx, char **argv)
 	ft_putstr_fd(": ", 2);
 	if (ctx->status == MS_NOT_VALID_ID)
 		ft_putchar_fd('`', 2);
-	ft_putstr_fd(argv[1], 2);
+	ft_putstr_fd(argv[arg_i], 2);
 	if (ctx->status == MS_NOT_VALID_ID)
 		ft_putchar_fd('\'', 2);
 	ft_putstr_fd(": ", 2);
@@ -83,9 +87,9 @@ void	builtins_errors(t_context *ctx, char **argv)
 	if ((!ft_strncmp(argv[0], "cd", 3) || !ft_strncmp(argv[0], "exit", 5)
 			|| !ft_strncmp(argv[0], "export", 7))
 		&& ctx->status != MS_TOO_MANY_ARGS && ctx->status != MS_OLDPWD_NOT_SET
-		&& ctx->status != MS_HOME_NOT_SET)
-		shell_arg_error(ctx, argv);
-	else
+		&& ctx->status != MS_HOME_NOT_SET && ctx->status != MS_NOT_VALID_ID)
+		shell_arg_error(ctx, argv, 1);
+	else if (ctx->status != MS_NOT_VALID_ID)
 		shell_perror(ctx, argv[0]);
 	ctx->exit_status = 1;
 	if (ctx->status == MS_NON_NUMERIC_ARG)

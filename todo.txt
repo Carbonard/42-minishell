@@ -35,9 +35,13 @@ remove debug
 redirection after subshell
 
 
+builtins warn about error but do not handle
 
-
-\t en automata
+unwatched functions:
+	fork
+	pipe
+	dup
+	dup2
 
 
 

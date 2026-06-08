@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/03 15:47:56 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/05/26 02:47:37 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/06/07 16:18:52 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,6 +91,22 @@ char	**find_matches(char *token)
 	return (matches.arr);
 }
 
+static void	free_remaining(char **matches, int i_match)
+{
+	while (matches[i_match])
+	{
+		free(matches[i_match]);
+		i_match++;
+	}
+	free(matches);
+}
+
+/*
+	This function returns:
+		 0 if anything done
+		 1 if wildcards are expanded
+		-1 on error
+*/
 int	expand_wildcards(char *token, t_dyn_ptr *argv)
 {
 	char		**matches;
@@ -107,7 +123,11 @@ int	expand_wildcards(char *token, t_dyn_ptr *argv)
 	i_match = 0;
 	while (matches[i_match])
 	{
-		add_ptr(argv, matches[i_match]);
+		if (!add_ptr(argv, matches[i_match]))
+		{
+			free_remaining(matches, i_match);
+			return (-1);
+		}
 		i_match++;
 		ret = 1;
 	}

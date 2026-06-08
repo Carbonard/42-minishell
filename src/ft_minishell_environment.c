@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/18 22:18:08 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/04/18 23:24:23 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/06/05 20:04:29 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,10 +18,13 @@ int	save_env(t_context *ctx, char **original_env)
 	while (*original_env)
 	{
 		if (add_env(ctx, *original_env) != MS_SUCCESS)
-			return (MS_E_ENV_MALLOC);
+		{
+			ctx->status = MS_E_MALLOC;
+			break ;
+		}
 		original_env++;
 	}
-	return (MS_SUCCESS);
+	return (ctx->status);
 }
 
 int	add_env(t_context *ctx, char *new_var)
@@ -30,10 +33,17 @@ int	add_env(t_context *ctx, char *new_var)
 
 	new_var = ft_strdup(new_var);
 	if (!new_var)
-		return (MS_E_ENV_MALLOC);
+	{
+		ctx->status = MS_E_MALLOC;
+		return (MS_E_MALLOC);
+	}
 	new_item = ft_str_lstnew(new_var);
 	if (!new_item)
-		return (MS_E_ENV_MALLOC);
+	{
+		free(new_item);
+		ctx->status = MS_E_MALLOC;
+		return (MS_E_MALLOC);
+	}
 	ft_str_lstadd_back(&ctx->env, new_item);
 	return (MS_SUCCESS);
 }

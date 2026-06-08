@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/15 20:06:16 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/05/28 19:34:47 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/06/06 20:27:37 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ void	get_prompt(t_context *ctx, char *prompt)
 		prompt[0] = 0;
 		return ;
 	}
-	expanded = expand_input(ctx, ft_strdup(ps1));
+	expanded = expand_variables(ctx, ft_strdup(ps1));
 	prompt[0] = 0;
 	i = 0;
 	while (expanded[i])

@@ -17,11 +17,11 @@ echo $?
 echo $PATH
 
 cd abcd
-
+echo aaaaaaaaaaaaaaaa
 export A=abcd
-
+echo aaaaaaaaaaaaaaaa
 echo $A, "$A", '$A', $AA
-
+echo aaaaaaaaaaaaaaaa
 export $A=5
 echo $?
 
@@ -344,5 +344,48 @@ rm asdf
 
 export A='1;2'
 echo $A "$A"
+unset  A
+
+(cat -e << a) << b > fileeeeee && << c cat -e > fiiiile
+dofjaosjd
+zlxkcasdf
+a
+asdfjñasjkf
+b
+erdtfvhbjkl
+njhgyft
+c
+
+cat fileeeeee
+cat fiiiile
+rm fileeeeee 	fiiiile
+
+export home=$HOME
+unset HOME
+cd
+echo $?
+cd -
+echo $?
+cd - asda
+echo $?
+export HOME=$home
+unset home
+
+export A=$OLDPWD
+unset OLDPWD
+cd -
+echo $?
+cd - asda
+echo $?
+export OLDPWD=$A
+unset A
+
+echo $PWD
+
+export A=1 2=B C=3
+echo $?
+echo $A - $B - $C
+echo $?
+unset A C
 
 echo end
