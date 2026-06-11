@@ -2,9 +2,9 @@
 
 make || return
 
-norminette > normi.log
-
 echo -e '\e[93mNorminette:\e[0m'
+
+norminette > normi.log
 
 globals=$(grep "Global" normi.log | wc -l)
 if [ $globals -gt 2 ]; then

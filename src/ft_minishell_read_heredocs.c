@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/29 17:22:13 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/06/06 20:27:37 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/06/12 01:09:41 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,12 +26,23 @@ static char	*read_line(t_context *ctx)
 	return (line);
 }
 
+static void	heredoc_ending_error(char *shell_name, char *eof)
+{
+	ft_putchar_fd('\n', 2);
+	ft_putstr_fd(shell_name, 2);
+	ft_putstr_fd(
+		": warning: here-document delimited by end-of-file (wanted `", 2);
+	ft_putstr_fd(eof, 2);
+	ft_putstr_fd("')\n", 2);
+}
+
 static void	read_hd(t_context *ctx, t_command_tree *node, char *eof)
 {
 	char	*new_line;
 	int		pipe_fds[2];
 
-	pipe(pipe_fds);
+	if (custom_pipe(ctx, pipe_fds))
+		return ;
 	add_int(&ctx->heredocs_fds, pipe_fds[0]);
 	node->hd_fd = pipe_fds[0];
 	new_line = read_line(ctx);
@@ -43,14 +54,7 @@ static void	read_hd(t_context *ctx, t_command_tree *node, char *eof)
 		new_line = read_line(ctx);
 	}
 	if (!new_line && !g_last_signal)
-	{
-		ft_putchar_fd('\n', 2);
-		ft_putstr_fd(ctx->shell_name, 2);
-		ft_putstr_fd(
-			": warning: here-document delimited by end-of-file (wanted `", 2);
-		ft_putstr_fd(eof, 2);
-		ft_putstr_fd("')\n", 2);
-	}
+		heredoc_ending_error(ctx->shell_name, eof);
 	free(new_line);
 	close(pipe_fds[1]);
 }

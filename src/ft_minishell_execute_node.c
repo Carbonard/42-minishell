@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/31 16:26:36 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/06/08 21:05:41 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/06/12 00:38:45 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,7 +88,8 @@ static int	execute_pipe(t_context *ctx, t_command_tree *node)
 	int	pid2;
 	int	status;
 
-	pipe(ctx->pipe_fds);
+	if (custom_pipe(ctx, ctx->pipe_fds))
+		return (-1);
 	ctx->read_exit_status = 0;
 	pid1 = custom_fork(ctx);
 	if (pid1 == 0)

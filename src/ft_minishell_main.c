@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/16 14:59:51 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/06/11 19:40:49 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/06/12 01:07:06 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ static int	initial_config(t_context *ctx, int argc, char **argv, char **env)
 
 int	main(int argc, char **argv, char **env)
 {
-	t_context			ctx;
+	t_context	ctx;
 
 	set_default_signals();
 	if (initial_config(&ctx, argc, argv, env) == MS_E_MALLOC)
@@ -58,7 +58,15 @@ int	main(int argc, char **argv, char **env)
 		ft_putendl_fd("Shell aborted", 2);
 		return (1);
 	}
-	io_while(&ctx);
-	free_all(&ctx);
+	else if (ctx.status == MS_SUCCESS)
+	{
+		io_while(&ctx);
+		free_all(&ctx);
+	}
+	else
+	{
+		ft_str_lstclear(&ctx.env, free);
+		return (ctx.exit_status);
+	}
 	return (ctx.exit_status);
 }

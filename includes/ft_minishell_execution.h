@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/03 18:11:57 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/06/11 19:15:35 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/06/12 00:39:06 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,8 @@ int		find_open_quote(char *str, int i);
 int		remove_parenthesis(char *str);
 // utils
 char	*remove_quotes(char *cmd);
-// children
+// custom_functions
 int		custom_fork(t_context *ctx);
 int		custom_waitpid(int pid, int *wstatus, int options);
 int		custom_dup2(t_context *ctx, int fd1, int fd2);
+int		custom_pipe(t_context *ctx, int fds[2]);

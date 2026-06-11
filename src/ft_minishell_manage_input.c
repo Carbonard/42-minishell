@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/23 19:59:01 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/06/08 21:02:09 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/06/12 01:11:41 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,11 @@ static void	manage_multiple_input(t_context *ctx)
 
 	error = 0;
 	original_in = dup(STDIN_FILENO);
-	pipe(pipe_fds);
+	if (custom_pipe(ctx, pipe_fds))
+	{
+		close (original_in);
+		return ;
+	}
 	error = custom_dup2(ctx, pipe_fds[0], STDIN_FILENO);
 	ft_putstr_fd(ctx->user_input, pipe_fds[1]);
 	close(pipe_fds[0]);

@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/18 16:04:35 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/06/08 21:41:15 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/06/12 01:05:21 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,12 +21,16 @@ static void	read_from_file(t_context *ctx, char **argv)
 	if (fd < 0)
 	{
 		shell_perror(ctx, argv[1]);
-		silent_exit(ctx, ES_CMD_NOT_FOUND);
+		ctx->exit_status = ES_CMD_NOT_FOUND;
+		ctx->status = MS_BADFILE;
+		return ;
 	}
 	if (custom_dup2(ctx, fd, STDIN_FILENO))
 	{
 		close(fd);
-		silent_exit(ctx, ES_CMD_NOT_FOUND);
+		ctx->exit_status = ES_CMD_NOT_FOUND;
+		ctx->status = MS_BADFILE;
+		return ;
 	}
 	close (fd);
 	ctx->no_tty = 1;
@@ -36,8 +40,13 @@ static void	read_from_argv(t_context *ctx, char **argv)
 {
 	int	input_pipe[2];
 
-	pipe(input_pipe);
-	if (custom_dup2(ctx, 42, STDIN_FILENO))
+	if (custom_pipe(ctx, input_pipe))
+	{
+		ctx->status = MS_E_PIPE;
+		ctx->exit_status = 1;
+		return ;
+	}
+	if (custom_dup2(ctx, input_pipe[0], STDIN_FILENO))
 		close (STDIN_FILENO);
 	close(input_pipe[0]);
 	ft_putstr_fd(argv[2], input_pipe[1]);

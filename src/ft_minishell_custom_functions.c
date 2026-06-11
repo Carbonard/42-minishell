@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_minishell_children.c                            :+:      :+:    :+:   */
+/*   ft_minishell_custom_functions.c                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/08 17:01:13 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/06/08 22:01:40 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/06/12 01:12:18 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,15 @@ int	custom_dup2(t_context *ctx, int fd1, int fd2)
 	if (dup2(fd1, fd2) != -1)
 		return (0);
 	ctx->status = MS_BADFILE;
-	shell_perror(ctx, NULL);
+	shell_perror(ctx, "dup2");
+	return (1);
+}
+
+int	custom_pipe(t_context *ctx, int fds[2])
+{
+	if (pipe(fds) != -1)
+		return (0);
+	ctx->status = MS_BADFILE;
+	shell_perror(ctx, "pipe");
 	return (1);
 }
