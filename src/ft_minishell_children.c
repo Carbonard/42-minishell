@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/08 17:01:13 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/06/08 18:12:51 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/06/08 22:01:40 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,4 +31,13 @@ int	custom_waitpid(int pid, int *wstatus, int options)
 	if (wstatus)
 		*wstatus = 0;
 	return (-2);
+}
+
+int	custom_dup2(t_context *ctx, int fd1, int fd2)
+{
+	if (dup2(fd1, fd2) != -1)
+		return (0);
+	ctx->status = MS_BADFILE;
+	shell_perror(ctx, NULL);
+	return (1);
 }

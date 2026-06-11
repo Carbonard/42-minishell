@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/23 19:59:01 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/06/04 19:04:54 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/06/08 21:02:09 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,19 +18,22 @@ static void	manage_multiple_input(t_context *ctx)
 	int	pipe_fds[2];
 	int	original_in;
 	int	original_tty;
+	int	error;
 
+	error = 0;
 	original_in = dup(STDIN_FILENO);
 	pipe(pipe_fds);
-	dup2(pipe_fds[0], STDIN_FILENO);
+	error = custom_dup2(ctx, pipe_fds[0], STDIN_FILENO);
 	ft_putstr_fd(ctx->user_input, pipe_fds[1]);
 	close(pipe_fds[0]);
 	close(pipe_fds[1]);
 	clear_input(ctx);
 	original_tty = ctx->no_tty;
 	ctx->no_tty = 2;
-	io_while(ctx);
+	if (!error)
+		io_while(ctx);
 	ctx->no_tty = original_tty;
-	dup2(original_in, STDIN_FILENO);
+	custom_dup2(ctx, original_in, STDIN_FILENO);
 	close(original_in);
 }
 

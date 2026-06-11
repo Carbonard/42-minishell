@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/31 16:26:36 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/06/08 17:58:40 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/06/08 21:05:41 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,15 +64,18 @@ static void
 	int	pipe_extrem;
 	int	pid;
 	int	status;
+	int	error;
 
 	ctx->subshell = 1;
 	if (fileno == STDIN_FILENO)
 		pipe_extrem = 0;
 	else
 		pipe_extrem = 1;
-	dup2(ctx->pipe_fds[pipe_extrem], fileno);
+	error = custom_dup2(ctx, ctx->pipe_fds[pipe_extrem], fileno);
 	close(ctx->pipe_fds[1]);
 	close(ctx->pipe_fds[0]);
+	if (error)
+		silent_exit(ctx, 1);
 	pid = execute_node(ctx, next_node);
 	custom_waitpid(pid, &status, 0);
 	status = get_status(ctx, status);

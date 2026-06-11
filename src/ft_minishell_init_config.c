@@ -6,56 +6,12 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/18 16:04:35 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/06/08 18:56:42 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/06/08 21:31:24 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_minishell_builtins.h"
 #include "ft_minishell_execution.h"
-
-static void	read_from_file(t_context *ctx, char **argv)
-{
-	int	fd;
-
-	fd = open(argv[1], O_RDONLY);
-	if (fd < 0)
-	{
-		shell_perror(ctx, argv[1]);
-		silent_exit(ctx, ES_CMD_NOT_FOUND);
-	}
-	dup2(fd, STDIN_FILENO);
-	close (fd);
-	ctx->no_tty = 1;
-}
-
-void	check_interactive(t_context *ctx, int argc, char **argv)
-{
-	int	input_pipe[2];
-
-	ctx->no_tty = 0;
-	if (!isatty(0))
-		ctx->no_tty = 1;
-	if (argc < 2)
-		return ;
-	if (!valid_flag(argv[1], 'c'))
-	{
-		read_from_file(ctx, argv);
-		return ;
-	}
-	if (argc < 3)
-	{
-		custom_error(ctx->shell_name, "-c: option requires an argument");
-		silent_exit(ctx, 2);
-	}
-	if (!isatty(0))
-		return ;
-	pipe(input_pipe);
-	dup2(input_pipe[0], STDIN_FILENO);
-	close(input_pipe[0]);
-	ft_putstr_fd(argv[2], input_pipe[1]);
-	close(input_pipe[1]);
-	ctx->no_tty = 1;
-}
 
 int	set_shell(t_context *ctx, char *shell_name)
 {
@@ -102,11 +58,25 @@ int	set_pwd(t_context *ctx)
 	return (ctx->status);
 }
 
+static char	*get_new_shlvl(t_context *ctx, int old_shlvl)
+{
+	int	new_shlvl;
+
+	if (old_shlvl == 999)
+	{
+		custom_error(ctx->shell_name,
+			"warning: shell level (1000) too high, resetting to 1");
+		new_shlvl = 1;
+	}
+	else
+		new_shlvl = old_shlvl + 1;
+	return (ft_itoa(new_shlvl));
+}
+
 int	increment_shlvl(t_context *ctx)
 {
 	char	*inherited_var;
 	char	new_var[17];
-	int		old_shlvl;
 	char	*new_shlvl;
 
 	inherited_var = find_env_value(ctx, "SHLVL");
@@ -115,11 +85,12 @@ int	increment_shlvl(t_context *ctx)
 		export(ctx, "SHLVL=1");
 		return (ctx->status);
 	}
-	old_shlvl = ft_atoi(inherited_var);
-	if (old_shlvl == 999)
-		custom_error(ctx->shell_name,
-			"warning: shell level (1000) too high, resetting to 1");
-	new_shlvl = ft_itoa((old_shlvl != 999) * old_shlvl + 1);
+	new_shlvl = get_new_shlvl(ctx, ft_atoi(inherited_var));
+	if (!new_shlvl)
+	{
+		ctx->status = MS_E_MALLOC;
+		return (ctx->status);
+	}
 	ft_strlcpy(new_var, "SHLVL=", 17);
 	if (new_shlvl)
 		ft_strlcat(new_var, new_shlvl, 17);

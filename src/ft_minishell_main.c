@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/16 14:59:51 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/06/06 22:39:10 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/06/11 19:40:49 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,21 +25,20 @@ static int	initial_config(t_context *ctx, int argc, char **argv, char **env)
 	ctx->exit_status = 0;
 	ctx->user_input = NULL;
 	ctx->input_tokens = NULL;
+	ctx->original_in = -1;
+	ctx->original_out = -1;
+	ctx->subshell = 0;
 	if (save_env(ctx, env))
 		return (ctx->status);
 	if (set_shell(ctx, argv[0]))
 		return (ctx->status);
 	set_pwd(ctx);
 	if (!find_env_node(ctx, "PS1"))
-	{
 		if (add_env(ctx, "PS1=\\w\\$ "))
 			return (ctx->status);
-	}
-	increment_shlvl(ctx);
+	if (increment_shlvl(ctx))
+		return (ctx->status);
 	check_interactive(ctx, argc, argv);
-	ctx->original_in = -1;
-	ctx->original_out = -1;
-	ctx->subshell = 0;
 	return (MS_SUCCESS);
 }
 

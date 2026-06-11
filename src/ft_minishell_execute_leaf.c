@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/29 03:50:34 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/06/08 17:41:55 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/06/11 19:35:05 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,11 @@ static void	init_argv(t_context *ctx, t_command_tree *node, t_str_list *token)
 	char		*prev;
 
 	ctx->original_in = dup(STDIN_FILENO);
+	if (ctx->original_in == -1)
+		ctx->original_in = -2;
 	ctx->original_out = dup(STDOUT_FILENO);
+	if (ctx->original_out == -1)
+		ctx->original_out = -2;
 	while (token && ctx->status == MS_SUCCESS)
 	{
 		prev = token->content;
