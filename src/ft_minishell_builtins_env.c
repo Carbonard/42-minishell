@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/16 18:55:11 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/06/07 20:33:39 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/06/20 22:03:58 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,11 +37,12 @@ int	unset(t_context *ctx, char **argv)
 	while (argv[arg_i])
 	{
 		var = argv[arg_i];
-		if (ft_strchr(var, '='))
-			return (MS_SUCCESS);
-		item = find_env_node(ctx, var);
-		if (item)
-			ft_str_delitem(&ctx->env, item);
+		if (!ft_strchr(var, '='))
+		{
+			item = find_env_node(ctx, var);
+			if (item)
+				ft_str_delitem(&ctx->env, item);
+		}
 		arg_i++;
 	}
 	return (MS_SUCCESS);
