@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/03 18:11:57 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/06/12 00:39:06 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/06/21 17:14:21 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,8 @@
 
 typedef struct s_exec_args
 {
-	char		exec_args[ARG_MAX];
 	char		*path;
-	char		*static_argv[ARG_MAX];
-	char		*env[ARG_MAX];
+	t_dyn_ptr	env;
 	size_t		args_length;
 }	t_exec_args;
 
@@ -47,7 +45,7 @@ void	sort_entries(char **arr);
 // builtins
 int		try_builtins(t_context *ctx, char **argv);
 // execute_command
-int		find_cmd_path(t_context *ctx, char *path, char *cmd);
+char	*find_cmd_path(t_context *ctx, char *cmd);
 void	execute_command(t_context *ctx, char **argv);
 // tree_utils
 int		find_closing_par(char *str);
@@ -61,3 +59,6 @@ int		custom_fork(t_context *ctx);
 int		custom_waitpid(int pid, int *wstatus, int options);
 int		custom_dup2(t_context *ctx, int fd1, int fd2);
 int		custom_pipe(t_context *ctx, int fds[2]);
+
+char	*triple_join(char *first, char *second, char *third);
+void	free_almost_all(t_context *ctx);

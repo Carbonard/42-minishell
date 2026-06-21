@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/29 20:33:14 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/06/06 19:42:15 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/06/21 17:14:04 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,5 +62,11 @@ void	free_all(t_context *ctx)
 {
 	clear_input(ctx);
 	ft_str_lstclear(&ctx->env, free);
+	rl_clear_history();
+}
+
+void	free_almost_all(t_context *ctx)
+{
+	clear_input(ctx);
 	rl_clear_history();
 }

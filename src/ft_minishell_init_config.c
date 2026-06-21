@@ -6,38 +6,47 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/18 16:04:35 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/06/12 01:07:52 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/06/21 17:37:50 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_minishell_builtins.h"
 #include "ft_minishell_execution.h"
 
+void	find_abs_path(t_context *ctx, char shell_var[], char *shell_name)
+{
+	int		last_slash;
+	char	current_dir[PATH_MAX];
+
+	last_slash = ft_strlen(shell_name);
+	while (shell_name[last_slash] != '/')
+		last_slash--;
+	ctx->shell_name = shell_name + last_slash + 1;
+	shell_name[last_slash] = 0;
+	getcwd(current_dir, PATH_MAX);
+	chdir(shell_name);
+	getcwd(shell_var + 6, PATH_MAX);
+	chdir(current_dir);
+	ft_strlcat(shell_var, "/", PATH_MAX);
+	ft_strlcat(shell_var, ctx->shell_name, PATH_MAX);
+}
+
 int	set_shell(t_context *ctx, char *shell_name)
 {
 	char	shell_var[PATH_MAX + 5];
-	char	current_dir[PATH_MAX];
-	int		last_slash;
+	char	*aux;
 
 	ft_strlcpy(shell_var, "SHELL=", PATH_MAX);
 	if (shell_name[0] != '.' && shell_name[0] != '/' && shell_name[0] != '~')
 	{
 		ctx->shell_name = shell_name;
-		find_cmd_path(ctx, shell_var + 6, shell_name);
+		aux = find_cmd_path(ctx, shell_name);
+		ft_strlcpy(shell_var + 6, aux, PATH_MAX);
+		free(aux);
 	}
 	else
 	{
-		last_slash = ft_strlen(shell_name);
-		while (shell_name[last_slash] != '/')
-			last_slash--;
-		ctx->shell_name = shell_name + last_slash + 1;
-		shell_name[last_slash] = 0;
-		getcwd(current_dir, PATH_MAX);
-		chdir(shell_name);
-		getcwd(shell_var + 6, PATH_MAX);
-		chdir(current_dir);
-		ft_strlcat(shell_var, "/", PATH_MAX);
-		ft_strlcat(shell_var, ctx->shell_name, PATH_MAX);
+		find_abs_path(ctx, shell_var, shell_name);
 	}
 	return (export(ctx, shell_var));
 }

@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/31 16:26:36 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/06/12 00:38:45 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/06/21 16:25:42 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,6 +109,7 @@ int	execute_node(t_context *ctx, t_command_tree *node)
 {
 	int	pid;
 
+	pid = 0;
 	if (node->subshell)
 		pid = execute_subshell(ctx, node);
 	else if (node->sep == NONE)

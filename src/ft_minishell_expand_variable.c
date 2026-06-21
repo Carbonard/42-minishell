@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/06 20:44:24 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/06/06 22:28:33 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/06/21 16:25:01 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,6 +97,7 @@ char	*expand_variable(t_context *ctx, char *str, int *i)
 	char	*expanded;
 
 	var_start = *i;
+	expanded = NULL;
 	if (str[var_start + 1] == '?')
 		expanded = expand_e_status(ctx, str, var_start, i);
 	else if (!ft_strchr(INVALID_EXPORT_CHARS, str[var_start + 1]))

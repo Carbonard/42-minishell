@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/29 18:00:06 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/04/02 16:19:03 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/06/21 16:22:00 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@ int	ft_strlcpy(char *dst, const char *src, size_t dsize)
 {
 	size_t	i;
 
+	i = 0;
 	if (!dst || !src)
 	{
 		dst[0] = 0;
@@ -24,7 +25,6 @@ int	ft_strlcpy(char *dst, const char *src, size_t dsize)
 	}
 	if (dsize > 0)
 	{
-		i = 0;
 		while ((i < (dsize - 1)) && (src[i] != 0))
 		{
 			dst[i] = src[i];
